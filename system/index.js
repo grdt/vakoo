@@ -1,5 +1,5 @@
-var express = require('../express');
-var _ = require('../underscore');
+var express = require('express');
+var _ = require('underscore');
 
 var vakoo = function(options){
 
@@ -7,7 +7,7 @@ var vakoo = function(options){
         port:8773,
         defaultController:'main',
         vakoo_path: __dirname,
-        app_path: __dirname.replace('/vakoo','').replace('/node_modules',''),
+        app_path: __dirname.replace('/vakoo','').replace('/node_modules','')
     }
 
     if(typeof options != "undefined"){
