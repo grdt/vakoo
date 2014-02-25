@@ -1,7 +1,8 @@
 var main = function(){
 
     this.index = function(){
-        this.send({aza:'olo'});
+        this.load.helper('date');
+        this.send({aza:this.h.date.aza('olo')});
     }
 
     return this;
