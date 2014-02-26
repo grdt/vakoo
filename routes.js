@@ -1,9 +1,9 @@
 module.exports = {
-    'users/:id':{
-        option:'user',
-        method:'item'
-    },
     users:{
         option:'user'
+    },
+    'users/:method':{
+        option:'user',
+        method:':method'
     }
 }

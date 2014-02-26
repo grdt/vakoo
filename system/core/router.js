@@ -55,12 +55,20 @@ var router = function(app){
             var routes = require(routes_path);
             for(key in routes){
                 _this._app._express.all('/'+key,function(req,res){
+                    console.log(key);
                     if(typeof routes[key].option != "undefined"){
                         _this.option = routes[key].option;
                         _this.controller = (typeof routes[key].controller != "undefined") ? routes[key].controller : 'controller';
                         _this.method = (typeof routes[key].method != "undefined") ? routes[key].method : 'index';
                         _this.request = req;
                         _this.response = res;
+                        for(i in routes[key]){
+                            if(routes[key][i][0] == ':'){
+                                if(i == 'method' || i == 'option' || i == 'controller'){
+                                    _this[i] = req.param(i);
+                                }
+                            }
+                        }
                         _this.execute(req,res);
                     }else{
                         throw new Error('this must be 404. illegal route params');

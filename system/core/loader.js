@@ -6,21 +6,35 @@ var loader = function(app){
 
     this._app = app;
 
+    this.EXT = '.js';
+
     this.controller = function(option,name){
         if(option){
 
-            var controller_path = _this._app.APP_PATH + '/components/'+ option +'/controllers/' + name;
+            var path = this.getControllerPath(option);
+            var controller_path = false;
 
-            if(!fs.existsSync(controller_path + '.js')){
-                controller_path = _this._app.APP_PATH + '/components/' +option + '/' + name;
+            for(i in path){
+                if(fs.existsSync(path[i] + '/' + name + this.EXT)){
+                    controller_path = path[i] + '/' + name;
+                }
             }
 
-            if(fs.existsSync(controller_path + '.js')){
+            if(!controller_path && name == 'controller'){
+                name = 'index';
+                for(i in path){
+                    if(fs.existsSync(path[i] + '/' + name + this.EXT)){
+                        controller_path = path[i] + '/' + name;
+                    }
+                }
+                this._app.router.controller = 'index';
+            }
+
+            if(controller_path){
                 var controller = new require(controller_path)();
                 controller = _this._app._.extend(_this._app.controller,controller);
                 controller.beforeInit();
                 controller.init();
-
                 return controller;
             }else{
                 throw new Error('controller '+name+' of component '+option+' not exists');
@@ -37,6 +51,13 @@ var loader = function(app){
         }else{
             throw new Error('helper '+name+' not exists');
         }
+    }
+
+    this.getControllerPath = function(option){
+        return [
+            _this._app.APP_PATH + '/components/'+ option,
+            _this._app.APP_PATH + '/components/'+ option + '/controllers'
+        ];
     }
 
     return this;
