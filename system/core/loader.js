@@ -9,16 +9,24 @@ var loader = function(app){
     this.controller = function(option,name){
         if(option){
 
-        }else{
-            if(fs.existsSync(_this._app.APP_PATH + '/controllers/' + name + '.js')){
-                var controller = new require(_this._app.APP_PATH + '/controllers/' + name)(_app);
+            var controller_path = _this._app.APP_PATH + '/components/'+ option +'/controllers/' + name;
+
+            if(!fs.existsSync(controller_path + '.js')){
+                controller_path = _this._app.APP_PATH + '/components/' +option + '/' + name;
+            }
+
+            if(fs.existsSync(controller_path + '.js')){
+                var controller = new require(controller_path)();
                 controller = _this._app._.extend(_this._app.controller,controller);
                 controller.beforeInit();
                 controller.init();
+
                 return controller;
             }else{
-                throw new Error('controller '+name+' not exists');
+                throw new Error('controller '+name+' of component '+option+' not exists');
             }
+        }else{
+            throw new Error('component-name not isset');
         }
     }
 

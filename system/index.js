@@ -7,7 +7,7 @@ var vakoo = function(options){
         port:8773,
         defaultController:'main',
         vakoo_path: __dirname,
-        app_path: __dirname.replace('/vakoo','').replace('/node_modules','')
+        app_path: __dirname.replace('/system','')
     }
 
     if(typeof options != "undefined"){
@@ -47,9 +47,13 @@ var vakoo = function(options){
             port = opts.port;
         }
 
+        _this._express.use(_this._express.router);
+
+        _this.router.init();
+
         _this._express.all('*',function(req,res){
             _this.router.execute(req,res);
-        })
+        });
 
         _this._express.listen(port);
     };

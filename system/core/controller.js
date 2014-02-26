@@ -32,6 +32,14 @@ var controller = function(app){
 
     this.init = function(){}
 
+    this.where = function(){
+        this.send({
+            option:this._app.router.option,
+            controller:this._app.router.controller,
+            method:this._app.router.method,
+        });
+    }
+
     return this;
 }
 
