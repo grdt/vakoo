@@ -45,8 +45,22 @@ var router = function(app){
             if(typeof req.param('option') != "undefined"){
                 _this.option = req.param('option');
             }
+
+            if(this.defaultRoutes()){
+                this.show404();
+            }
+
         }
         return req.url;
+    }
+
+    this.defaultRoutes = function(){
+        return (this.controller == 'controller' && this.method == 'index' && this.option == 'main');
+    }
+
+    this.show404 = function(){
+        this.response.statusCode = 404;
+        this.response.send({success:false,message:'page not found'});
     }
 
     this.init = function(){

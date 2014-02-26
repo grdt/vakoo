@@ -45,7 +45,7 @@ var loader = function(app){
     }
 
     this.helper = function(name){
-        if(fs.existsSync(_this._app.APP_PATH + '/helpers/' + name + '.js')){
+        if(fs.existsSync(_this._app.APP_PATH + '/helpers/' + name + this.EXT)){
             var helper = require(_this._app.APP_PATH + '/helpers/' + name);
             this._app.h[name] = helper;
         }else{
