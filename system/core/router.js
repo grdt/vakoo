@@ -26,6 +26,7 @@ var router = function(app){
     }
 
     this.fetchUrl = function(req,res){
+        
         _this.request = req;
         _this.response = res;
 
@@ -58,9 +59,12 @@ var router = function(app){
         return (this.controller == 'controller' && this.method == 'index' && this.option == 'main');
     }
 
-    this.show404 = function(){
+    this.show404 = function(mess){
+        if(typeof mess == "undefined"){
+            mess = 'page not found';
+        }
         this.response.statusCode = 404;
-        this.response.send({success:false,message:'page not found'});
+        this.response.send({success:false,message:mess});
     }
 
     this.init = function(){

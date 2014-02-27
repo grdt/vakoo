@@ -14,17 +14,19 @@ var controller = function(app){
         if(typeof this[method] == "function"){
             this[method]();
         }else{
-            this.show404();
+            this.show404('method '+method+' not found');
         }
     }
 
     this.beforeInit = function(){
+        console.log('controller before init');
         this.req = _this._app.router.request;
         this.res = _this._app.router.response;
+        return this;
     }
 
-    this.show404 = function(){
-        this._app.router.show404();
+    this.show404 = function(mess){
+        this._app.router.show404(mess);
     }
 
     this.send = function(data){
@@ -35,7 +37,7 @@ var controller = function(app){
 
     }
 
-    this.init = function(){}
+    this.init = function(){return this;}
 
     this.where = function(){
         this.send({

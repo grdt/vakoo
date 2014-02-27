@@ -1,5 +1,6 @@
 var express = require('express');
 var _ = require('underscore');
+var fs = require('fs');
 
 var vakoo = function(options){
 
@@ -41,21 +42,55 @@ var vakoo = function(options){
 
     this.h = {};
 
-    this.listen = function(port){
+    this._config = this.load.config();
+
+    this.db = false;
+
+    this.db_conn = function(next){
+        if(typeof this._config.db != "undefined"){
+            if(typeof this._config.db.driver != "undefined"){
+                if(fs.existsSync(this.VAKOO_PATH + '/database/' + this._config.db.driver)){
+                    console.log('db driver',this._config.db.driver,'found','check connection');
+                    var connector = require(this.VAKOO_PATH + '/database/' + this._config.db.driver)(this);
+                    this.db = {
+                        conn:connector
+                    };
+                    return connector.connect(next);
+                }else{
+                    throw new Error('database driver ' + this._config.db.driver + ' not found');
+                }
+            }else{
+                throw new Error('database driver not found');
+            }
+        }
+    }
+
+    this.start = function(port){
+
+        this.db_conn(function(db){
+            this._app.db.interface = db;
+            this._app.db.driver = this.driver();
+        });
 
         if(typeof port == "undefined"){
             port = opts.port;
         }
 
-        _this._express.use(_this._express.router);
+        this._express.use(express.logger('dev'));
 
-        _this.router.init();
+        this._express.use(express.errorHandler());
 
-        _this._express.all('*',function(req,res){
+        this._express.use(this._express.router);
+
+        this.router.init();
+
+        this._express.all('*',function(req,res){
             _this.router.execute(req,res);
         });
 
-        _this._express.listen(port);
+        this._express.listen(port);
+        
+        console.log('start listen',port);
     };
 
     return this;
