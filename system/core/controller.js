@@ -11,15 +11,20 @@ var controller = function(app){
     this.h = {};
 
     this.run = function(method){
-
         if(typeof this[method] == "function"){
             this[method]();
+        }else{
+            this.show404();
         }
     }
 
     this.beforeInit = function(){
         this.req = _this._app.router.request;
         this.res = _this._app.router.response;
+    }
+
+    this.show404 = function(){
+        this._app.router.show404();
     }
 
     this.send = function(data){
