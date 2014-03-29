@@ -1,0 +1,10 @@
+{
+    "title":"Vakoo Engine",
+    "version":"0.0.1",
+    "port":8080,
+    "default_executor":{
+        "option":"main",
+        "controller":"controller",
+        "method":"index"
+    }
+}

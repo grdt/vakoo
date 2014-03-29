@@ -1,103 +1,70 @@
-var fs = require('fs');
-var router = function(app){
+var Router = function(){
 
-    if(typeof app == "undefined"){
-        throw new Error("App in undefined");
-    }
+    this.parseExecutor = function(req){
 
-    var _this = this;
-    
-    this._app = app;
-
-    this.option = 'main'; //default component
-
-    this.controller = 'controller'; //default controller
-
-    this.method = 'index'; //default method
-
-    this.request = {};
-
-    this.response = {};
-
-    this.execute = function(req,res,nofetch){
-        var url = _this.fetchUrl(req,res);
-        var controller = _this._app.load.controller(_this.option,_this.controller);
-        controller.run(_this.method);
-    }
-
-    this.fetchUrl = function(req,res){
+        var executor = this._.clone(this.vakoo.config().default_executor);
         
-        _this.request = req;
-        _this.response = res;
-
-        if(req.url == '/'){
-            _this.controller = 'controller';
-            _this.method = 'index';
-            _this.option = 'main';
-        }else{
-            if(typeof req.param('task') != "undefined"){
-                var task = req.param('task').split('.');
-                _this.method = task[task.length - 1];
-                if(task.length == 2){
-                    _this.controller = task[0];
-                }
+        if(typeof req.param('task') != "undefined"){
+            var task = req.param('task').split('.');
+            executor.method = task[task.length - 1];
+            if(task.length == 2){
+                executor.controller = task[0];
             }
-
-            if(typeof req.param('option') != "undefined"){
-                _this.option = req.param('option');
-            }
-
-            if(this.defaultRoutes()){
-                this.show404();
-            }
-
         }
-        return req.url;
-    }
 
-    this.defaultRoutes = function(){
-        return (this.controller == 'controller' && this.method == 'index' && this.option == 'main');
-    }
-
-    this.show404 = function(mess){
-        if(typeof mess == "undefined"){
-            mess = 'page not found';
+        if(typeof req.param('option') != "undefined"){
+            executor.option = req.param('option');
         }
-        this.response.statusCode = 404;
-        this.response.send({success:false,message:mess});
+
+        return executor;
+
     }
 
-    this.init = function(){
-        var routes_path = this._app.APP_PATH + '/routes';
-        if(fs.existsSync(routes_path + '.js')){
-            var routes = require(routes_path);
-            for(key in routes){
-                _this._app._express.all('/'+key,function(req,res){
-                    console.log(key);
-                    if(typeof routes[key].option != "undefined"){
-                        _this.option = routes[key].option;
-                        _this.controller = (typeof routes[key].controller != "undefined") ? routes[key].controller : 'controller';
-                        _this.method = (typeof routes[key].method != "undefined") ? routes[key].method : 'index';
-                        _this.request = req;
-                        _this.response = res;
-                        for(i in routes[key]){
-                            if(routes[key][i][0] == ':'){
-                                if(i == 'method' || i == 'option' || i == 'controller'){
-                                    _this[i] = req.param(i);
-                                }
+    this.fetchUrl = function(url){
+        var params = false;
+        var executor = false;
+        this.routes().forEach(function(route){
+            params = route.match(url);
+            if(params != null){
+                if(typeof route.executor.option != "undefined"){
+
+                    executor = route.executor;
+
+                    for(i in route.executor){
+                        if(route.executor[i][0] == ':'){
+                            if(i == 'method' || i == 'option' || i == 'controller'){
+                                executor[i] = params[i];
                             }
                         }
-                        _this.execute(req,res);
-                    }else{
-                        throw new Error('this must be 404. illegal route params');
                     }
-                });
+                }
             }
+        });
+
+        return {params:params,executor:executor};
+
+    }
+
+    this.executor = function(code){
+        if(typeof code == "undefined"){
+            code = 404;
+        }
+
+        var codes = {
+            404:{option:"main",controller:"controller",method:"show404"},
+            666:{option:"main",controller:"controller",method:"show666"}
+        };
+
+        if(typeof codes[code] != "undefined"){
+            return codes[code];
+        }else{
+            return codes[666];
         }
     }
 
-
     return this;
+
 }
 
-module.exports = router;
+
+module.exports = Router;

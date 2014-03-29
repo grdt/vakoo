@@ -1,0 +1,9 @@
+{
+    "users":{
+        "option":"user"
+    },
+    "user/<method>":{
+        "option":"user",
+        "method":":method"
+    }
+}
