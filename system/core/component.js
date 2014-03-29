@@ -61,6 +61,19 @@ var Component = function(name){
             return false;
         }
     }
+    
+    this.library = function(name){
+        if(!!this._libraries[name]){
+            return new this._libraries[name]();
+        }else{
+            throw new Error('library ' + name + ' not found');
+            return false;
+        }
+    }
+
+    this.render = function(view,data){
+        this.library(this.vakoo.config().tmpl_lib).render(view,data);
+    }
 
 
     this.coreController = function(){

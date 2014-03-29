@@ -10,7 +10,7 @@ var Controller = function(){
 
     this.page = function(){
         var page = this.model('page');
-
+        this.render('view',{num:1,string:'aza'});
         this.where();
     }
 

@@ -60,6 +60,17 @@ var Loader = function(vakoo){
         });
 
 
+        // ---- load libraries ---
+
+        var Library = require('./library');
+
+        Library.prototype = this;
+        this.getDirs(this.LIBRARIES_PATH).forEach(function(lib){
+            loader._libraries[lib] = new Library(lib);
+        });
+
+
+
         this.preloadDB();
     }
 
