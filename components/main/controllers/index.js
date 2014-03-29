@@ -14,6 +14,10 @@ var Controller = function(){
         this.where();
     }
 
+	this.index = function() {
+		this.where()
+	}
+
     return this;
 }
 
