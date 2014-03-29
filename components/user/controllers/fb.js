@@ -1,6 +1,7 @@
 var Fb = function(){
 
     this.register = function(){
+
         this.where();
     }
 
