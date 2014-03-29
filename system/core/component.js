@@ -5,7 +5,9 @@ var Component = function(name){
 
     var component = this;
 
-    this.COMPONENT_PATH = this.APP_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + name;
+    this.COMPONENT_NAME = name;
+    this.COMPONENT_PATH = this.APP_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + this.COMPONENT_NAME;
+
     this.CONFIG_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'config' + this.EXT_JSON;
     this.ROUTES_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON;
 
@@ -16,6 +18,12 @@ var Component = function(name){
     this.CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'controllers';
 
     this.INDEX_CONTROLLER_PATH = '';
+
+    this.DB_WAIT_LOOPS = 20;
+
+    this.DB_WAIT_INTERVAL = 300;
+
+    this.DB_WAIT_OK = false;
 
     this._controllers = {};
 
@@ -44,6 +52,16 @@ var Component = function(name){
         }
     }
 
+    this.model = function(name){
+        if(!!this._models[name]){
+            var m = new this._models[name]();
+            return m;
+        }else{
+            throw new Error('model ' + name + ' not found');
+            return false;
+        }
+    }
+
 
     this.coreController = function(){
         if(!!this._core_controller)
@@ -53,6 +71,23 @@ var Component = function(name){
         this._core_controller = new core_controller();
         return this._core_controller;
     }
+    
+    this.coreModel = function(){
+        if(!!this._core_model)
+            return this._code_model;
+
+        var core_model;
+
+        if(typeof this.db == "object" && typeof this.db.model == "object"){
+            core_model = this.db.model;
+        }else{
+            core_model = {};
+        }
+
+        this._core_model = core_model;
+
+        return this._core_model;
+    }
 
     this.preloadController = function(name,path){
         var controller = require(path);
@@ -61,6 +96,12 @@ var Component = function(name){
         return this;
     }
 
+    this.preloadModel = function(name,path){
+        var model = require(path);
+        model.prototype = this.coreModel();
+        this._models[name] = model;
+        return this;
+    }
 
     this.preloadConfig = function(){
         if(this.fileExists(this.CONFIG_PATH)){
@@ -71,6 +112,36 @@ var Component = function(name){
     this.preloadRoutes = function(){
         if(this.fileExists(this.ROUTES_PATH)){
             this._components_routes.push(require(this.ROUTES_PATH));
+        }
+    }
+
+    this.preloadModels = function(){
+
+
+        if(typeof component.db != "object"){
+            var loop = 1;
+            var dbInterval = setInterval(function(){
+                if(loop == component.DB_WAIT_LOOPS){
+                    component.preloadModels();
+                    clearInterval(dbInterval);
+                }else{
+                    loop++;
+                    if(typeof component.db == "object"){
+                        clearInterval(dbInterval);
+                        component.preloadModels();
+                        return false;
+                    }
+                }
+            },this.DB_WAIT_INTERVAL);
+            return false;
+        }
+
+        if(this.fileExists(this.MODEL_PATH) && this.isDir(this.MODEL_PATH)){
+            this.getFiles(this.MODEL_PATH).forEach(function(model_file){
+                if(component.getExtension(component.MODEL_PATH + component.SEPARATOR + model_file) == component.EXT_JS){
+                    component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''));
+                }
+            })
         }
     }
 
@@ -110,6 +181,7 @@ var Component = function(name){
 
         this.preloadConfig();
         this.preloadRoutes();
+        this.preloadModels();
 
         return this;
     }
