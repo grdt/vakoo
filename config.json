@@ -1,9 +1,9 @@
 {
-    "port":8774,
+    "port":8773,
     "db":{
         "driver":"mongodb",
         "host":"127.0.0.1",
         "database":"vakoo"
-    }
-
+    },
+    "tmpl_lib":"tmpl"
 }

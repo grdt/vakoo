@@ -10,8 +10,8 @@ var Controller = function(){
 
     this.page = function(){
         var page = this.model('page');
-        this.render('view',{num:1,string:'aza'});
-        this.where();
+        page.alias(this.url.request.param('alias'));
+        this.render('page',{page:page});
     }
 
 	this.index = function() {

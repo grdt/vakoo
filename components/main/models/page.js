@@ -1,7 +1,12 @@
 var Page = function(){
 
-    this.alias = function(){
+    this.COLLECTION_NAME = 'pages';
 
+
+
+    this.alias = function(alias){
+        this.where({alias:alias});
+        this.find();
     }
 
     return this;
