@@ -4,7 +4,13 @@ var Controller = function(){
         this.url.response.send({aza:'aza'});
     }
 
+    this.index = function(){
+        this.where();
+    }
+
     this.page = function(){
+        var page = this.model('page');
+
         this.where();
     }
 

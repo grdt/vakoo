@@ -39,6 +39,8 @@ var Router = function(){
                         params[i] = executor[i];
                     }
                 }
+
+                //todo break foreach
             }
         });
 
