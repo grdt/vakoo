@@ -7,6 +7,7 @@ var Component = function(name){
 
     this.COMPONENT_PATH = this.APP_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + name;
     this.CONFIG_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'config' + this.EXT_JSON;
+    this.ROUTES_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON;
 
     this.MODEL_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'models';
 
@@ -21,6 +22,8 @@ var Component = function(name){
     this._models = {};
 
     this._views = {};
+
+    this.config = {};
 
     this.execute = function(url){
         var controller = this.controller(url.executor.controller,url);
@@ -58,6 +61,19 @@ var Component = function(name){
         return this;
     }
 
+
+    this.preloadConfig = function(){
+        if(this.fileExists(this.CONFIG_PATH)){
+            this.config = require(this.CONFIG_PATH);
+        }
+    }
+
+    this.preloadRoutes = function(){
+        if(this.fileExists(this.ROUTES_PATH)){
+            this._components_routes.push(require(this.ROUTES_PATH));
+        }
+    }
+
     this.preload = function(){
         
         if(this.fileExists(this.COMPONENT_PATH + this.SEPARATOR + 'index' + this.EXT_JS)){
@@ -91,6 +107,9 @@ var Component = function(name){
         if(this.INDEX_CONTROLLER_PATH != '')
             this.preloadController('controller',this.INDEX_CONTROLLER_PATH);
 
+
+        this.preloadConfig();
+        this.preloadRoutes();
 
         return this;
     }

@@ -24,25 +24,25 @@ var Router = function(){
         var params = false;
         var executor = false;
         this.routes().forEach(function(route){
-            params = route.match(url);
-            if(params != null){
-                if(typeof route.executor.option != "undefined"){
+            if(!params && route.match(url)){
 
-                    executor = route.executor;
+                params = route.match(url);
 
-                    for(i in route.executor){
-                        if(route.executor[i][0] == ':'){
-                            if(i == 'method' || i == 'option' || i == 'controller'){
-                                executor[i] = params[i];
-                            }
+                executor = route.executor;
+
+                for(i in route.executor){
+                    if(route.executor[i][0] == ':'){
+                        if(i == 'method' || i == 'option' || i == 'controller'){
+                            executor[i] = params[i];
                         }
+                    }else{
+                        params[i] = executor[i];
                     }
                 }
             }
         });
 
         return {params:params,executor:executor};
-
     }
 
     this.executor = function(code){

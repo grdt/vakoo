@@ -1,0 +1,9 @@
+{
+    "users":{
+        "option":"user"
+    },
+    "user/register":{
+        "option":"user",
+        "method":"register"
+    }
+}

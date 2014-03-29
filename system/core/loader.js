@@ -29,13 +29,15 @@ var Loader = function(vakoo){
     this._libraries = {};
     this._templates = {};
 
+    this._components_routes = [];
+
     this.execute = function(req,res){
         var url = this.url(req,res);
         var option = this.option(url.executor.option);
         if(option){
             option.execute(url);
         }else{
-            this.showError(404,'Component not found',res);
+            this.show404(404,'Component not found',res);
         }
     }
 
@@ -131,6 +133,8 @@ var Loader = function(vakoo){
     this.routes = function(){
         if(!!this._routes)return this._routes;
 
+
+        //----load main routes ----
         var routes = (fs.existsSync(this.APP_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON)) ? require(this.APP_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON) : {};
 
         this._routes = [];
@@ -140,6 +144,21 @@ var Loader = function(vakoo){
             route.executor = routes[key];
             this._routes.push(route);
         }
+
+        //------load components routes
+
+        if(this._components_routes.length){
+            for(i in this._components_routes){
+                var routes = this._components_routes[i];
+                for(key in routes){
+                    var route = Susanin.Route('/'+key);
+                    route.executor = routes[key];
+                    this._routes.push(route);
+                }
+            }
+        }
+
+        // --- end of load
 
         return this._routes;
 
