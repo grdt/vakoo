@@ -36,7 +36,9 @@ var Router = function(){
                             executor[i] = params[i];
                         }
                     }else{
-                        params[i] = executor[i];
+                        if(i != 'method' && i != 'option' && i != 'controller'){
+                            params[i] = executor[i];
+                        }
                     }
                 }
 

@@ -1,7 +1,12 @@
 var Loader = require('./core/loader'),
     _ = require('underscore'),
     express = require('express'),
-    fs = require('fs');
+    fs = require('fs'),
+    path = require('path');
+
+var multipart = require('connect-multiparty');
+
+var multipartMiddleware = multipart();
 
 var vakoo = function(){
 
@@ -24,6 +29,15 @@ var vakoo = function(){
         this._express.use(express.logger('dev'));
 
         this._express.use(express.errorHandler());
+
+        this._express.use(express.json());
+
+        this._express.use(express.urlencoded());
+
+        this._express.use(multipartMiddleware);
+
+//          todo find plugin for multipart uploads
+
 
         this._express.all('*',function(req,res){
             vakoo.load.execute(req,res);

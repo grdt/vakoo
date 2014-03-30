@@ -2,7 +2,6 @@
     "about":{
         "option":"main",
         "method":"page",
-        "alias":"about",
-		"template": "about"
+        "alias":"about"
     }
 }
