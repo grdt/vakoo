@@ -15,7 +15,7 @@ var Tmpl = function(params){
         console.log('render view: ',view,'with data: ',data);
         var template = this.template(view);
 
-        if(template){
+        if(template != null){
             this.url.response.send(template);
         }else{
             this.url.response.send('template '+view+' not found');

@@ -1,9 +1,6 @@
 {
-    "users":{
-        "option":"user"
-    },
-    "user/register":{
+    "user/<method>":{
         "option":"user",
-        "method":"register"
+        "method":":method"
     }
 }

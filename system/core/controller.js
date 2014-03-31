@@ -32,6 +32,15 @@ var Controller = function(url){
         }
     }
 
+    this.createUrl = function(executor){
+        executor = this._.defaults(executor,this.url.executor);
+        return this.router().createUrl(executor);
+    }
+
+    this.redirect = function(url){
+        this.url.response.redirect(url);
+    }
+
     this.files = function(param){
         if(!this.post())return false;
 

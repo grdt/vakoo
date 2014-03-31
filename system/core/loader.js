@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var fs = require('fs');
 var Susanin = require('susanin');
-
+var url = require('url');
 
 var Loader = function(vakoo){
 
@@ -288,6 +288,14 @@ var Loader = function(vakoo){
                 for(key in routes){
                     var route = Susanin.Route('/'+key);
                     route.executor = routes[key];
+                    route.buildUrl = function(params){
+                        var parts = url.parse(this.build(params),true);
+                        delete parts.query.method;
+                        delete parts.query.controller;
+                        delete parts.query.option;
+                        delete parts.search;
+                        return url.format(parts);
+                    }
                     this._routes.push(route);
                 }
             }

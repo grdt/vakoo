@@ -78,6 +78,7 @@ var Component = function(name){
     }
 
 
+
     this.coreController = function(){
         if(!!this._core_controller)
             return this._core_controller;

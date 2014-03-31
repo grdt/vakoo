@@ -1,8 +1,12 @@
+var _url = require('url');
+
 var Router = function(){
+
+    var router = this;
 
     this.parseExecutor = function(req){
 
-        var executor = this._.clone(this.vakoo.config().default_executor);
+        var executor = this.executor();
         
         if(typeof req.param('task') != "undefined"){
             var task = req.param('task').split('.');
@@ -28,7 +32,7 @@ var Router = function(){
 
                 params = route.match(url);
 
-                executor = route.executor;
+                executor = router._.clone(route.executor);
 
                 for(i in route.executor){
                     if(route.executor[i][0] == ':'){
@@ -48,21 +52,49 @@ var Router = function(){
 
         return {params:params,executor:executor};
     }
+    
+    this.createUrl = function(params){
 
-    this.executor = function(code){
-        if(typeof code == "undefined"){
-            code = 404;
-        }
+        params = this.executor(params);
 
-        var codes = {
-            404:{option:"main",controller:"controller",method:"show404"},
-            666:{option:"main",controller:"controller",method:"show666"}
-        };
+        var executor = this._.pick(params,['option','controller','method']);
 
-        if(typeof codes[code] != "undefined"){
-            return codes[code];
+        var url = false;
+        
+        this.routes().forEach(function(route){
+            var r_ex = router.executor(route.executor);
+            if(!url && r_ex.option == executor.option){
+                if(r_ex.controller == executor.controller){
+                    if(r_ex.method == executor.method){
+                        url = route.buildUrl(params);
+                    }else{
+                        if(r_ex.method[0] == ':'){
+                            url = route.buildUrl(params);
+                        }
+                    }
+                }else{
+                    if(r_ex.controller[0] == ':'){
+                        if(r_ex.method == executor.method){
+                            url = route.buildUrl(params);
+                        }else{
+                            if(r_ex.method[0] == ':'){
+                                url = route.buildUrl(params);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return url;
+    }
+
+    this.executor = function(executor){
+        var clone = this._.clone(this.vakoo.config().default_executor);
+        if(typeof executor == "undefined"){
+            return clone;
         }else{
-            return codes[666];
+            return this._.defaults(executor,clone);
         }
     }
 
