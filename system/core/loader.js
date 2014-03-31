@@ -11,6 +11,7 @@ var Loader = function(vakoo){
 
     this.EXT_JS = '.js';
     this.EXT_JSON = '.json';
+    this.EXT_VIEW = '.twig';
 
 
     this.SEPARATOR = '/';
@@ -19,7 +20,10 @@ var Loader = function(vakoo){
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
     this.COMPONENTS_PATH = this.APP_PATH + this.SEPARATOR + 'components';
     this.LIBRARIES_PATH = this.APP_PATH + this.SEPARATOR + 'libraries';
+
     this.TEMPLATES_PATH = this.APP_PATH + this.SEPARATOR + 'templates';
+
+    this.TEMPLATE_PATH = this.TEMPLATES_PATH + this.SEPARATOR + this.vakoo.config().template;
 
     this.DB_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'database';
 
@@ -60,18 +64,124 @@ var Loader = function(vakoo){
         });
 
 
+        //----load templates ----
+
+        var opt_templates_exists = this.isDir(this.TEMPLATE_PATH + this.SEPARATOR + 'components');
+
+        for(option in this._options){
+
+            var directory = this.parseDirectory(this._options[option].VIEW_PATH);
+
+            var compare = {};
+
+            if(directory){
+                compare = this.compareDirectory(this._options[option].VIEW_PATH,directory);
+            }
+
+            if(opt_templates_exists){
+                var tmp_opt_dir = this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option;
+                var tmpl_directory = this.parseDirectory(tmp_opt_dir);
+                if(tmpl_directory){
+                    var tmpl_compare = this.compareDirectory(tmp_opt_dir,tmpl_directory);
+                    compare = _.defaults(tmpl_compare,compare);
+                }
+            }
+
+            if(!_.isEmpty(compare)){
+                this._templates[option] = {};
+                for(key in compare){
+                    this._templates[option][key] = fs.readFileSync(compare[key],'utf8');
+                }
+            }else{
+                this._templates[option] = null;
+            }
+        }
+        
+        var template_dir = this.parseDirectory(this.TEMPLATE_PATH,'components');
+        
+        if(template_dir){
+            var template_compare = this.compareDirectory(this.TEMPLATE_PATH,template_dir);
+            if(!_.isEmpty(template_compare)){
+                for(key in template_compare){
+                    if(!!this._templates[key]){
+                        throw new Error('view '+template_compare[key]+' cant named as component');
+                    }else{
+                        this._templates[key] = fs.readFileSync(template_compare[key],'utf8');
+                    }
+                }
+            }
+        }
+
         // ---- load libraries ---
 
         var Library = require('./library');
 
         Library.prototype = this;
         this.getDirs(this.LIBRARIES_PATH).forEach(function(lib){
-            loader._libraries[lib] = new Library(lib);
+              loader._libraries[lib] = new Library(lib);
         });
 
 
+        // --- load default libs --- 
+
 
         this.preloadDB();
+    }
+
+    this.compareDirectory = function(path,directory,templates,tmpl_key){
+
+        if(typeof templates == "undefined"){
+            templates = {};
+        }
+
+        if(typeof tmpl_key == "undefined"){
+            tmpl_key = '';
+        }
+
+        for(key in directory){
+            if(typeof directory[key] == "string"){
+                var tkey = directory[key].replace(this.EXT_VIEW,'');
+                if(tmpl_key)
+                    tkey = tmpl_key + '.' + tkey;
+                
+                templates[tkey] = path + this.SEPARATOR + directory[key];
+                
+                if(directory[key].replace(this.EXT_VIEW,'') == 'index' && typeof templates[tmpl_key] == "undefined"){
+                    templates[tmpl_key] = templates[tkey];
+                }
+            }
+            
+            if(typeof directory[key] == "object"){
+                this.compareDirectory(path + this.SEPARATOR + key,directory[key],templates,key);
+            }
+        }
+        
+        return templates;
+    }
+    
+    this.parseDirectory = function(path,exclude){
+        if(typeof exclude == "undefined"){
+            exclude = [];
+        }else{
+            if(typeof exclude == "string"){
+                exclude = [exclude];
+            }
+        }
+        if(this.isDir(path)){
+            var directory = [];
+            this.getFiles(path,exclude).forEach(function(file){
+                directory.push(file);
+            });
+            
+            this.getDirs(path,exclude).forEach(function(dir){
+                directory[dir] = loader.parseDirectory(path + loader.SEPARATOR + dir);
+            });
+
+            return directory;
+            
+        }else{
+            return null;
+        }
     }
 
 
@@ -92,11 +202,18 @@ var Loader = function(vakoo){
         return fs.lstatSync(path).isFile();
     }
 
-    this.getDirs = function(path){
+    this.getDirs = function(path,exclude){
+        if(typeof exclude == "undefined"){
+            exclude = [];
+        }else{
+            if(typeof exclude == "string"){
+                exclude = [exclude];
+            }
+        }
         var files = fs.readdirSync(path);
         var result = [];
         files.forEach(function(file){
-            if(loader.isDir(path + loader.SEPARATOR + file)){
+            if(exclude.indexOf(file) < 0 && loader.isDir(path + loader.SEPARATOR + file)){
                 result.push(file);
             }
         });
@@ -104,11 +221,18 @@ var Loader = function(vakoo){
         return result;
     }
 
-    this.getFiles = function(path){
+    this.getFiles = function(path,exclude){
+        if(typeof exclude == "undefined"){
+            exclude = [];
+        }else{
+            if(typeof exclude == "string"){
+                exclude = [exclude];
+            }
+        }
         var files = fs.readdirSync(path);
         var result = [];
         files.forEach(function(file){
-            if(loader.isFile(path + loader.SEPARATOR + file)){
+            if(exclude.indexOf(file) < 0 && loader.isFile(path + loader.SEPARATOR + file)){
                 result.push(file);
             }
         });

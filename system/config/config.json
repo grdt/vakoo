@@ -7,5 +7,6 @@
         "controller":"controller",
         "method":"index"
     },
-    "tmpl_lib":"tmpl"
+    "tmpl_lib":"tmpl",
+    "template":"default"
 }
