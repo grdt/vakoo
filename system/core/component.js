@@ -71,17 +71,35 @@ var Component = function(name){
         }
     }
 
-    this.render = function(view,data){
-        var tmpl = this.library(this.vakoo.config().tmpl_lib,{url:this.url,option:this});
-        tmpl.render(view,data);
-        return this;
+    this.user = function(callback){
+        console.log('in default component');
+        if(this.session('user_id')){
+            if(typeof this._options['user'] != "undefined"){
+                var user = this._options['user'].model('user');
+                if(!!user){
+                    user.where({_id:this.session('user_id')});
+                    user.findOne(function(){
+                        if(typeof callback != "undefined"){
+                            callback(user);
+                        }
+                    });
+                }
+            }else{
+                if(typeof callback != "undefined"){
+                    callback(null);
+                }
+            }
+        }else{
+            if(typeof callback != "undefined"){
+                callback(null);
+            }
+        }
     }
 
 
-
     this.coreController = function(){
-        if(!!this._core_controller)
-            return this._core_controller;
+//        if(!!this._core_controller)
+//            return this._core_controller;
         var core_controller = require('./controller');
         core_controller.prototype = this;
         this._core_controller = new core_controller();
@@ -132,8 +150,6 @@ var Component = function(name){
     }
 
     this.preloadModels = function(){
-
-
         if(typeof component.db != "object"){
             var loop = 1;
             var dbInterval = setInterval(function(){
@@ -181,28 +197,31 @@ var Component = function(name){
                 this.INDEX_CONTROLLER_PATH = this.CONTROLLER_PATH + this.SEPARATOR + 'controller' + this.EXT_JS;
             }
 
-            this.getFiles(this.CONTROLLER_PATH).forEach(function(controller){
-                if(controller != ('controller' + component.EXT_JS) && controller != ('index' + component.EXT_JS)){
-                    if(component.getExtension(component.CONTROLLER_PATH + component.SEPARATOR + controller) == component.EXT_JS){
-                        component.preloadController(controller.replace(component.EXT_JS,''),(component.CONTROLLER_PATH + component.SEPARATOR + controller).replace(component.EXT_JS,''));
+            var controllers = this.getFiles(this.CONTROLLER_PATH);
+            
+            for(var key in controllers){
+
+                var controller = controllers[key];
+
+                if(controller != ('controller' + this.EXT_JS) && controller != ('index' + this.EXT_JS)){
+                    if(this.getExtension(this.CONTROLLER_PATH + this.SEPARATOR + controller) == this.EXT_JS){
+                        this.preloadController(controller.replace(this.EXT_JS,''),(this.CONTROLLER_PATH + this.SEPARATOR + controller));
                     }
                 }
-            });
+            }
 
         }
 
         if(this.INDEX_CONTROLLER_PATH != '')
             this.preloadController('controller',this.INDEX_CONTROLLER_PATH);
 
-
-        this.preloadConfig();
-        this.preloadRoutes();
-        this.preloadModels();
-
         return this;
     }
 
     this.preload();
+    this.preloadConfig();
+    this.preloadRoutes();
+    this.preloadModels();
 
     return this;
 }

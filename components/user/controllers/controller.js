@@ -9,7 +9,7 @@ var Controller = function(){
             user.password = this.post('password');
             user.save(function(){
                 if(user._id){
-                    controller.redirect(controller.createUrl({method:'profile',json:'true'}));
+                    controller.redirect(controller.createUrl({method:'profile'}));
                 }
             })
         }else{
@@ -18,7 +18,44 @@ var Controller = function(){
     }
 
     this.profile = function(){
-        this.where();
+
+        this.user(function(user){
+            if(user){
+                controller.json(user.clean());
+            }else{
+                controller.redirect(controller.createUrl({method:'login'}));
+            }
+        })
+    }
+
+    this.login = function(){
+        if(this.post()){
+            var user = this.model('user');
+            user.where({email:this.post('email'),password:this.post('password')});
+            user.findOne(function(){
+                if(user._id){
+                    user.last_login = new Date();
+                    user.save();
+                    controller.session('user_id',user._id);
+                    controller.redirect(controller.createUrl({method:'profile'}));
+                }else{
+                    controller.render('login');
+                }
+            })
+        }else{
+            this.user(function(user){
+                if(user){
+                    controller.redirect(controller.createUrl({method:'profile'}));
+                }else{
+                    controller.render('login');
+                }
+            })
+        }
+    }
+
+    this.logout = function(){
+        this.session('user_id',null);
+        this.redirect();
     }
 
     return this;

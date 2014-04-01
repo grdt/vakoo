@@ -25,6 +25,10 @@ var Loader = function(vakoo){
 
     this.TEMPLATE_PATH = this.TEMPLATES_PATH + this.SEPARATOR + this.vakoo.config().template;
 
+    this.ADMIN_TEMPLATE = 'admin';
+
+    this.ADMIN_TEMPLATE_PATH = this.TEMPLATES_PATH + this.SEPARATOR + this.ADMIN_TEMPLATE;
+
     this.DB_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'database';
 
     this.DB_DRIVERS_PATH = this.DB_PATH + this.SEPARATOR + 'drivers';
@@ -32,6 +36,7 @@ var Loader = function(vakoo){
     this._options = {};
     this._libraries = {};
     this._templates = {};
+    this._admin_templates = {};
 
     this._components_routes = [];
 
@@ -58,59 +63,23 @@ var Loader = function(vakoo){
         //----load components ---
 
         var Component = require('./component');
+        var AdminComponent = require('./admin_component');
         Component.prototype = this;
         this.getDirs(this.COMPONENTS_PATH).forEach(function(option){
             loader._options[option] = new Component(option);
+            if(option != 'admin'){
+                AdminComponent.prototype = loader._options[option];
+                loader._options['admin.'+option] = new AdminComponent();
+            }else{
+                AdminComponent.prototype = loader._options[option];
+                loader._options[option] = new AdminComponent();
+                console.log(loader._options[option]);
+            }
         });
-
 
         //----load templates ----
 
-        var opt_templates_exists = this.isDir(this.TEMPLATE_PATH + this.SEPARATOR + 'components');
-
-        for(option in this._options){
-
-            var directory = this.parseDirectory(this._options[option].VIEW_PATH);
-
-            var compare = {};
-
-            if(directory){
-                compare = this.compareDirectory(this._options[option].VIEW_PATH,directory);
-            }
-
-            if(opt_templates_exists){
-                var tmp_opt_dir = this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option;
-                var tmpl_directory = this.parseDirectory(tmp_opt_dir);
-                if(tmpl_directory){
-                    var tmpl_compare = this.compareDirectory(tmp_opt_dir,tmpl_directory);
-                    compare = _.defaults(tmpl_compare,compare);
-                }
-            }
-
-            if(!_.isEmpty(compare)){
-                this._templates[option] = {};
-                for(key in compare){
-                    this._templates[option][key] = fs.readFileSync(compare[key],'utf8');
-                }
-            }else{
-                this._templates[option] = null;
-            }
-        }
-        
-        var template_dir = this.parseDirectory(this.TEMPLATE_PATH,'components');
-        
-        if(template_dir){
-            var template_compare = this.compareDirectory(this.TEMPLATE_PATH,template_dir);
-            if(!_.isEmpty(template_compare)){
-                for(key in template_compare){
-                    if(!!this._templates[key]){
-                        throw new Error('view '+template_compare[key]+' cant named as component');
-                    }else{
-                        this._templates[key] = fs.readFileSync(template_compare[key],'utf8');
-                    }
-                }
-            }
-        }
+        this.preloadTemplates();
 
         // ---- load libraries ---
 
@@ -126,6 +95,74 @@ var Loader = function(vakoo){
 
 
         this.preloadDB();
+    }
+
+    this.preloadTemplates = function(){
+        for(var option in this._options){
+
+            var compare = this.getCompare(this._options[option].VIEW_PATH,'admin');
+
+            var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
+
+            compare = _.defaults(tmpl_compare,compare);
+
+            if(!_.isEmpty(compare)){
+                this._templates[option] = {};
+                for(var key in compare){
+                    this._templates[option][key] = fs.readFileSync(compare[key],'utf8');
+                }
+            }else{
+                this._templates[option] = null;
+            }
+
+            var admin_compare = this.getCompare(this._options[option].VIEW_PATH + this.SEPARATOR + this.ADMIN_TEMPLATE);
+
+            var admin_tmpl_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
+
+            admin_compare = _.defaults(admin_tmpl_compare,admin_compare);
+
+            if(!_.isEmpty(admin_compare)){
+                this._admin_templates[option] = {};
+                for(var key in admin_compare){
+                    this._admin_templates[option][key] = fs.readFileSync(admin_compare[key],'utf8');
+                }
+            }else{
+                this._admin_templates[option] = null;
+            }
+        }
+
+        var template_compare = this.getCompare(this.TEMPLATE_PATH,'components');
+        if(!_.isEmpty(template_compare)){
+            for(var key in template_compare){
+                if(!!this._templates[key]){
+                    throw new Error('view '+template_compare[key]+' cant named as component');
+                }else{
+                    this._templates[key] = fs.readFileSync(template_compare[key],'utf8');
+                }
+            }
+        }
+
+        var admin_template_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH,'components');
+
+        if(!_.isEmpty(admin_template_compare)){
+            for(var key in admin_template_compare){
+                if(!!this._admin_templates[key]){
+                    throw new Error('admin view '+template_compare[key]+' cant named as component');
+                }else{
+                    this._admin_templates[key] = fs.readFileSync(admin_template_compare[key],'utf8');
+                }
+            }
+        }
+    }
+
+    this.getCompare = function(path,exclude){
+        var compare = {};
+        var directory = this.parseDirectory(path,exclude);
+        if(directory){
+            compare = this.compareDirectory(path,directory);
+        }
+
+        return compare;
     }
 
     this.compareDirectory = function(path,directory,templates,tmpl_key){
@@ -309,6 +346,10 @@ var Loader = function(vakoo){
 
     this.show404 = function(code,message,res){
        res.send({code:code,message:message});
+    }
+
+    this.parent = function(){
+        return this.__proto__;
     }
 
 

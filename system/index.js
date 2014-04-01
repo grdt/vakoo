@@ -34,9 +34,15 @@ var vakoo = function(){
 
         this._express.use(express.urlencoded());
 
+        this._express.use(express.cookieParser());
+
+        this._express.use(express.session({
+            secret:'1234567890QWERTY',
+            cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
+        }));
+
         this._express.use(multipartMiddleware);
 
-//          todo find plugin for multipart uploads
 
 
         this._express.all('*',function(req,res){

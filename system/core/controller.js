@@ -4,12 +4,18 @@ var Controller = function(url){
 
     this.url = url;
 
-    this.index = function(){
 
+
+    this.index = function(){
+        this.echo("method 'index' not found");
     }
 
     this.where = function(){
-        this.url.response.send(this.url.executor);
+        this.url.response.send({
+            executor:this.url.executor,
+            "get":this.get(),
+            "post":this.post()
+        });
     }
 
     this.get = function(param){
@@ -33,12 +39,53 @@ var Controller = function(url){
     }
 
     this.createUrl = function(executor){
+        if(typeof executor == "undefined"){
+            executor = {};
+        }
         executor = this._.defaults(executor,this.url.executor);
         return this.router().createUrl(executor);
     }
 
     this.redirect = function(url){
+        if(typeof url == "undefined"){
+            url = '/';
+        }
         this.url.response.redirect(url);
+    }
+
+    this.render = function(view,data){
+        var lib = this.vakoo.config().tmpl_lib;
+        var tmpl = this.library(lib,{url:this.url,option:this});
+        tmpl.render(view,data);
+        return this;
+    }
+
+    this.json = function(data){
+        this.url.response.send(data);
+    }
+
+    this.echo = function(data){
+        this.url.response.send(data);
+    }
+
+    this.session = function(key,value){
+        if(typeof value == "undefined"){
+            if(typeof key == "undefined"){
+                return this.url.request.session;
+            }else{
+                return (typeof this.url.request.session[key] != "undefined") ? this.url.request.session[key] : null;
+            }
+        }else{
+            if(value == null){
+                if(typeof this.url.request.session[key] != "undefined"){
+                    delete this.url.request.session[key];
+                }
+            }else{
+                this.url.request.session[key] = value;
+            }
+        }
+
+        return this;
     }
 
     this.files = function(param){

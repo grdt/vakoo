@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var ObjectID = require('mongodb').ObjectID;
 
 var Model = function(){
 
@@ -11,6 +12,10 @@ var Model = function(){
     this.where = function(params){
         for(key in params){
             if(this.hasOwnProperty(key)){
+                if(key == '_id'){
+                    params[key] = this.ObjectID(params[key]);
+                }
+
                 this._where[key] = params[key];
             }
         }
@@ -39,6 +44,9 @@ var Model = function(){
                         callback(_this);
                     }
                 }else{
+                    if(typeof callback == "function"){
+                        callback(_this);
+                    }
                     console.log('not found');
                 }
             }
@@ -81,8 +89,15 @@ var Model = function(){
         return this;
     }
 
-    this.update = function(){
-        
+    this.update = function(callback){
+        var _this = this;
+
+        this.collection().update({_id:this._id},this.clean(),function(err,items){
+            if(typeof callback == "function"){
+                callback(_this);
+            }
+        });
+
     }
 
     this.clean = function(without){
@@ -114,6 +129,10 @@ var Model = function(){
         var object = _.pick(this,keys);
 
         return object;
+    }
+
+    this.ObjectID = function(id){
+        return new ObjectID(id);
     }
 
     this.collection = function(){

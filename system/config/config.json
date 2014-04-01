@@ -8,5 +8,6 @@
         "method":"index"
     },
     "tmpl_lib":"tmpl",
-    "template":"default"
+    "template":"default",
+    "session_live": 900000
 }

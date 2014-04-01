@@ -16,7 +16,7 @@ var Tmpl = function(params){
         var template = this.template(view);
 
         if(template != null){
-            this.url.response.send(template);
+            this.url.response.send(template + '1');
         }else{
             this.url.response.send('template '+view+' not found');
         }
