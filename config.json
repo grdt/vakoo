@@ -1,5 +1,5 @@
 {
-    "port":8773,
+    "port":8774,
     "db":{
         "driver":"mongodb",
         "host":"127.0.0.1",

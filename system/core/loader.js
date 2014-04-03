@@ -8,7 +8,7 @@ var Loader = function(vakoo){
 
     this.EXT_JS = '.js';
     this.EXT_JSON = '.json';
-    this.EXT_VIEW = '.twig';
+    this.EXT_VIEW = '.hbs';
 
 
     this.SEPARATOR = '/';

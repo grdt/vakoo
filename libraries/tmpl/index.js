@@ -1,3 +1,5 @@
+var Handlebars = require('handlebars');
+
 var Tmpl = function(params){
 
     if(!!params.url){
@@ -10,13 +12,24 @@ var Tmpl = function(params){
 
 
     this.render = function(view,data){
-        console.log(this.LIBRARY_NAME);
-        console.log(this.LIBRARY_PATH);
-        console.log('render view: ',view,'with data: ',data);
-        
-        var template = this.template(view);
-        if(template != null){
-            this.url.response.send(template + '1');
+//        console.log(this.LIBRARY_NAME);
+//        console.log(this.LIBRARY_PATH);
+//        console.log('render view: ',view,'with data: ',data);
+        var html = this.template(view);
+//		var layout = this._templates.layout;
+//		html = layout
+        if(html != null){
+			var _this = this;
+			Handlebars.registerHelper('include', function(fileName) {
+				var file = view + '.' + fileName;
+				var result = _this.template(file);
+				return new Handlebars.SafeString(result);
+			});
+
+			var template = Handlebars.compile(html);
+			var output = template(data.data);
+
+            this.url.response.send(output);
         }else{
             this.url.response.send('template '+view+' not found');
         }

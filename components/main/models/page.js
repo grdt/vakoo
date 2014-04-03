@@ -8,7 +8,13 @@ var Page = function(){
 
     this.teaser = '';
 
-    this.content = '';
+    this.content = function() {
+		var li = ''
+		for (var i=0; i<10; i++) {
+			li+='<li>'+i+'</li>'
+		}
+		return '<ul>' + li + '</ul>';
+	};
 
     this.status = '';
 
