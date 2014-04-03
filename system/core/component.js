@@ -70,24 +70,35 @@ var Component = function(name){
             return false;
         }
     }
+    
+    this.template = function(name){
+        var templates_destination = (this.isAdmin()) ? this._admin_templates : this._templates;
+
+        if(!!templates_destination[this.COMPONENT_NAME] && typeof templates_destination[this.COMPONENT_NAME][name] != "undefined"){
+            return templates_destination[this.COMPONENT_NAME][name];
+        }
+
+        if(typeof templates_destination[name] != "undefined"){
+            return templates_destination[name];
+        }
+
+        return null;
+    }
+
+    this.isAdmin = function(){
+        return false;
+    }
 
     this.user = function(callback){
-        console.log('in default component');
         if(this.session('user_id')){
-            if(typeof this._options['user'] != "undefined"){
-                var user = this._options['user'].model('user');
-                if(!!user){
-                    user.where({_id:this.session('user_id')});
-                    user.findOne(function(){
-                        if(typeof callback != "undefined"){
-                            callback(user);
-                        }
-                    });
-                }
-            }else{
-                if(typeof callback != "undefined"){
-                    callback(null);
-                }
+            var user = this.option('user').model('user');
+            if(!!user){
+                user.where({_id:this.session('user_id')});
+                user.findOne(function(){
+                    if(typeof callback != "undefined"){
+                        callback(user);
+                    }
+                });
             }
         }else{
             if(typeof callback != "undefined"){
@@ -98,8 +109,6 @@ var Component = function(name){
 
 
     this.coreController = function(){
-//        if(!!this._core_controller)
-//            return this._core_controller;
         var core_controller = require('./controller');
         core_controller.prototype = this;
         this._core_controller = new core_controller();
@@ -178,12 +187,12 @@ var Component = function(name){
     }
 
     this.preload = function(){
-        
-        if(this.fileExists(this.COMPONENT_PATH + this.SEPARATOR + 'index' + this.EXT_JS)){
+
+        if(!this.isAdmin() && this.fileExists(this.COMPONENT_PATH + this.SEPARATOR + 'index' + this.EXT_JS)){
             this.INDEX_CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'index' + this.EXT_JS;
         }
 
-        if(this.fileExists(this.COMPONENT_PATH + this.SEPARATOR + 'controller' + this.EXT_JS)){
+        if(!this.isAdmin() && this.fileExists(this.COMPONENT_PATH + this.SEPARATOR + 'controller' + this.EXT_JS)){
             this.INDEX_CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'controller' + this.EXT_JS;
         }
 

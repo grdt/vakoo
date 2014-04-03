@@ -7,6 +7,10 @@ var Router = function(){
     this.parseExecutor = function(req){
 
         var executor = this.executor();
+
+        if(_url.parse(req.url).pathname != '/'){
+            return executor;
+        }
         
         if(typeof req.param('task') != "undefined"){
             var task = req.param('task').split('.');

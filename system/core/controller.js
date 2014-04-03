@@ -48,14 +48,17 @@ var Controller = function(url){
 
     this.redirect = function(url){
         if(typeof url == "undefined"){
-            url = '/';
+            url = (this.isAdmin()) ? '/admin' :'/';
         }
         this.url.response.redirect(url);
     }
 
     this.render = function(view,data){
         var lib = this.vakoo.config().tmpl_lib;
-        var tmpl = this.library(lib,{url:this.url,option:this});
+        var tmpl = this.library(lib,{url:this.url,from:this});
+        if(typeof data == "undefined"){
+            data = {};
+        }
         tmpl.render(view,data);
         return this;
     }

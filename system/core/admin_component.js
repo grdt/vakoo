@@ -6,23 +6,26 @@ var AdminComponent = function(name){
 
     this.CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'controllers' + this.SEPARATOR + 'admin';
 
+    this.INDEX_CONTROLLER_PATH = '';
+
+    if(!!this._controllers){
+        this._controllers = {};
+    }
+
     this.user = function(callback){
-        console.log('here now');
         if(this.session('user_id')){
-            if(typeof this._options['user'] != "undefined"){
-                var user = this._options['user'].model('user');
-                if(!!user){
-                    user.where({_id:this.session('user_id')});
-                    user.findOne(function(){
-                        if(typeof callback != "undefined"){
+            var user = this.option('user').model('user');
+            if(!!user){
+                user.where({_id:this.session('user_id')});
+                user.findOne(function(){
+                    if(typeof callback != "undefined"){
+                        if(user.status == 'admin'){
                             callback(user);
+                        }else{
+                            callback(null);
                         }
-                    });
-                }
-            }else{
-                if(typeof callback != "undefined"){
-                    callback(null);
-                }
+                    }
+                });
             }
         }else{
             if(typeof callback != "undefined"){
@@ -31,7 +34,13 @@ var AdminComponent = function(name){
         }
     }
 
+    this.isAdmin = function(){
+        return true;
+    }
+
     this.preload();
+    
+
 
     return this;
 }

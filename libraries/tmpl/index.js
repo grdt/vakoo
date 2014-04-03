@@ -4,8 +4,8 @@ var Tmpl = function(params){
         this.url = params.url;
     }
 
-    if(!!params.option){
-        this.option = params.option;
+    if(!!params.from){
+        this.from = params.from;
     }
 
 
@@ -13,8 +13,8 @@ var Tmpl = function(params){
         console.log(this.LIBRARY_NAME);
         console.log(this.LIBRARY_PATH);
         console.log('render view: ',view,'with data: ',data);
+        
         var template = this.template(view);
-
         if(template != null){
             this.url.response.send(template + '1');
         }else{
@@ -23,15 +23,7 @@ var Tmpl = function(params){
     }
     
     this.template = function(name){
-        if(typeof this._templates[this.option.COMPONENT_NAME][name] != "undefined"){
-            return this._templates[this.option.COMPONENT_NAME][name];
-        }
-
-        if(typeof this._templates[name] != "undefined"){
-            return this._templates[name];
-        }
-
-        return null;
+        return this.from.template(name);
     }
 
     this.preload = function(){

@@ -63,17 +63,24 @@ var Loader = function(vakoo){
         //----load components ---
 
         var Component = require('./component');
-        var AdminComponent = require('./admin_component');
+
         Component.prototype = this;
         this.getDirs(this.COMPONENTS_PATH).forEach(function(option){
+
+            var AdminComponent = require('./admin_component');
+
             loader._options[option] = new Component(option);
+            
             if(option != 'admin'){
                 AdminComponent.prototype = loader._options[option];
                 loader._options['admin.'+option] = new AdminComponent();
+                if(option == 'main'){
+                    console.log(loader._options[option]._controllers);
+                    console.log(loader._options['admin.'+option]._controllers);
+                }
             }else{
                 AdminComponent.prototype = loader._options[option];
                 loader._options[option] = new AdminComponent();
-                console.log(loader._options[option]);
             }
         });
 
@@ -100,6 +107,8 @@ var Loader = function(vakoo){
     this.preloadTemplates = function(){
         for(var option in this._options){
 
+            if(this._options[option].isAdmin() && option != 'admin')continue;
+            
             var compare = this.getCompare(this._options[option].VIEW_PATH,'admin');
 
             var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
@@ -143,7 +152,7 @@ var Loader = function(vakoo){
         }
 
         var admin_template_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH,'components');
-
+        
         if(!_.isEmpty(admin_template_compare)){
             for(var key in admin_template_compare){
                 if(!!this._admin_templates[key]){
