@@ -12,6 +12,7 @@ var Controller = function(url){
 
     this.where = function(){
         this.url.response.send({
+            admin:this.isAdmin(),
             executor:this.url.executor,
             "get":this.get(),
             "post":this.post()
@@ -89,6 +90,12 @@ var Controller = function(url){
         }
 
         return this;
+    }
+
+    this.destroySession = function(){
+        this.session('user_id',null);
+//        this.url.request.session.destroy();
+//        this.url.response.clearCookie('connect.sid', { path: '/' });
     }
 
     this.files = function(param){

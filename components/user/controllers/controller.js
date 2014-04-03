@@ -23,6 +23,7 @@ var Controller = function(){
             if(user){
                 controller.json(user.clean());
             }else{
+                controller.session('redirect_after_login',controller.url.request.url);
                 controller.redirect(controller.createUrl({method:'login'}));
             }
         })
@@ -37,7 +38,12 @@ var Controller = function(){
                     user.last_login = new Date();
                     user.save();
                     controller.session('user_id',user._id);
-                    controller.redirect(controller.createUrl({method:'profile'}));
+                    if(controller.session('redirect_after_login')){
+                        controller.redirect(controller.session('redirect_after_login'));
+                        controller.session('redirect_after_login',null);
+                    }else{
+                        controller.redirect(controller.createUrl({method:'profile'}));
+                    }
                 }else{
                     controller.render('login');
                 }

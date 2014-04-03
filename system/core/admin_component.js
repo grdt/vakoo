@@ -6,6 +6,11 @@ var AdminComponent = function(name){
 
     this.CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'controllers' + this.SEPARATOR + 'admin';
 
+    if(this.COMPONENT_NAME == 'admin'){
+        this.VIEW_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'views';
+        this.CONTROLLER_PATH = this.COMPONENT_PATH + this.SEPARATOR + 'controllers';
+    }
+
     this.INDEX_CONTROLLER_PATH = '';
 
     if(!!this._controllers){

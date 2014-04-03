@@ -74,10 +74,6 @@ var Loader = function(vakoo){
             if(option != 'admin'){
                 AdminComponent.prototype = loader._options[option];
                 loader._options['admin.'+option] = new AdminComponent();
-                if(option == 'main'){
-                    console.log(loader._options[option]._controllers);
-                    console.log(loader._options['admin.'+option]._controllers);
-                }
             }else{
                 AdminComponent.prototype = loader._options[option];
                 loader._options[option] = new AdminComponent();

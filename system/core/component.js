@@ -220,7 +220,7 @@ var Component = function(name){
             }
 
         }
-
+        
         if(this.INDEX_CONTROLLER_PATH != '')
             this.preloadController('controller',this.INDEX_CONTROLLER_PATH);
 

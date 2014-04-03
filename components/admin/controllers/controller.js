@@ -3,7 +3,6 @@ var Controller = function(){
     var controller = this;
 
     this.index = function(){
-
         this.user(function(user){
             if(user){
                 if(!controller._.isEqual(controller.executor(),controller.router().executor())){
@@ -12,7 +11,12 @@ var Controller = function(){
                     controller.render('main');
                 }
             }else{
-                controller.exec({option:'user',method:'login'});
+                if(!controller._.isEqual(controller.executor(),controller.router().executor()) && !controller._.isEqual(controller.executor(),controller.loginExecutor())){
+                    controller.session('redirect_after_login',controller.url.request.url);
+                    controller.redirect();
+                }else{
+                    controller.exec({option:'user',method:'login'});
+                }
             }
         });
     }
@@ -34,11 +38,27 @@ var Controller = function(){
             if(task.length == 2){
                 executor.controller = task[0];
             }
+        }else{
+            if(this.get('method')){
+                executor.method = this.get('method');
+            }
+        }
+
+        if(this.get('option')){
+            executor.option = this.get('option');
+        }
+
+        if(this.get('method')){
+            executor.method = this.get('method');
         }
         
         executor = this.router().executor(executor);
 
         return executor;
+    }
+
+    this.loginExecutor = function(){
+        return {option:'user',controller:this.router().executor().controller,method:'login'};
     }
 
     return this;
