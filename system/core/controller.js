@@ -43,7 +43,7 @@ var Controller = function(url){
         if(typeof executor == "undefined"){
             executor = {};
         }
-        executor = this._.defaults(executor,this.url.executor);
+        executor = executor.defaults(this.url.executor);
         return this.router().createUrl(executor);
     }
 

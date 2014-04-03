@@ -36,7 +36,7 @@ var Router = function(){
 
                 params = route.match(url);
 
-                executor = router._.clone(route.executor);
+                executor = route.executor.clone();
 
                 for(i in route.executor){
                     if(route.executor[i][0] == ':'){
@@ -61,7 +61,7 @@ var Router = function(){
 
         params = this.executor(params);
 
-        var executor = this._.pick(params,['option','controller','method']);
+        var executor = params.pick(['option','controller','method']);
 
         var url = false;
         
@@ -94,11 +94,11 @@ var Router = function(){
     }
 
     this.executor = function(executor){
-        var clone = this._.clone(this.vakoo.config().default_executor);
+        var clone = this.vakoo.config().default_executor.clone();
         if(typeof executor == "undefined"){
             return clone;
         }else{
-            return this._.defaults(executor,clone);
+            return executor.defaults(clone);
         }
     }
 

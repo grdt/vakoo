@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var ObjectID = require('mongodb').ObjectID;
 
 var Model = function(){
@@ -104,26 +103,22 @@ var Model = function(){
 
         //todo: refactor cleaner
 
-        var keys = _.keys(this);
+        var keys = this.keys();
+
+        keys.withoutFunctions();
 
         for(key in this._reservedKeys){
-            keys = _.without(keys,this._reservedKeys[key]);
+            keys = keys.without(this._reservedKeys[key]);
         }
 
         if(typeof without == "string"){
-            keys = _.without(keys,without);
+            keys = keys.without(without);
         }else{
             if(typeof without == "object"){
                 for(key in without){
-                    keys = _.without(keys,without[key]);
+                    keys = keys.without(without[key]);
                 }
             }
-        }
-
-        var funcs = _.functions(this);
-
-        for(func in funcs){
-            keys = _.without(keys, funcs[func]);
         }
 
         var object = _.pick(this,keys);

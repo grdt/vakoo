@@ -1,5 +1,3 @@
-var _ = require('underscore');
-var fs = require('fs');
 var Susanin = require('susanin');
 var url = require('url');
 
@@ -7,7 +5,6 @@ var Loader = function(vakoo){
 
     var loader = this;
     this.vakoo = vakoo;
-    this._ = _;
 
     this.EXT_JS = '.js';
     this.EXT_JSON = '.json';
@@ -101,6 +98,7 @@ var Loader = function(vakoo){
     }
 
     this.preloadTemplates = function(){
+
         for(var option in this._options){
 
             if(this._options[option].isAdmin() && option != 'admin')continue;
@@ -109,9 +107,9 @@ var Loader = function(vakoo){
 
             var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
 
-            compare = _.defaults(tmpl_compare,compare);
+            compare.defaults(tmpl_compare);
 
-            if(!_.isEmpty(compare)){
+            if(!compare.isEmpty()){
                 this._templates[option] = {};
                 for(var key in compare){
                     this._templates[option][key] = fs.readFileSync(compare[key],'utf8');
@@ -124,9 +122,9 @@ var Loader = function(vakoo){
 
             var admin_tmpl_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
 
-            admin_compare = _.defaults(admin_tmpl_compare,admin_compare);
+            admin_compare.defaults(admin_tmpl_compare);
 
-            if(!_.isEmpty(admin_compare)){
+            if(!admin_compare.isEmpty()){
                 this._admin_templates[option] = {};
                 for(var key in admin_compare){
                     this._admin_templates[option][key] = fs.readFileSync(admin_compare[key],'utf8');
@@ -134,10 +132,13 @@ var Loader = function(vakoo){
             }else{
                 this._admin_templates[option] = null;
             }
+
         }
 
+
+
         var template_compare = this.getCompare(this.TEMPLATE_PATH,'components');
-        if(!_.isEmpty(template_compare)){
+        if(!template_compare.isEmpty()){
             for(var key in template_compare){
                 if(!!this._templates[key]){
                     throw new Error('view '+template_compare[key]+' cant named as component');
@@ -146,10 +147,12 @@ var Loader = function(vakoo){
                 }
             }
         }
+        
+
 
         var admin_template_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH,'components');
         
-        if(!_.isEmpty(admin_template_compare)){
+        if(!template_compare.isEmpty()){
             for(var key in admin_template_compare){
                 if(!!this._admin_templates[key]){
                     throw new Error('admin view '+template_compare[key]+' cant named as component');

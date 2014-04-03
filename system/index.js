@@ -4,6 +4,8 @@ var Loader = require('./core/loader'),
     fs = require('fs'),
     path = require('path');
 
+require('./core/global');
+
 var multipart = require('connect-multiparty');
 
 var multipartMiddleware = multipart();
@@ -61,7 +63,7 @@ var vakoo = function(){
         var default_config = (fs.existsSync(this.CONFIG_PATH + this.SEPARATOR + 'config' + this.EXT_JSON)) ? require(this.CONFIG_PATH + this.SEPARATOR + 'config' + this.EXT_JSON) : false;
         var config = (fs.existsSync(this.APP_PATH + this.SEPARATOR + 'config' + this.EXT_JSON)) ? require(this.APP_PATH + this.SEPARATOR + 'config' + this.EXT_JSON) : false;
         if(config){
-            config = _.defaults(config,default_config);
+            config.defaults(default_config);
         }else{
             config = default_config;
         }

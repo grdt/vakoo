@@ -1,6 +1,3 @@
-var fs = require('fs');
-
-
 var Component = function(name){
 
     var component = this;

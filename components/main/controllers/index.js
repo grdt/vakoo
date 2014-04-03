@@ -14,6 +14,18 @@ var Controller = function(){
     }
 
 	this.index = function() {
+        var obj = {
+            aza:'olo'
+        };
+
+        var arr = ['aza','olo']
+
+//        require(this.SYSTEM_PATH + this.SEPARATOR + 'core/global');
+//        sameGlobalFunc('aza');
+
+//        obj.azazaFunc('aza');
+//        arr.sameObjectFunc('arr');
+        
         this.where();
 	}
 
