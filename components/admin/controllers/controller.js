@@ -5,13 +5,13 @@ var Controller = function(){
     this.index = function(){
         this.user(function(user){
             if(user){
-                if(!controller._.isEqual(controller.executor(),controller.router().executor())){
+                if(!controller.isEqual(controller.executor(),controller.router().executor())){
                     controller.exec(controller.executor());
                 }else{
                     controller.render('main');
                 }
             }else{
-                if(!controller._.isEqual(controller.executor(),controller.router().executor()) && !controller._.isEqual(controller.executor(),controller.loginExecutor())){
+                if(!controller.executor().isEqual(controller.router().executor()) && !controller.executor().isEqual(controller.loginExecutor())){
                     controller.session('redirect_after_login',controller.url.request.url);
                     controller.redirect();
                 }else{

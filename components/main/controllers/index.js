@@ -9,7 +9,7 @@ var Controller = function(){
     this.page = function(){
         var page = this.model('page');
 
-        this.render('page', {data: page});
+        this.render('page', {page: page});
 
     }
 
