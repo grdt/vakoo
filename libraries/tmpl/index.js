@@ -2,6 +2,9 @@ var Handlebars = require('handlebars');
 
 var Tmpl = function(params){
 
+	var $l = this;
+	this.hbs = Handlebars;
+
     if(!!params.url){
         this.url = params.url;
     }
@@ -10,21 +13,18 @@ var Tmpl = function(params){
         this.from = params.from;
     }
 
+	this._data = null;
+	this._view = null;
+	this._layout = null;
+	this._config = null;
+	this._factory = null;
 
-    this.render = function(view,data){
-        var html = this.template(view);
-        var layout = this.layout();
-
-        if(html != null){
-
-			var content = this.compile(this.template(view),data);
-            var layout = this.layout(data);
-
-            this.url.response.send(layout);
-        }else{
-            this.url.response.send('template '+view+' not found');
-        }
-    }
+	this.display = function(view,data){
+		this._data = data;
+		this._view = view;
+		var html = this.layout()({factory:this.factory()});
+		this.url.response.send(html);
+	}
 
     this.compile = function(html,data){
         var template = Handlebars.compile(html);
@@ -35,21 +35,54 @@ var Tmpl = function(params){
         return this.from.template(name);
     }
 
-    this.layout = function(data){
+    this.layout = function(){
+	    if(this._layout){
+		    return this._layout;
+	    }
         var templates_destination = (this.from.isAdmin()) ? this._admin_templates : this._templates;
         if(!!templates_destination.layout){
             var lay = Handlebars.compile(templates_destination.layout);
-            return lay({factory:this.factory(data)});
+	        this._layout = lay;
+            return this._layout;
         }else{
             throw new Error('layout not found');
         }
     }
 
-    this.factory = function(data){
-        var factory = require('./factory');
-        factory.prototype = this;
-        return new factory(data);
+
+    this.factory = function(){
+	    if(this._factory){
+			return this._factory;
+	    }else{
+		    this.helpers();
+		    var Factory = require('./factory');
+		    Factory.prototype = this;
+		    this._factory = new Factory;
+		    return this._factory
+	    }
     }
+
+	this.helpers = function(){
+		Handlebars.registerHelper('factory', function() {
+			var args = Array.prototype.slice.call(arguments);
+
+			if(!!args[0] && typeof $l.factory()[args[0]] == "function"){
+				return $l.factory()[args[0]].apply(this, _.rest(args));
+			}
+			return null;
+		});
+	}
+
+
+	this.config = function(){
+		if(this._config){
+			return this._config;
+		}else{
+			var config = require('./config.json');
+			this._config = config;
+			return this._config;
+		}
+	}
 
     this.preload = function(){
 

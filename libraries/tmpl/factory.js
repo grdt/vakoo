@@ -1,40 +1,34 @@
-var Factory = function(params){
+var Factory = function(){
 
-    var factory = this;
+	var $f = this;
 
-    this.init = function(params){
-        if(typeof params != "undefined"){
-            params.defaults(this.default_params());
-        }else{
-            params = this.default_params();
-        }
-        this._params = params;
-    }
+	this.meta = {
+		title:this.config().title,
+		desc:'desc',
+		keywords:'key1,key2,key3'
+	};
 
-    this.head = function(){
+	this.title = this.config().title;
 
-        var head = factory.compile(factory.template('head'),factory._params);
+	this.content = function(){
+		var content = $f.compile($f.template($f._view),$f._data);
+		return new $f.hbs.SafeString(content);
+	}
 
-        return head;
-    }
+	this.module = function(module){
+		var args = _.initial(Array.prototype.slice.call(arguments));
+		console.log(module);
+		console.log(args);
+		return 'aza';
+	}
 
+	this.css = function(source){
+		return new $f.hbs.SafeString('<link rel="stylesheet" href="'+source+'">');
+	}
 
-
-    this.default_params = function(){
-        var defaults = {
-            js:[
-                'http://code.jquery.com/jquery-2.1.0.min.js'
-            ],
-            css:[
-                '/admin/media/css/bootstrap.css'
-            ]
-        };
-
-        return defaults;
-    }
-
-
-    this.init(params);
+	this.js = function(source){
+		return new $f.hbs.SafeString('<script type="text/javascript" src="'+source+'"></script>');
+	}
 
     return this;
 }

@@ -54,15 +54,15 @@ var Controller = function(url){
         this.url.response.redirect(url);
     }
 
-    this.render = function(view,data){
-        var lib = this.vakoo.config().tmpl_lib;
-        var tmpl = this.library(lib,{url:this.url,from:this});
-        if(typeof data == "undefined"){
-            data = {};
-        }
-        tmpl.render(view,data);
-        return this;
-    }
+	this.tmpl = function(){
+		if(typeof this._tmpl != "undefined"){
+			return this._tmpl;
+		}
+
+		var lib = this.vakoo.config().tmpl_lib;
+		var tmpl = this.library(lib,{url:this.url,from:this});
+		return tmpl;
+	}
 
     this.json = function(data){
         this.url.response.send(data);
