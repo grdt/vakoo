@@ -10,6 +10,7 @@
     "express": "~3.5.1",
     "handlebars": "~2.0.0-alpha.2",
     "connect-multiparty": "~1.0.3",
-    "mime": "~1.2.11"
+    "mime": "~1.2.11",
+    "csv": "~0.3.7"
   }
 }

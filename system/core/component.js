@@ -52,6 +52,7 @@ var Component = function(name){
     this.model = function(name){
         if(!!this._models[name]){
             var m = new this._models[name]();
+	        m._keys = m.keys();
             return m;
         }else{
             throw new Error('model ' + name + ' not found');

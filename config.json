@@ -1,5 +1,10 @@
 {
     "port":8773,
+	"default_executor":{
+		"option":"shop",
+		"controller":"cities",
+		"method":"index"
+	},
     "db":{
         "driver":"mongodb",
         "host":"127.0.0.1",

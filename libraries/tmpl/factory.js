@@ -17,9 +17,9 @@ var Factory = function(){
 
 	this.module = function(module){
 		var args = _.initial(Array.prototype.slice.call(arguments));
-		console.log(module);
-		console.log(args);
-		return 'aza';
+//		console.log(module);
+//		console.log(args);
+		return '';
 	}
 
 	this.css = function(source){

@@ -8,7 +8,12 @@ var Model = function(){
 
     this._reservedKeys = ['COLLECTION_NAME','_collection'];
 
+//	this._items = null;
+
     this.where = function(params){
+
+	    this._where = {};
+
         for(key in params){
             if(this.hasOwnProperty(key)){
                 if(key == '_id'){
@@ -18,16 +23,58 @@ var Model = function(){
                 this._where[key] = params[key];
             }
         }
+
+	    return this;
     }
 
-    this.find = function(){
+    this.find = function(callback){
+		var _this = this;
 
+	    this.collection().find(this._where,function(err,cursor){
+		    if(err){
+			    console.log(err);
+		    }else{
+			    cursor.toArray(function(err,items){
+				    if(err){
+					    console.log(err);
+				    }else{
+					    if(items.length){
+
+//						    _this._items = items;
+
+						    var collection = [];
+
+						    items.forEach(function(item,i){
+							    var clone = _this.clone();
+							    for(key in item){
+								    if(clone.hasOwnProperty(key)){
+									    clone[key] = item[key];
+								    }
+							    }
+
+							    collection.push(clone);
+						    })
+
+
+
+						    if(typeof callback == "function"){
+							    callback(collection);
+						    }
+
+					    }else{
+						    if(typeof callback == "function"){
+							    callback(null);
+						    }
+					    }
+				    }
+			    })
+		    }
+	    });
     }
 
     this.findOne = function(callback){
 
         var _this = this;
-
         this.collection().findOne(this._where,function(err,item){
             if(err){
                 console.log(err);
@@ -46,7 +93,7 @@ var Model = function(){
                     if(typeof callback == "function"){
                         callback(_this);
                     }
-                    console.log('not found');
+	                console.log('not found');
                 }
             }
         });
@@ -101,11 +148,43 @@ var Model = function(){
 
     this.clean = function(without){
 
+	    var object;
+
+	    if(typeof this._keys != "undefined"){
+
+		    var m_keys = this._keys;
+
+		    var out = this._reservedKeys.clone();
+
+		    var funcs = this.functions();
+
+		    for(f in funcs){
+			    m_keys = m_keys.without(funcs[f]);
+		    }
+
+		    if(_.isString(without)){
+			    out.push(without);
+		    }
+
+
+		    for(key in out){
+			    m_keys = m_keys.without(out[key]);
+		    }
+
+
+
+		    return _.pick(this, m_keys);
+	    }
+
         //todo: refactor cleaner
+	    
+	    var clone = this.clone();
+	    var funcs = clone.functions();
+	    var keys = clone.keys();
 
-        var keys = this.keys();
-
-        keys.withoutFunctions();
+	    for(key in funcs){
+		    keys = keys.without(funcs[key]);
+	    }
 
         for(key in this._reservedKeys){
             keys = keys.without(this._reservedKeys[key]);
@@ -121,7 +200,13 @@ var Model = function(){
             }
         }
 
-        var object = _.pick(this,keys);
+
+
+	    if(typeof this._keys != "undefined"){
+		    object = _.pick(this,keys);
+	    }else{
+		    object = _.pick(this,keys);
+	    }
 
         return object;
     }
