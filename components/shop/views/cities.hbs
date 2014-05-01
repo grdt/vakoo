@@ -1,0 +1,124 @@
+<script type="text/javascript" src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU"></script>
+<script type="text/javascript" src="https://dadata.ru/static/js/jquery.suggestions-4.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("button").click(function(){
+            var $button = $(this);
+
+            $("#from").val($button.data('from'));
+            $("#in").val($button.data('in'));
+
+            $("#_id").val($button.data('city_id'));
+
+            $("#map").empty();
+            map = new ymaps.Map ("map", {
+                center: [$button.data('lat'), $button.data('lng')],
+                zoom: 15,
+            });
+
+            ymaps.geocode([$button.data('lat') + '0000000000000', $button.data('lng') + '000000000000']).then(
+                    function(res){
+                        var street = res.geoObjects.get(0);
+                        var street = res.geoObjects.get(0);
+                        if(street){
+                            var name = street.properties.get('text');
+                            $("#address").html(name);
+                            $("#address").focus();
+                        }
+
+                    },
+                    function(err){
+                        console.log(err);
+            });
+
+
+            map.events.add('click', function (e) {
+                ymaps.geocode(e.get('coordPosition')).then(
+                        function(res){
+                            var street = res.geoObjects.get(0);
+                            if(street){
+                                var name = street.properties.get('text');
+                                $("#address").html(name);
+                                $("#address").focus();
+                            }
+
+                        },
+                        function(err){
+                            console.log(err);
+                        });
+            });
+
+
+//            $.post('http://webmaster.yandex.ru/xml/ajax/find-region.xml?region='+$button.data('name')+'&lang=cyr',function(data){
+//                console.log(data);
+//            });
+
+
+//            var In = $("input[type=text].in."+$(this).attr('city_id')).val();
+//            var From = $("input[type=text].from."+$(this).attr('city_id')).val();
+//            $.post('/?task=cities.store',{id:$(this).attr('city_id'),"in":In,from:From},function(data){
+//                console.log(data);
+//                $button.closest('tr').remove();
+//            })
+
+
+            $("#address").suggestions({
+                serviceUrl: "https://dadata.ru/api/v2/suggest/address",
+                type: "ADDRESS",
+                token: "4e8f740f9a2e275a91e5a904e64729e935b3fad0",
+                onSearchComplete: function(query,suggestion) {
+                    var data = suggestion[suggestion.length-1].data;
+
+                    if(data && data.house && data.postal_code.length && data.house.length){
+                        $.post('/?option=shop&task=cities.storedata',{id:$("#_id").val(),data:data},function(data){
+                            console.log(data);
+
+                            if($("#from").val().length && $("#in").val().length){
+                                $("button[data-city_id="+$("#_id").val()+"]").closest('tr').remove();
+
+                                setTimeout(function(){
+                                    $("button[data-city_id]").eq(0).click();
+                                },300)
+
+
+                            }else{
+                                console.log('need name');
+                                $("button").eq(0).closest('tr').remove();
+                                $("button").eq(0).click();
+                            }
+
+                        });
+                    }else{
+                        $("button").eq(0).closest('tr').remove();
+                        $("button").eq(0).click();
+                    }
+                }
+            });
+        });
+    });
+</script>
+<input id="_id" type="hidden"/>
+<div style="position: fixed;">
+<div id="map" style="position: absolute;top:0;left: 800px;width: 400px;height: 400px;"></div>
+</div>
+<input type="text" id="from" style="position: fixed;top:400px;left: 1200px;" placeholder="нет кого?"/>
+<br/>
+<input type="text" id="in" style="position: fixed;top:425px;left: 1200px;" placeholder="думать о ком?"/>
+<textarea name="" id="address" cols="30" rows="10" style="position: fixed;top:450px;left: 1200px;width: 400px;height: 200px;">
+
+</textarea>
+<table>
+
+
+{{#each cities}}
+    <tr>
+        <td>{{name_ru}}</td>
+        <td>{{name_en}}</td>
+        <td>
+            <button class="btn btn-default" data-city_id="{{_id}}" data-name="{{name_ru}}" data-from="{{title_from}}" data-in="{{title_in}}" data-lat="{{loc.lat}}" data-lng="{{loc.lng}}">map</button>
+        </td>
+    </tr>
+{{/each}}
+
+</table>

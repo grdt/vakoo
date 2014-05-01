@@ -1,6 +1,42 @@
 var Controller = function(){
 	var $c = this;
 
+
+	this.storedata = function(){
+		if(this.post()){
+			this.model('city').where({_id:this.post('id')}).findOne(function(city){
+
+				city.data = $c.post('data');
+
+				city.save();
+
+				$c.json(city.clean('block'));
+			});
+		}
+	}
+
+	this.store = function(){
+		if(this.post()){
+			this.model('city').where({_id:this.post('id')}).findOne(function(city){
+//				city.title_from = $c.post('from');
+//				city.title_in = $c.post('in');
+//				city.save();
+//				console.log('save',city._id,city.clean('block'));
+				$c.json(city.clean('block'));
+			});
+
+
+		}
+	}
+
+	this.index = function(){
+		this.model('city').where({"$or":[{"data":null},{"data.city":"Кизел"}]}).find(function(cities){
+			console.log(cities.length);
+			$c.tmpl().display('cities',{cities:cities});
+		})
+	}
+
+
 	this.coords = function(){
 		if(this.post()){
 			var lat = this.post('lat');
@@ -18,7 +54,7 @@ var Controller = function(){
 
 	}
 
-	this.index = function(){
+	this.getLocation = function(){
 
 		//{"loc":{"$near":[53.182612460368276, 56.879352315243075]}}
 

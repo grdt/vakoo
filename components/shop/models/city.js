@@ -20,6 +20,7 @@ var City = function(){
 		lng:0,
 		lat:0
 	}
+	this.data = {};
 
 	this.byIP = function(ip){
 		if(!_.isNumber(ip)){

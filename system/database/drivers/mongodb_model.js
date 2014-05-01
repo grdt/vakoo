@@ -15,13 +15,13 @@ var Model = function(){
 	    this._where = {};
 
         for(key in params){
-            if(this.hasOwnProperty(key)){
+//            if(this.hasOwnProperty(key)){
                 if(key == '_id'){
                     params[key] = this.ObjectID(params[key]);
                 }
 
                 this._where[key] = params[key];
-            }
+//            }
         }
 
 	    return this;
@@ -29,6 +29,7 @@ var Model = function(){
 
     this.find = function(callback){
 		var _this = this;
+	    
 
 	    this.collection().find(this._where,function(err,cursor){
 		    if(err){
