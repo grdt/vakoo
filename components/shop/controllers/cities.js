@@ -29,10 +29,30 @@ var Controller = function(){
 		}
 	}
 
+	this.remove = function(){
+		if(this.post()){
+			this.model('city').where({_id:this.post('id')}).findOne(function(city){
+				city.status = $c.post('status');
+				city.save();
+				$c.json(city.clean('block'));
+			});
+		}
+	}
+
 	this.index = function(){
-		this.model('city').where({"$or":[{"data":null},{"data.city":"Кизел"}]}).find(function(cities){
-			console.log(cities.length);
-			$c.tmpl().display('cities',{cities:cities});
+		this.model('city').where({status:'active'}).find(function(cities){
+			var cities2 = [];
+
+			cities.forEach(function(city){
+				if(city.name_ru != city.data.city){
+					cities2.push(city);
+				}
+			});
+			
+			console.log(cities2.length);
+
+
+			$c.tmpl().display('cities2',{cities:cities2});
 		})
 	}
 

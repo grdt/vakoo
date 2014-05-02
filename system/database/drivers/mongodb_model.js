@@ -112,9 +112,20 @@ var Model = function(){
 
         var _this = this;
 
-        this.collection().insert(this.clean(['_id']),function(err,items){
+	    var obj = this;
+
+	    if(obj._id == ''){
+		    obj = obj.clean('_id');
+	    }else{
+		    obj = obj.clean();
+	    }
+
+        this.collection().insert(obj,function(err,items){
             if(err){
                 console.log(err);
+	            if(typeof callback == "function"){
+		            callback(null);
+	            }
             }else{
                 if(items.length == 1){
                     for(key in items[0]){

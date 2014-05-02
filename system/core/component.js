@@ -114,8 +114,8 @@ var Component = function(name){
     }
     
     this.coreModel = function(){
-        if(!!this._core_model)
-            return this._code_model;
+//        if(typeof this._core_model != "undefined")
+//            return this._code_model;
 
         var core_model;
 

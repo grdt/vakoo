@@ -2,7 +2,7 @@
     "port":8773,
 	"default_executor":{
 		"option":"shop",
-		"controller":"cities",
+		"controller":"controller",
 		"method":"index"
 	},
     "db":{

@@ -1,7 +1,5 @@
 var City = function(){
 
-	var $m;
-
 	this.COLLECTION_NAME = 'cities';
 
 	this._id = '';
@@ -21,6 +19,8 @@ var City = function(){
 		lat:0
 	}
 	this.data = {};
+
+	this.status = 'active';
 
 	this.byIP = function(ip){
 		if(!_.isNumber(ip)){

@@ -1,0 +1,18 @@
+<table>
+
+
+    {{#each cities}}
+        <tr>
+            <td>{{name_ru}}</td>
+            <td>{{title_in}} {{title_from}}</td>
+            <td>
+                <pre>
+                    {{#each data}}
+                        {{@key}} {{this}}
+                    {{/each}}
+                </pre>
+            </td>
+        </tr>
+    {{/each}}
+
+</table>
