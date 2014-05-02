@@ -16,6 +16,7 @@ var Loader = function(vakoo){
     this.APP_PATH = this.SYSTEM_PATH.replace('/system','');
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
     this.COMPONENTS_PATH = this.APP_PATH + this.SEPARATOR + 'components';
+    this.MODULES_PATH = this.APP_PATH + this.SEPARATOR + 'modules';
     this.LIBRARIES_PATH = this.APP_PATH + this.SEPARATOR + 'libraries';
 
     this.TEMPLATES_PATH = this.APP_PATH + this.SEPARATOR + 'templates';
@@ -31,6 +32,7 @@ var Loader = function(vakoo){
     this.DB_DRIVERS_PATH = this.DB_PATH + this.SEPARATOR + 'drivers';
 
     this._options = {};
+	this._modules = {};
     this._libraries = {};
     this._templates = {};
     this._admin_templates = {};
@@ -54,6 +56,28 @@ var Loader = function(vakoo){
             return false;
         }
     }
+
+
+	this.module = function(namespace,name){
+		var modulename;
+		var module;
+		if(typeof name == "undefined" || !_.isString(name)){
+			var m = namespace.split(':');
+			module = m[0];
+			modulename = m[1];
+		}else{
+			module = namespace;
+			modulename = name;
+		}
+
+		if(!!this._modules[module]){
+			return this._modules[module].submodule(modulename);
+		}else{
+			return false;
+		}
+
+
+	}
 
     this.preload = function(){
 
@@ -91,7 +115,26 @@ var Loader = function(vakoo){
         });
 
 
-        // --- load default libs --- 
+        // --- load default libs ---
+
+
+
+	    //--- load modules ----
+
+		var Module = require('./module');
+	    Module.prototype = this;
+	    this.getDirs(this.MODULES_PATH).forEach(function(module){
+			var submodules = loader.getDirs(loader.MODULES_PATH + loader.SEPARATOR + module);
+
+		    loader._modules[module] = new Module(module);
+
+		    if(submodules.length){
+			    submodules.forEach(function(submodule){
+				    loader._modules[module].addSubmodule(submodule);
+			    });
+		    }
+
+	    });
 
 
         this.preloadDB();

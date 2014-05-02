@@ -1,3 +1,4 @@
+
 var Factory = function(){
 
 	var $f = this;
@@ -15,11 +16,12 @@ var Factory = function(){
 		return new $f.hbs.SafeString(content);
 	}
 
-	this.module = function(module){
+	this.module = function(modulename){
 		var args = _.initial(Array.prototype.slice.call(arguments));
-		console.log(module);
-		console.log(args);
-		return module;
+		var module = $f.vakoo.load.module(modulename);
+		var result = module.render($f,$f._data[modulename]);
+		var content = $f.compile($f.template(result.view),result.data);
+		return new $f.hbs.SafeString(content);
 	}
 
 	this.css = function(source){

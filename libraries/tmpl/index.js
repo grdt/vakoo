@@ -71,6 +71,14 @@ var Tmpl = function(params){
 			}
 			return null;
 		});
+
+		Handlebars.registerHelper('keyin', function(context, options) {
+			var ret = "";
+			for(key in context){
+				ret = ret + options.fn(context[key]);
+			}
+			return ret;
+		});
 	}
 
 

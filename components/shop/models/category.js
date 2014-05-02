@@ -8,6 +8,8 @@ var Category = function(){
 
 	this.ancestors = [];
 
+	this.parent = '';
+
 	this.import = {
 		id:0,
 		parent_id:0

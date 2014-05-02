@@ -3,7 +3,13 @@ var Controller = function(){
 	var $c = this;
 
 	this.index = function(){
-		this.tmpl().display('main');
+		this.model('category').find(function(categories){
+			$c.tmpl().display('main',{
+				"catalog:menu":{
+					categories:categories
+				}
+			});
+		});
 	}
 
 }

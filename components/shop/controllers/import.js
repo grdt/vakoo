@@ -87,6 +87,7 @@ var Import = function(){
 						});
 						var anc = parent.ancestors.clone();
 						anc.push(parent._id);
+						category.parent = parent._id;
 						category.ancestors = anc;
 					}
 

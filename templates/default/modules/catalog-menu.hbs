@@ -1,0 +1,18 @@
+<ul>
+{{#keyin tree.childs}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+        <ul>
+            {{#keyin this.childs}}
+                <li><a href="{{path}}">{{title}}</a></li>
+                <ul>
+                    {{#keyin this.childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/keyin}}
+                </ul>
+
+            {{/keyin}}
+        </ul>
+    </li>
+{{/keyin}}
+</ul>
