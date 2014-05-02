@@ -2,13 +2,10 @@ var Loader = require('./core/loader'),
     _ = require('underscore'),
     express = require('express'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+	multipart = require('connect-multiparty');
 
 require('./core/global');
-
-var multipart = require('connect-multiparty');
-
-var multipartMiddleware = multipart();
 
 var vakoo = function(){
 
@@ -24,38 +21,99 @@ var vakoo = function(){
 
     this._express = express();
 
+	this._server = require('http').createServer(this._express);
+
     this.start = function(){
 
         this.load = new Loader(this);
 
-        this._express.use(express.logger('dev'));
+		this.middlewareInit();
 
-        this._express.use(express.errorHandler());
+	    this.executeInit();
 
-        this._express.use(express.json());
-
-        this._express.use(express.urlencoded());
-
-        this._express.use(express.cookieParser());
-
-        this._express.use(express.session({
-            secret:'1234567890QWERTY',
-            cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
-        }));
-
-        this._express.use(multipartMiddleware);
-
-
-
-        this._express.all('*',function(req,res){
-            vakoo.load.execute(req,res);
-        });
-
-        this._express.listen(this.config().port);
-
-        console.log('Vakoo start at port ',this._config.port);
-
+        this.serverStart();
     };
+
+	this.serverStop = function(){
+		this._server.close();
+		console.log('Vakoo stop listen');
+	}
+
+	this.serverStart = function(){
+		this._server.listen(this.config().port);
+		console.log('Vakoo start at port ',this.config().port);
+	}
+
+	this.serverRestart = function(){
+		this.serverStop();
+		this.serverStart();
+	}
+
+	this.middlewareInit = function(mw){
+		if(typeof mw == "undefined")
+			mw = this.middleware();
+
+		for(key in mw){
+			this._express.use(mw[key].handler);
+		}
+	}
+
+	this.expressInit = function(){
+		this._express = require('express')();
+	}
+
+	this.serverInit = function(){
+		this._server = require('http').createServer(this._express);
+	}
+
+	this.executeInit = function(){
+		this._express.all('*',function(req,res){
+			vakoo.load.execute(req,res);
+		});
+	}
+
+	this.middleware = function(){
+
+		if(typeof this._middleware != "undefined")
+			return this._middleware;
+
+		this._middleware = [
+			{
+				name:'logger',
+				handler:express.logger('dev')
+			},
+			{
+				name:'error',
+				handler:express.errorHandler()
+			},
+			{
+				name:'json',
+				handler:express.json()
+			},
+			{
+				name:'url',
+				handler:express.urlencoded()
+			},
+			{
+				name:'cookie',
+				handler:express.cookieParser()
+			},
+			{
+				name:'multipart',
+				handler:multipart()
+			},
+			{
+				name:'session',
+				handler:express.session({
+					secret:'vakoo secret key',
+					key:'vakooFUCK.sid',
+					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
+				})
+			}
+		];
+
+		return this._middleware;
+	}
 
     this.config = function(){
         if(!!this._config)return this._config;

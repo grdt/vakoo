@@ -29,9 +29,9 @@ var Db = function(config){
 
         this._driver.emitter.on('db_conn',function(db){
             console.log(Db.driver,'connect successfull');
-	        Db.initPlugin('after_db_init');
 	        Db.interface = db;
-            Db.loadModel();
+	        Db.initPlugin('after_db_init');
+	        Db.loadModel();
         });
     }
 

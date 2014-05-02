@@ -9,5 +9,5 @@
     },
     "tmpl_lib":"tmpl",
     "template":"default",
-    "session_live": 900000
+    "session_live": 25920000000
 }
