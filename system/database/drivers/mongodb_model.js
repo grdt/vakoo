@@ -224,7 +224,15 @@ var Model = function(){
     }
 
     this.ObjectID = function(id){
-        return new ObjectID(id);
+	    var oid = id;
+
+	    try{
+		    oid = new ObjectID(id);
+	    }catch(e){
+
+	    }
+
+        return oid;
     }
 
     this.collection = function(){

@@ -17,6 +17,7 @@ var Loader = function(vakoo){
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
     this.COMPONENTS_PATH = this.APP_PATH + this.SEPARATOR + 'components';
     this.MODULES_PATH = this.APP_PATH + this.SEPARATOR + 'modules';
+    this.PLUGINS_PATH = this.APP_PATH + this.SEPARATOR + 'plugins';
     this.LIBRARIES_PATH = this.APP_PATH + this.SEPARATOR + 'libraries';
 
     this.TEMPLATES_PATH = this.APP_PATH + this.SEPARATOR + 'templates';
@@ -33,9 +34,14 @@ var Loader = function(vakoo){
 
     this._options = {};
 	this._modules = {};
+	this._plugins = {};
     this._libraries = {};
     this._templates = {};
     this._admin_templates = {};
+
+	this._routes = [];
+
+	this._router_init = false;
 
     this._components_routes = [];
 
@@ -77,6 +83,18 @@ var Loader = function(vakoo){
 		}
 
 
+	}
+
+	this.initPlugin = function(event){
+		var args = Array.prototype.slice.call(arguments);
+		if(!!this._plugins[event]){
+			for(key in this._plugins[event]){
+				if(typeof this._plugins[event][key].init == "function"){
+					console.log('init plugin',event);
+					this._plugins[event][key].init.apply(this, _.rest(args));
+				}
+			}
+		}
 	}
 
     this.preload = function(){
@@ -136,6 +154,19 @@ var Loader = function(vakoo){
 
 	    });
 
+		//----- load plugins ----
+
+	    this.getDirs(this.PLUGINS_PATH).forEach(function(event){
+
+		    loader._plugins[event] = {};
+
+		    loader.getFiles(loader.PLUGINS_PATH + loader.SEPARATOR + event).forEach(function(plugin){
+			    var Item = require(loader.PLUGINS_PATH + loader.SEPARATOR + event + loader.SEPARATOR + plugin);
+			    Item.prototype = loader;
+			    loader._plugins[event][plugin] = new Item;
+		    });
+	    });
+
 
         this.preloadDB();
     }
@@ -190,8 +221,6 @@ var Loader = function(vakoo){
                 }
             }
         }
-        
-
 
         var admin_template_compare = this.getCompare(this.ADMIN_TEMPLATE_PATH,'components');
         
@@ -354,17 +383,17 @@ var Loader = function(vakoo){
     }
 
     this.routes = function(){
-        if(!!this._routes)return this._routes;
-
-
+	    if(this._router_init)
+	        return this._routes;
         //----load main routes ----
+
+	    this._router_init = true;
         var routes = (fs.existsSync(this.APP_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON)) ? require(this.APP_PATH + this.SEPARATOR + 'routes' + this.EXT_JSON) : {};
 
-        this._routes = [];
-        
         for(key in routes){
             var route = Susanin.Route('/'+key);
             route.executor = routes[key];
+	        this.addRoute(route);
             this._routes.push(route);
         }
 
@@ -394,6 +423,12 @@ var Loader = function(vakoo){
         return this._routes;
 
     }
+	
+	this.addRoute = function(route){
+		if(route instanceof Susanin.Route){
+			this._routes.push(route);
+		}
+	}
 
     this.show404 = function(code,message,res){
        res.send({code:code,message:message});

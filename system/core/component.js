@@ -137,10 +137,13 @@ var Component = function(name){
         return this;
     }
 
-    this.preloadModel = function(name,path){
+    this.preloadModel = function(name,path,callback){
         var model = require(path);
         model.prototype = this.coreModel();
         this._models[name] = model;
+	    if(typeof callback == "function"){
+		    callback();
+	    }
         return this;
     }
 
@@ -176,11 +179,19 @@ var Component = function(name){
         }
 
         if(this.fileExists(this.MODEL_PATH) && this.isDir(this.MODEL_PATH)){
-            this.getFiles(this.MODEL_PATH).forEach(function(model_file){
+	        var files = this.getFiles(this.MODEL_PATH);
+            files.forEach(function(model_file,i){
                 if(component.getExtension(component.MODEL_PATH + component.SEPARATOR + model_file) == component.EXT_JS){
-                    component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''));
+	                if(i == (files.length - 1)){
+		                component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''),function(){
+			                component.initPlugin('after_' + component.COMPONENT_NAME + '_init');
+		                });
+	                }else{
+		                component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''));
+	                }
+
                 }
-            })
+            });
         }
     }
 

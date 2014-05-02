@@ -4,11 +4,7 @@ var Controller = function(){
 
 	this.index = function(){
 		this.model('category').find(function(categories){
-			$c.tmpl().display('main',{
-				"catalog:menu":{
-					categories:categories
-				}
-			});
+			$c.tmpl().display('main');
 		});
 	}
 

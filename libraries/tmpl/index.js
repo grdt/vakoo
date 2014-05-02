@@ -20,10 +20,12 @@ var Tmpl = function(params){
 	this._factory = null;
 
 	this.display = function(view,data){
-		this._data = data;
-		this._view = view;
-		var html = this.layout()({factory:this.factory()});
-		this.url.response.send(html);
+		this.initPlugin('before_display',view,data,function(data){
+			$l._data = data;
+			$l._view = view;
+			var html = $l.layout()({factory:$l.factory()});
+			$l.url.response.send(html);
+		});
 	}
 
     this.compile = function(html,data){
