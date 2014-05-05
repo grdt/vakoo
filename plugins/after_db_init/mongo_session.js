@@ -25,8 +25,7 @@ var Plugin = function(){
 				});
 			}
 		}
-
-
+		
 		this.vakoo.middlewareInit(middleware);
 		this.vakoo.executeInit();
 		this.vakoo.serverInit();

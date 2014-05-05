@@ -109,6 +109,10 @@ var vakoo = function(){
 					key:'vakooFUCK.sid',
 					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
 				})
+			},
+			{
+				name:'public',
+				handler:express.static(this.APP_PATH + this.SEPARATOR + 'public')
 			}
 		];
 

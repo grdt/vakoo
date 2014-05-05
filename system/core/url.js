@@ -10,7 +10,7 @@ var Url = function(request,response){
 
     if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
         var params = this.router().fetchUrl(this.request.url);
-        if(!params){
+        if(!params.params && !params.executor){
             this.executor = this.router().executor(404);
         }else{
             this.executor = params.executor.defaults(this.vakoo.config().default_executor);

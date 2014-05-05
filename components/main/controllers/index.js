@@ -21,6 +21,10 @@ var Controller = function(){
 		});
 	}
 
+	this.error = function(){
+		this.echo('error page. code: ' + this.get('id'));
+	}
+
     return this;
 }
 

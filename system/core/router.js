@@ -98,6 +98,14 @@ var Router = function(){
         if(typeof executor == "undefined"){
             return clone;
         }else{
+	        if(_.isNumber(executor)){
+		        return {
+			        option:"main",
+			        controller:"controller",
+			        method:"error",
+			        id:executor
+		        }
+	        }
             return executor.defaults(clone);
         }
     }

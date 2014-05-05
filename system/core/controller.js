@@ -23,6 +23,9 @@ var Controller = function(url){
         if(typeof param == "undefined"){
             return this.url.request.params;
         }else{
+	        if(typeof this.url.executor[param] != "undefined"){
+		        return this.url.executor[param];
+	        }
             return (typeof this.url.request.param(param) == "undefined") ? null : this.url.request.param(param);
         }
     }
