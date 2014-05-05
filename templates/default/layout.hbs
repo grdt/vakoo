@@ -7,26 +7,47 @@
     <meta name="keywords" content="{{factory.meta.keywords}}"/>
     {{factory 'js' '/js/jquery.js'}}
     {{factory 'js' '/js/bootstrap.js'}}
+    {{factory 'js' '/js/common.js'}}
     {{factory 'css' '/css/bootstrap.css'}}
-    {{factory 'css' '/css/bootstrap-theme.css'}}
+    {{factory 'css' '/css/style.css'}}
 	<title>{{factory.title}}</title>
 </head>
 <body>
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Vakoo</a>
+
+                        {{factory 'module' 'catalog:menu'}}
+
+                        <br/><br/>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-2">
 
         </div>
         <div class="col-md-6">
-            header
         </div>
         <div class="col-md-4">
-            cart
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            {{factory 'module' 'catalog:menu'}}
             {{factory.content}}
         </div>
     </div>

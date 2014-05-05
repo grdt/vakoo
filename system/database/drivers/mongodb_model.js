@@ -29,7 +29,6 @@ var Model = function(){
 
     this.find = function(callback){
 		var _this = this;
-	    
 
 	    this.collection().find(this._where,function(err,cursor){
 		    if(err){
@@ -64,7 +63,7 @@ var Model = function(){
 
 					    }else{
 						    if(typeof callback == "function"){
-							    callback(null);
+							    callback([]);
 						    }
 					    }
 				    }

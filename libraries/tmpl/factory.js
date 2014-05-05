@@ -9,7 +9,13 @@ var Factory = function(){
 		keywords:'key1,key2,key3'
 	};
 
-	this.title = this.config().title;
+	this.title = function(){
+		if(typeof $f._data.title == "undefined"){
+			return $f.config().title;
+		}else{
+			return $f._data.title + ' | ' + $f.config().title;
+		}
+	}
 
 	this.content = function(){
 		var content = $f.compile($f.template($f._view),$f._data);

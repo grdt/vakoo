@@ -7,7 +7,7 @@ var Menu = function(){
 		var categories = data.categories;
 		categories.sort(function(a,b){
 			return a.ancestors.length - b.ancestors.length;
-		})
+		});
 
 		categories.forEach(function(category){
 
@@ -39,7 +39,13 @@ var Menu = function(){
 			}
 		});
 
-		return {view:'modules.catalog-menu',data:{tree:tree.svet}};
+		var open = '';
+		
+		if(factory.from.url.request.url == '/'){
+			open = 'open';
+		}
+
+		return {view:'modules.catalog-menu',data:{tree:tree.svet,open:open}};
 
 	}
 }

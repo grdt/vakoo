@@ -1,18 +1,24 @@
-<ul>
-{{#keyin tree.childs}}
-    <li>
-        <a href="{{path}}">{{title}}</a>
-        <ul>
-            {{#keyin this.childs}}
-                <li><a href="{{path}}">{{title}}</a></li>
-                <ul>
-                    {{#keyin this.childs}}
-                        <li><a href="{{path}}">{{title}}</a></li>
-                    {{/keyin}}
-                </ul>
+<div class="btn-group {{open}}" id="catalog-menu">
+    <a href="#" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span>&nbsp;Категории товаров</a>
 
-            {{/keyin}}
-        </ul>
-    </li>
-{{/keyin}}
-</ul>
+    <ul class="dropdown-menu" role="menu">
+    {{#keyin tree.childs}}
+        <li>
+            <a href="{{path}}">{{title}} <span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+            <div class="childs row">
+                {{#keyin childs}}
+                    <ul class="last-childs col-md-6">
+                        <li><a href="{{path}}" class="child-head">{{title}}</a></li>
+                        {{#keyin childs}}
+                            <li><a href="{{path}}">{{title}}</a></li>
+                        {{/keyin}}
+                    </ul>
+                {{/keyin}}
+            </div>
+        </li>
+    {{/keyin}}
+    </ul>
+</div>
+
+
+
