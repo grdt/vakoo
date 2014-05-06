@@ -80,7 +80,7 @@ var Component = function(name){
             return templates_destination[name];
         }
 
-        return null;
+	    throw new Error('template ' + name + ' not found');
     }
 
     this.isAdmin = function(){

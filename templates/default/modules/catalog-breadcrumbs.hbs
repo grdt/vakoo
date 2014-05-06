@@ -1,0 +1,38 @@
+
+<div class="row">
+    <div class="pull-left" style="margin-bottom: 20px;padding: 8px 0px 8px 15px;">
+        <a href="#">Назад</a><span style="color:#ccc;padding-left: 15px;">|</span>
+    </div>
+    <div class="pull-left">
+        <ol class="breadcrumb">
+            {{#each crumbs}}
+                <li data-content="<a href=Vivamus> sagittis lacus </a><br>vel augue laoreet <br>rutrum faucibus."><a href="{{url}}">{{title}}</a></li>
+            {{/each}}
+        </ol>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.breadcrumb li').last().html($('.breadcrumb li').last().find('a').html()).addClass('active');
+        $('.breadcrumb li').each(function(i,item){
+            $(item).popover({
+                html:true,
+                placement:'bottom',
+                trigger:'hover',
+                container: item,
+                title:$(item).find('a').html(),
+                delay:{
+                    show:100,
+                    hide:500
+                }
+            });
+
+//            $(item).on('mouseover',function(){
+//                $(this).popover('show');
+//            });
+
+        })
+    })
+</script>

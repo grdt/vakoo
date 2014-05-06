@@ -23,8 +23,6 @@ var Categories = function(){
 					}
 
 					$c.model('product').where(where).find(function(products){
-
-						console.log(category.ancestors);
 						$c.tmpl().display('category',{
 							title:category.title,
 							category:category,

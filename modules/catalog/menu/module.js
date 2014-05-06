@@ -4,7 +4,7 @@ var Menu = function(){
 		var model = factory.option('shop').model('category');
 		var tree = [];
 		var result = false;
-		var categories = data.categories;
+		var categories = data['catalog:menu'].categories;
 		categories.sort(function(a,b){
 			return a.ancestors.length - b.ancestors.length;
 		});

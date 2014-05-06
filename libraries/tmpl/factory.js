@@ -3,6 +3,8 @@ var Factory = function(){
 
 	var $f = this;
 
+	this.TITLE_SEPARATOR = ' | ';
+
 	this.meta = {
 		title:this.config().title,
 		desc:'desc',
@@ -10,10 +12,13 @@ var Factory = function(){
 	};
 
 	this.title = function(){
+		if(typeof $f._data == "undefined"){
+			return $f.config().title;
+		}
 		if(typeof $f._data.title == "undefined"){
 			return $f.config().title;
 		}else{
-			return $f._data.title + ' | ' + $f.config().title;
+			return $f._data.title + $f.TITLE_SEPARATOR + $f.config().title;
 		}
 	}
 
@@ -25,9 +30,13 @@ var Factory = function(){
 	this.module = function(modulename){
 		var args = _.initial(Array.prototype.slice.call(arguments));
 		var module = $f.vakoo.load.module(modulename);
-		var result = module.render($f,$f._data[modulename]);
-		var content = $f.compile($f.template(result.view),result.data);
-		return new $f.hbs.SafeString(content);
+		var result = module.render($f,$f._data);
+		if(result){
+			var content = $f.compile($f.template(result.view),result.data);
+			return new $f.hbs.SafeString(content);
+		}else{
+			return false;
+		}
 	}
 
 	this.css = function(source){
