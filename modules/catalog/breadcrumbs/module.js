@@ -36,7 +36,8 @@ var Breadcrumbs = function(){
 				}
 			}
 		}
-		return {view:'modules.catalog-breadcrumbs',data:{crumbs:crumbs}};
+
+		return {view:'modules.catalog-breadcrumbs',data:{crumbs:crumbs,backs:data.history}};
 	}
 }
 

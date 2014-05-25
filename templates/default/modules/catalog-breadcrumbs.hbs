@@ -1,7 +1,11 @@
-
 <div class="row">
-    <div class="pull-left" style="margin-bottom: 20px;padding: 8px 0px 8px 15px;">
-        <a href="#">Назад</a><span style="color:#ccc;padding-left: 15px;">|</span>
+    <div class="pull-left back-link btn-group">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Назад</a><span>|</span>
+        <ul class="dropdown-menu" role="menu">
+            {{#keyin backs}}
+                <li><a href="{{url}}">{{title}}</a></li>
+            {{/keyin}}
+        </ul>
     </div>
     <div class="pull-left">
         <ol class="breadcrumb">
@@ -11,7 +15,6 @@
         </ol>
     </div>
 </div>
-
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -28,11 +31,6 @@
                     hide:500
                 }
             });
-
-//            $(item).on('mouseover',function(){
-//                $(this).popover('show');
-//            });
-
         })
     })
 </script>

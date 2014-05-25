@@ -45,8 +45,15 @@
     <div class="row">
         <div class="col-md-12">
             {{factory.content}}
+
+            {{#keyin factory._data.history}}
+                {{title}}&nbsp;{{url}}&nbsp;{{date}}<br/>
+            {{/keyin}}
+
         </div>
     </div>
+
+
 
     <div class="row">
         <div class="col-md-12">

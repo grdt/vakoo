@@ -8,17 +8,6 @@ var Plugin = function(){
 			data = {};
 		}
 		
-
-		if(typeof data.aza == "undefined"){
-			data.aza = 'hist';
-		}else{
-			console.log('aza',data.aza);
-		}
-
-
-
-
-		
 		if(!$l.from.session('history')){
 			data.history = {};
 			$l.from.session('history',{});
@@ -38,19 +27,19 @@ var Plugin = function(){
 			}
 
 			var sorted = _.sortBy(history,function(item){
-				console.log(new Date(item.date).getTime());
-				return 10;
+				return new Date(item.date).getTime();
 			});
+
+			sorted.reverse();
 			
-			console.log(sorted);
+			history = {};
+
+			sorted.forEach(function(item){
+				history[item.url] = item;
+			});
 
 			$l.from.session('history',history);
-			
-			console.log(history);
 		}
-
-		console.log(data.history);
-
 
 		if(typeof callback == "function"){
 			callback($l,view,data,next);

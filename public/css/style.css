@@ -55,3 +55,16 @@
     text-decoration: none;
     margin-left:10px;
 }
+
+.back-link{
+    margin-bottom: 20px;padding: 8px 0px 8px 15px;
+}
+
+.back-link span{
+    color:#ccc;padding-left: 15px;
+}
+
+.back-link ul.dropdown-menu li a:hover{
+    cursor:pointer;
+    background: #ccc;
+}

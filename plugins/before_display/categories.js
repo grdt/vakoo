@@ -8,14 +8,7 @@ var Plugin = function(){
 			data = {};
 		}
 		
-		if(typeof data.aza == "undefined"){
-			data.aza = 'cats';
-		}else{
-			console.log('aza1',data.aza);
-		}
-
-
-		this.option('shop').model('category').find(function(categories){
+			this.option('shop').model('category').find(function(categories){
 
 			data["catalog:menu"] = {categories:categories};
 			data["catalog:breadcrumbs"] = {categories:categories};
