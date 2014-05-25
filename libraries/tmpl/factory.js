@@ -30,12 +30,34 @@ var Factory = function(){
 	this.module = function(modulename){
 		var args = _.initial(Array.prototype.slice.call(arguments));
 		var module = $f.vakoo.load.module(modulename);
-		var result = module.render($f,$f._data);
-		if(result){
-			var content = $f.compile($f.template(result.view),result.data);
-			return new $f.hbs.SafeString(content);
+		if(module){
+			var moduleArguments = [];
+			moduleArguments.push($f);
+			moduleArguments.push($f._data);
+			moduleArguments = moduleArguments.concat(_.rest(args));
+			var result = module.render.apply(this,moduleArguments);
+			if(result){
+				var content = $f.compile($f.template(result.view),result.data);
+				return new $f.hbs.SafeString(content);
+			}else{
+				return false;
+			}
 		}else{
 			return false;
+		}
+
+	}
+
+	this.data = function(context,variable){
+		if(typeof $f._data != "undefined"){
+			if(typeof $f._data[context] != "undefined"){
+				if(typeof $f._data[context][variable] != "undefined"){
+					if(typeof $f._data[context][variable] == "function"){
+						return $f._data[context][variable]();
+					}else
+						return $f._data[context][variable];
+				}
+			}
 		}
 	}
 

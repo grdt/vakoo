@@ -1,24 +1,33 @@
-<div class="btn-group {{open}}" id="catalog-menu">
-    <a href="#" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span>&nbsp;Категории товаров</a>
+<div class="row well">
+    <div class="col-md-4">
+        <div class="btn-group {{open}}" id="catalog-menu">
+            <a href="#" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span>&nbsp;Категории товаров</a>
 
-    <ul class="dropdown-menu" role="menu">
-    {{#keyin tree.childs}}
-        <li>
-            <a href="{{path}}">{{title}} <span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
-            <div class="childs row">
-                {{#keyin childs}}
-                    <ul class="last-childs col-md-6">
-                        <li><a href="{{path}}" class="child-head">{{title}}</a></li>
-                        {{#keyin childs}}
-                            <li><a href="{{path}}">{{title}}</a></li>
-                        {{/keyin}}
-                    </ul>
+            <ul class="dropdown-menu" role="menu">
+                {{#keyin tree.childs}}
+                    <li>
+                        <a href="{{path}}">{{title}} <span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+                        <div class="childs row">
+                            {{#keyin childs}}
+                                <ul class="last-childs col-md-6">
+                                    <li><a href="{{path}}" class="child-head">{{title}}</a></li>
+                                    {{#keyin childs}}
+                                        <li><a href="{{path}}">{{title}}</a></li>
+                                    {{/keyin}}
+                                </ul>
+                            {{/keyin}}
+                        </div>
+                    </li>
                 {{/keyin}}
-            </div>
-        </li>
-    {{/keyin}}
-    </ul>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+    <div class="col-md-2 cart">
+        <a href="#" class="btn btn-lg btn-default">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            Товаров: <span class="count">0</span>,<br/>
+            На сумму: <span class="total">0</span>
+        </a>
+    </div>
 </div>
-
-
-

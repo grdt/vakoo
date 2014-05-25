@@ -16,40 +16,17 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/">Vakoo</a>
-
-                        {{factory 'module' 'catalog:menu'}}
-
-                        <br/><br/>
-
-                    </div>
-                </div>
-            </nav>
+            {{factory 'module' 'catalog:menu'}}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            {{factory 'module' 'catalog:breadcrumbs'}}
+
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             {{factory.content}}
-
-            {{#keyin factory._data.history}}
-                {{title}}&nbsp;{{url}}&nbsp;{{date}}<br/>
-            {{/keyin}}
-
         </div>
     </div>
 

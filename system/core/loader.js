@@ -77,11 +77,13 @@ var Loader = function(vakoo){
 		}
 
 		if(!!this._modules[module]){
+			if(typeof modulename == "undefined" && this._modules[module]._module){
+				return this._modules[module]._module;
+			}
 			return this._modules[module].submodule(modulename);
 		}else{
 			return false;
 		}
-
 
 	}
 
@@ -169,7 +171,7 @@ var Loader = function(vakoo){
 			var submodules = loader.getDirs(loader.MODULES_PATH + loader.SEPARATOR + module);
 
 		    loader._modules[module] = new Module(module);
-
+		    
 		    if(submodules.length){
 			    submodules.forEach(function(submodule){
 				    loader._modules[module].addSubmodule(submodule);
@@ -455,7 +457,7 @@ var Loader = function(vakoo){
 	}
 
     this.show404 = function(code,message,res){
-       res.send({code:code,message:message});
+        res.send({code:code,message:message});
     }
 
     this.parent = function(){

@@ -49,9 +49,9 @@ var Component = function(name){
         }
     }
 
-    this.model = function(name){
+    this.model = function(name,options){
         if(!!this._models[name]){
-            var m = new this._models[name]();
+            var m = new this._models[name](options);
 	        m._keys = m.keys();
             return m;
         }else{

@@ -27,8 +27,8 @@ var Product = function(){
 		categoryId:0
 	}
 
-	this.aza = function(){
-
+	this.url = function(){
+		return '#';
 	}
 
 }

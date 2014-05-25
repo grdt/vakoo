@@ -1,4 +1,6 @@
 var Handlebars = require('handlebars');
+var HandlebarsHelpers = require('handlebars-helper');
+HandlebarsHelpers.help(Handlebars);
 
 var Tmpl = function(params){
 
@@ -85,7 +87,55 @@ var Tmpl = function(params){
 			}
 			return ret;
 		});
+		
+		Handlebars.registerHelper('row',function(context,inRow,options){
+			if(typeof options == "undefined"){
+				var options = inRow;
+				var inRow = 4;
+			}
+			var result = '';
+			for(var i=0;i<Math.ceil(context.length / inRow);i++){
+				var items = [];
+				for(var y=0;y<inRow;y++){
+					if(typeof context[i*inRow + y] != "undefined")
+						items.push(context[i*inRow + y]);
+				}
+				result += options.fn({rowId:i,items:items});
+			}
+			return result;
+		});
+
+		Handlebars.registerHelper('text-count',function(items,type){
+			if(_.isString(type)){
+				var text = $l.counters[type];
+				var count = _.isArray(items) ? items.length : items;
+				var ending;
+
+				var number = count % 100;
+				if (number>=11 && number<=19) {
+					ending=text[2];
+				}
+				else {
+					var i = number % 10;
+					switch (i)
+					{
+						case (1): ending = text[0]; break;
+						case (2):
+						case (3):
+						case (4): ending = text[1]; break;
+						default: ending=text[2];
+					}
+				}
+
+				return count + ' ' + ending;
+			}
+		});
 	}
+
+
+	this.counters = {
+		'product':['товар','товара','товаров']
+	};
 
 
 	this.config = function(){

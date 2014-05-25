@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-6 page-header">
+        <h1>{{category.title}}<br/><small>мы нашли {{text-count productCount 'product'}}</small></h1>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        {{factory 'module' 'catalog:breadcrumbs'}}
+    </div>
+</div>
+
+{{#if categories}}
+<div class="row">
+    <div class="well">
+        {{#keyin categories}}
+            <a href="{{url}}" class="btn btn-{{#if active}}primary{{else}}default{{/if}}">{{title}}</a>
+        {{/keyin}}
+    </div>
+</div>
+{{/if}}
+
+{{#if products}}
+    {{#row products}}
+        <div class="row" data-row="{{rowId}}">
+            {{#each items}}
+                <div class="col-md-3">
+                    <div class="thumbnail product-thumb">
+                        <a href="{{factory 'data' 'category' 'url'}}/{{alias}}" data-href="{{alias}}"><img src="{{image}}" alt="..."></a>
+                        <div class="caption">
+                            <h4><a href="{{factory 'data' 'category' 'url'}}/{{alias}}" data-href="{{alias}}">{{title}}</a></h4>
+                            <p><span class="price">{{price}} P</span></p>
+                            <p>
+                                <a href="#" class="btn btn-primary add-to-cart" data-id="{{_id}}" role="button"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;В корзину</a>
+                                <a href="#" class="btn btn-primary add-to-cart one-click" role="button" data-id="{{_id}}"><span class="glyphicon glyphicon-hand-up"></span>&nbsp;Купить</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/row}}
+{{/if}}
+
+{{#if pagination}}
+    {{factory 'module' 'pagination' pagination}}
+{{/if}}
+

@@ -2,7 +2,15 @@ var Module = function(name){
 
 	this._submodules = {};
 
+	this._module = false;
+
 	this.MODULE_PATH = this.MODULES_PATH + this.SEPARATOR + name;
+	
+	if(this.fileExists(this.MODULE_PATH + this.SEPARATOR + 'module.js')){
+		var Module = require(this.MODULE_PATH + this.SEPARATOR + 'module.js');
+		Module.prototype = this;
+		this._module = new Module();
+	}
 
 	this.addSubmodule = function(module){
 		var Module = require(this.MODULE_PATH + this.SEPARATOR + module + this.SEPARATOR + 'module.js');

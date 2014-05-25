@@ -6,6 +6,10 @@ var Model = function(){
 
     this._sort = {};
 
+	this._skip = 0;
+
+	this._limit = 0;
+
     this._reservedKeys = ['COLLECTION_NAME','_collection'];
 
 //	this._items = null;
@@ -27,6 +31,26 @@ var Model = function(){
 	    return this;
     }
 
+	this.limit = function(skip,limit){
+
+		this._skip = 0;
+		this._limit = 0;
+
+		if(typeof limit == "undefined"){
+			limit = skip;
+			skip = 0;
+		}
+
+		if(!skip){
+			skip = 0;
+		}
+
+		this._skip = skip;
+		this._limit = limit;
+
+		return this;
+	}
+
     this.find = function(callback){
 		var _this = this;
 
@@ -34,6 +58,10 @@ var Model = function(){
 		    if(err){
 			    console.log(err);
 		    }else{
+			    if(_this._limit){
+				    cursor.skip(_this._skip);
+				    cursor.limit(_this._limit);
+			    }
 			    cursor.toArray(function(err,items){
 				    if(err){
 					    console.log(err);
@@ -71,6 +99,22 @@ var Model = function(){
 		    }
 	    });
     }
+
+	this.count = function(callback){
+		var _this = this;
+
+		this.collection().count(this._where,function(err,count){
+			if(err){
+				if(typeof callback == "function"){
+					callback(0);
+				}
+			}else{
+				if(typeof callback == "function"){
+					callback(count);
+				}
+			}
+		});
+	}
 
     this.findOne = function(callback){
 

@@ -68,3 +68,16 @@
     cursor:pointer;
     background: #ccc;
 }
+
+.add-to-cart{
+    width:49%;
+}
+
+.product-thumb h4>a{
+    color:rgb(51, 51, 51);
+}
+
+.product-thumb .price{
+    font-weight: bold;
+    font-size: 22px;
+}

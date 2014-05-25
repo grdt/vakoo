@@ -19,6 +19,10 @@ var Category = function(){
 		this._id = translit(this.title);
 		return this;
 	}
+
+	this.url = function(){
+		return this.ancestors.join('/').replace('svet','') + '/' + this._id;
+	}
 }
 
 module.exports = Category;

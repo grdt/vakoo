@@ -19,18 +19,18 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('.breadcrumb li').last().html($('.breadcrumb li').last().find('a').html()).addClass('active');
-        $('.breadcrumb li').each(function(i,item){
-            $(item).popover({
-                html:true,
-                placement:'bottom',
-                trigger:'hover',
-                container: item,
-                title:$(item).find('a').html(),
-                delay:{
-                    show:100,
-                    hide:500
-                }
-            });
-        })
+//        $('.breadcrumb li').each(function(i,item){
+//            $(item).popover({
+//                html:true,
+//                placement:'bottom',
+//                trigger:'hover',
+//                container: item,
+//                title:$(item).find('a').html(),
+//                delay:{
+//                    show:100,
+//                    hide:500
+//                }
+//            });
+//        })
     })
 </script>

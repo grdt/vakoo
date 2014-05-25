@@ -75,6 +75,19 @@ var Controller = function(url){
         this.url.response.send(data);
     }
 
+	this.isAjax = function(){
+		return this.url.request.xhr;
+	}
+
+	this.exception = function(code,message){
+		if(typeof message == "undefined"){
+			message = code;
+			code = 404;
+		}
+		this.url.response.status(code);
+		this.url.response.send(message);
+	}
+
     this.session = function(key,value){
         if(typeof value == "undefined"){
             if(typeof key == "undefined"){

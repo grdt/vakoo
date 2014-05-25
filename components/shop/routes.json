@@ -1,1 +1,7 @@
-{}
+{
+	"shop/<controller>/<method>":{
+		"option":"shop",
+		"controller":":controller",
+		"method":":method"
+	}
+}
