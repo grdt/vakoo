@@ -29,6 +29,11 @@ $(document).on('click','.add-to-cart',function(){
 	return false;
 });
 
+$(document).on('click','.cart>a',function(){
+	var modal = new Modal('cart','/shop/cart');
+	return false;
+});
+
 var Cart = function(){
 	var self = this;
 	this.update = function(options){
@@ -42,6 +47,15 @@ var Cart = function(){
 		}
 	}
 };
+
+var Modal = function(name,url){
+	if(typeof url != "undefined"){
+		$.get(url).success(function(html){
+			$('body').append(html);
+			$('#modal-'+name).modal();
+		});
+	}
+}
 
 var cart = new Cart;
 cart.update();

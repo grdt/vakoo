@@ -2,6 +2,16 @@ var Controller = function(){
 
 	var $c = this;
 
+	this.index = function(){
+		if(!this.isAjax()){
+			this.exception(403,'Access Denied');
+			return;
+		}
+
+		var cart = this.model('cart',this);
+
+	}
+
 	this.add = function(){
 		if(!this.isAjax()){
 			this.exception(403,'Access Denied');
