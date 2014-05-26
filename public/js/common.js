@@ -2,6 +2,10 @@ $(document).ready(function(){
 
 });
 
+$(window).load(function(){
+
+});
+
 $(document).on('click','.add-to-cart',function(){
 	var $button = $(this);
 	$.post('/shop/cart/add',{id:$button.data('id'),value:'+1'})
@@ -15,7 +19,8 @@ $(document).on('click','.add-to-cart',function(){
 					html:true,
 					placement:'top',
 					content:'<strong><span class="glyphicon glyphicon-shopping-cart"></span> Добавлено</strong>',
-					selector:$button
+					selector:$button,
+					container:'body'
 				}).popover('show');
 
 				setTimeout(function(){
