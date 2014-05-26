@@ -1,17 +1,66 @@
-<div class="modal fade" id="modal-cart">
-    <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="modal-cart">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title">Корзина <small>Общая сумма заказа {{number-format total 0 '.' ' '}} P</small></h4>
             </div>
             <div class="modal-body">
-                <p>One fine body&hellip;</p>
+                <table class="table">
+                    {{#each products}}
+                        <tr data-product-row="{{_id}}">
+                            <td>
+                                <img src="{{image}}" width="100px"/>
+                            </td>
+                            <td>
+                                {{title}}
+                            </td>
+                            <td>
+                                <span class="price">{{number-format price 0 '.' ' '}}</span> P
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default add-to-cart no-popover" data-id="{{_id}}" data-value="-1"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button type="button" class="btn btn-default count-button no-popover" style="width: 50px;"><strong class="count">{{count}}</strong></button>
+                                    <button type="button" class="btn btn-default add-to-cart no-popover" data-id="{{_id}}"><span class="glyphicon glyphicon-plus"></span></button>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="total">{{number-format total 0 '.' ' '}}</span> P
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-default add-to-cart no-popover" data-id="{{_id}}" data-value="0"><span class="glyphicon glyphicon-remove"></span></button>
+                            </td>
+                        </tr>
+
+                    {{else}}
+                        <tr>
+                            <td>
+                                Корзина пуста
+                            </td>
+                        </tr>
+                    {{/each}}
+
+                    {{#if total}}
+                        <tr>
+                            <td colspan="3">
+
+                            </td>
+                            <td>
+                                Всего:
+                            </td>
+                            <td colspan="2">
+                                <span class="total-price">{{number-format total 0 '.' ' '}}</span> P
+                            </td>
+                        </tr>
+                    {{/if}}
+                </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger" data-action="clean">Очистить</button>
+                <button type="button" class="btn btn-primary" data-action="checkout">Заказать</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>

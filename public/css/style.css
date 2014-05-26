@@ -81,3 +81,11 @@
     font-weight: bold;
     font-size: 22px;
 }
+
+#modal-cart .add-to-cart{
+    width: auto;
+}
+
+#modal-confirm{
+    z-index: 1100;
+}

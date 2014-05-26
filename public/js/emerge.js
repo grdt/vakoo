@@ -36,7 +36,7 @@ if (jQuery) {
 			var cssUrlRegex = /url\(\s*(['"]?)(.*?)\1\s*\)/g
 
 			var log = function (txt) {
-				if (1) console.log (txt)
+				if (0) console.log (txt)
 				// if (1) $('#__cons').html ($('#__cons').html () + txt + '<br>')
 			}
 

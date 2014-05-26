@@ -9,7 +9,7 @@ var Controller = function(){
 		}
 
 		var cart = this.model('cart',this);
-
+		this.tmpl().render('modals.cart',cart);
 	}
 
 	this.add = function(){
@@ -29,7 +29,6 @@ var Controller = function(){
 				});
 			}
 		}
-		
 	}
 
 	this.get = function(){

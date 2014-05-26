@@ -8,6 +8,8 @@ var Cart = function($c){
 	this.count = 0;
 	
 	this.lastModified = new Date();
+
+	this._lastMod = {};
 	
 	this.save = function(){
 		
@@ -46,7 +48,7 @@ var Cart = function($c){
 				if(item.count < modification.replace('-','')*1){
 					item.count = 0;
 				}else{
-					item.count = modification.replace('-','')*1
+					item.count -= modification.replace('-','')*1
 				}
 			}
 		}else{
@@ -54,8 +56,10 @@ var Cart = function($c){
 		}
 
 		if(item.count == 0){
+			this._lastMod = {_id:item._id,count:0,total:0};
 			delete this.products[item._id];
 		}else{
+			this._lastMod = item;
 			item.total = item.price * item.count;
 		}
 		return true;
@@ -72,7 +76,7 @@ var Cart = function($c){
 	}
 	
 	this.data = function(){
-		return {total:this.total,count:this.count};
+		return {total:this.total,count:this.count,item:this._lastMod};
 	}
 
 	this.save = function(){
