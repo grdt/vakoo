@@ -62,8 +62,6 @@ var Pagination = function(){
 			}
 			
 			if(to < pages){
-
-				console.log(to,pages);
 				if(to < (pages - 1)){
 					pagesArr.push({
 						page:'...',
