@@ -21,7 +21,8 @@ var Category = function(){
 	}
 
 	this.url = function(){
-		return '/'+this.ancestors.join('/');
+		var url = '/'+ ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
+		return url;
 	}
 }
 

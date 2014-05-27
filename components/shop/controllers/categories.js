@@ -5,56 +5,58 @@ var Categories = function(){
 		this.model('category').where({_id:this.get('id')}).findOne(function(category){
 			if(category._id){
 
-				var subs;
+				var subs = [];
+				var subsubs = [];
 
 				var data = {
 					title:category.title,
-					category:category,
+					category:category
 				};
 
-				$c.model('category').where({parent:category._id}).find(function(subcategories){
+				var where = {parent:category._id};
 
-					var where = {};
+				if(category.parent){
+					where = {$or:[where,{parent:category.parent}]};
+				}
 
-					if(subcategories.length){
+				$c.model('category').where(where).find(function(subcategories){
 
-						var cats = [];
+					if(subcategories && subcategories.length){
 
 						subcategories.forEach(function(subcat){
-							cats.push(subcat._id);
-						});
+							if(subcat._id == category._id){
+								subcat.active = true;
+							}
 
-						subs = subcategories;
-
-						where = {category:{$in:cats}}
-					}else{
-						where = {category:category._id};
-						$c.model('category').where({parent:category.parent}).find(function(subcategories){
-							subs = subcategories;
-							subs.forEach(function(sub){
-								if(sub._id == category._id){
-									sub.active = true;
-								}
-							});
+							if(subcat.parent != category._id){
+								subs.push(subcat);
+							}else{
+								subsubs.push(subcat);
+							}
 						});
 					}
 
-					$c.model('product').where(where).count(function(count){
+					data.categories = (subsubs.length) ? subsubs : subs;
+
+					$c.model('product').where({ancestors:category._id}).count(function(count){
 
 						data.productCount = count;
 
 						if($c.config.product.perPage < count){
-							$c.model('product').where(where).limit($c.get('p') * $c.config.product.perPage,$c.config.product.perPage).find(function(products){
-								data.products = products;
-								data.categories = subs;
-								data.pagination = {page:$c.get('p')*1 + 1,count:count,perPage:$c.config.product.perPage};
-								$c.tmpl().display('category',data);
+							$c.model('product')
+								.where({ancestors:category._id})
+								.limit($c.get('p') * $c.config.product.perPage,$c.config.product.perPage)
+								.find(function(products){
+									data.products = products;
+									data.pagination = {page:$c.get('p')*1 + 1,count:count,perPage:$c.config.product.perPage};
+									$c.tmpl().display('category',data);
 							});
 						}else{
-							$c.model('product').where(where).find(function(products){
-								data.categories = subs;
-								data.products = products;
-								$c.tmpl().display('category',data);
+							$c.model('product')
+								.where({ancestors:category._id})
+								.find(function(products){
+									data.products = products;
+									$c.tmpl().display('category',data);
 							});
 						}
 					});

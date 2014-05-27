@@ -13,9 +13,9 @@ var Menu = function(){
 
 			var parent;
 
-			if(category.ancestors.length == 1){
+			if(category.ancestors.length == 0){
 				tree[category._id] = category.clean();
-				tree[category._id].path = category.ancestors.join('/');
+				tree[category._id].path = category.url();
 				tree[category._id].childs = [];
 			}else{
 				parent = tree[category.ancestors[0]];
@@ -27,13 +27,13 @@ var Menu = function(){
 					}
 					if(parent){
 						parent.childs[category._id] = category.clean();
-						parent.childs[category._id].path = category.ancestors.join('/');
+						parent.childs[category._id].path = category.url();
 						parent.childs[category._id].childs = [];
 
 					}
 				}else{
 					parent.childs[category._id] = category.clean();
-					parent.childs[category._id].path = category.ancestors.join('/');
+					parent.childs[category._id].path = category.url();
 					parent.childs[category._id].childs = [];
 				}
 			}

@@ -19,20 +19,19 @@ var Breadcrumbs = function(){
 					var categories = data['catalog:menu'].categories;		
 					ancestors.forEach(function(ancestor){
 						categories.forEach(function(category){
-							if(category._id == ancestor && ancestor != 'svet'){
+							if(category._id == ancestor){
 								crumbs.push({
-									url: '/' + category.ancestors.join('/'),
+									url: category.url(),
 									title: category.title
 								});
 							}	
 						});
 					});
 
-//					crumbs.push({
-//						url: '/' + data.category.ancestors.join('/'),
-//						title: data.category.title
-//					});
-					
+					crumbs.push({
+						url:data.category.url(),
+						title:data.category.title
+					});
 				}
 			}
 		}

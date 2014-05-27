@@ -9,7 +9,7 @@ var Plugin = function(){
 		this.option('shop').model('category').find(function(categories){
 			categories.forEach(function(category){
 
-				var route_string = '/' + category.ancestors.join('/');
+				var route_string = category.url();
 				var route = Susanin.Route(route_string);
 				route.executor = {
 					option:"shop",
