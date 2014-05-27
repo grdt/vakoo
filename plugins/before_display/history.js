@@ -1,3 +1,5 @@
+var Url = require('url');
+
 var Plugin = function(){
 	var $p = this;
 
@@ -14,7 +16,7 @@ var Plugin = function(){
 		}else{
 			var history = $l.from.session('history');
 			var title = $l.factory().title().replace($l.factory().TITLE_SEPARATOR,'').replace($l.factory().config().title,'');
-			var url = $l.from.url.request.url;
+			var url = Url.parse($l.from.url.request.url).pathname;
 			if(title == ''){
 				title = $l.factory().config().title;
 			}
@@ -30,7 +32,7 @@ var Plugin = function(){
 				return new Date(item.date).getTime();
 			});
 
-			sorted.reverse();
+			sorted = sorted.reverse().slice(0,11);
 			
 			history = {};
 
@@ -39,7 +41,9 @@ var Plugin = function(){
 			});
 
 			$l.from.session('history',history);
+			data.history = history;
 		}
+
 
 		if(typeof callback == "function"){
 			callback($l,view,data,next);
