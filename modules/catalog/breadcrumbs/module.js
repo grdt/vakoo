@@ -21,17 +21,17 @@ var Breadcrumbs = function(){
 						categories.forEach(function(category){
 							if(category._id == ancestor && ancestor != 'svet'){
 								crumbs.push({
-									url: category.ancestors.join('/').replace('svet','') + '/' + category._id,
+									url: '/' + category.ancestors.join('/'),
 									title: category.title
 								});
 							}	
 						});
 					});
 
-					crumbs.push({
-						url: data.category.ancestors.join('/').replace('svet','') + '/' +data.category._id,
-						title: data.category.title
-					});
+//					crumbs.push({
+//						url: '/' + data.category.ancestors.join('/'),
+//						title: data.category.title
+//					});
 					
 				}
 			}

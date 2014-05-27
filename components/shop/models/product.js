@@ -10,6 +10,8 @@ var Product = function(){
 
 	this.category = '';
 
+	this.ancestors = [];
+
 	this.price = 0;
 
 	this.image = '';
@@ -28,7 +30,7 @@ var Product = function(){
 	}
 
 	this.url = function(){
-		return '#';
+		return '/' + this.ancestors.join('/') + '/' + this.alias;
 	}
 
 }

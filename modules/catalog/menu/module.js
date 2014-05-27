@@ -13,9 +13,9 @@ var Menu = function(){
 
 			var parent;
 
-			if(category.ancestors.length == 0){
+			if(category.ancestors.length == 1){
 				tree[category._id] = category.clean();
-				tree[category._id].path = category.ancestors.join('/').replace('svet','') + '/' + category._id;
+				tree[category._id].path = category.ancestors.join('/');
 				tree[category._id].childs = [];
 			}else{
 				parent = tree[category.ancestors[0]];
@@ -27,25 +27,25 @@ var Menu = function(){
 					}
 					if(parent){
 						parent.childs[category._id] = category.clean();
-						parent.childs[category._id].path = category.ancestors.join('/').replace('svet','') + '/' + category._id;
+						parent.childs[category._id].path = category.ancestors.join('/');
 						parent.childs[category._id].childs = [];
 
 					}
 				}else{
 					parent.childs[category._id] = category.clean();
-					parent.childs[category._id].path = category.ancestors.join('/').replace('svet','') + '/' + category._id;
+					parent.childs[category._id].path = category.ancestors.join('/');
 					parent.childs[category._id].childs = [];
 				}
 			}
 		});
-
-		var open = '';
 		
+		var open = '';
+
 		if(factory.from.url.request.url == '/'){
 			open = 'open';
 		}
 
-		return {view:'modules.catalog-menu',data:{tree:tree.svet,open:open}};
+		return {view:'modules.catalog-menu',data:{tree:tree,open:open}};
 
 	}
 }

@@ -21,7 +21,7 @@ var Category = function(){
 	}
 
 	this.url = function(){
-		return this.ancestors.join('/').replace('svet','') + '/' + this._id;
+		return '/'+this.ancestors.join('/');
 	}
 }
 

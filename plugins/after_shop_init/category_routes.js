@@ -8,13 +8,28 @@ var Plugin = function(){
 	this.init = function(){
 		this.option('shop').model('category').find(function(categories){
 			categories.forEach(function(category){
-				var route_string = category.ancestors.join('/').replace('svet','');
-				var route = Susanin.Route(route_string + '/' + category._id);
+
+				var route_string = '/' + category.ancestors.join('/');
+				var route = Susanin.Route(route_string);
 				route.executor = {
 					option:"shop",
 					controller:"categories",
 					method:"index",
 					id:category._id
+				}
+				$p.addRoute(route);
+			});
+		});
+
+
+		this.option('shop').model('product').find(function(products){
+			products.forEach(function(product){
+				var route = Susanin.Route(product.url());
+				route.executor = {
+					option:"shop",
+					controller:"products",
+					method:"index",
+					id:product._id
 				}
 				$p.addRoute(route);
 			});

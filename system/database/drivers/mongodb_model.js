@@ -117,7 +117,6 @@ var Model = function(){
 	}
 
     this.findOne = function(callback){
-
         var _this = this;
         this.collection().findOne(this._where,function(err,item){
             if(err){
@@ -137,7 +136,7 @@ var Model = function(){
                     if(typeof callback == "function"){
                         callback(_this);
                     }
-	                console.log('not found');
+//	                console.log('not found');
                 }
             }
         });
@@ -273,6 +272,10 @@ var Model = function(){
 		    oid = new ObjectID(id);
 	    }catch(e){
 
+	    }
+
+	    if(id.toString() != oid.toString){
+		    return id;
 	    }
 
         return oid;
