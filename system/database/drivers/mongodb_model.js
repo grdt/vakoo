@@ -274,7 +274,7 @@ var Model = function(){
 
 	    }
 
-	    if(id.toString() != oid.toString){
+	    if(id.toString() != oid.toString()){
 		    return id;
 	    }
 

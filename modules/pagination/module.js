@@ -84,9 +84,6 @@ var Pagination = function(){
 			}
 		}
 
-
-
-
 		var prev = {
 			url:parsedUrl.pathname + (((options.page - 2) == 0) ? '' : '?p=' + (options.page - 2)),
 			enable:false
