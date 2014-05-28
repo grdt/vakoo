@@ -12,7 +12,8 @@
     "connect-multiparty": "~1.0.3",
     "mime": "~1.2.11",
     "csv": "~0.3.7",
-    "connect-mongo": "~0.4.1"
+    "connect-mongo": "~0.4.1",
+    "handlebars-helper": "0.0.11"
   },
   "scripts": {
     "start": "supervisor -e js,json,hbs,css app.js"

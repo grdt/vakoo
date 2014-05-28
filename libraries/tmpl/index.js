@@ -149,13 +149,13 @@ var Tmpl = function(params){
 		Handlebars.registerHelper('number-format',function(number, decimals, dec_point, thousands_sep){
 				var i, j, kw, kd, km;
 				if( isNaN(decimals = Math.abs(decimals)) ){
-					decimals = 2;
+					decimals = 0;
 				}
 				if( dec_point == undefined ){
-					dec_point = ",";
+					dec_point = ".";
 				}
 				if( thousands_sep == undefined ){
-					thousands_sep = ".";
+					thousands_sep = " ";
 				}
 
 				i = parseInt(number = (+number || 0).toFixed(decimals)) + "";

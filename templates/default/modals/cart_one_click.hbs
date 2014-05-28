@@ -1,0 +1,79 @@
+<script type="text/javascript" src="https://dadata.ru/static/js/jquery.suggestions-4.3.min.js"></script>
+
+<div class="modal fade" id="modal-one-click">
+    <div class="modal-dialog">
+        <form class="modal-content form-horizontal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{title}}<br/><small>Общая сумма заказа {{number-format price}} P</small></h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="well">
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <img src="{{image}}" alt="" width="100%"/>
+                        </div>
+                        <div class="col-sm-7">
+                            {{desc}}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="id" value="{{_id}}"/>
+
+                <div class="form-group">
+                    <label for="contact" class="col-sm-4 control-label">Способ связи</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="contact" placeholder="Email или телефон">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-4 control-label">Как обратиться?</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="name" placeholder="Имя и фамилия">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="col-sm-4 control-label">Адрес доставки</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" name="address" placeholder="Начните вводить адрес" rows="3"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="submit" class="btn btn-primary" data-action="checkout">Заказать</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#modal-one-click").on('shown.bs.modal',function(){
+
+        function join(arr /*, separator */) {
+            var separator = arguments.length > 1 ? arguments[1] : ", ";
+            return arr.filter(function(n){return n}).join(separator);
+        }
+
+        $("[name=name]").suggestions({
+            serviceUrl: "https://dadata.ru/api/v2/suggest/fio",
+            type: "NAME",
+            token: "4e8f740f9a2e275a91e5a904e64729e935b3fad0",
+            hint:false,
+            preventBadQueries:true
+        });
+
+        $("[name=address]").suggestions({
+            serviceUrl: "https://dadata.ru/api/v2/suggest/address",
+            type: "ADDRESS",
+            token: "4e8f740f9a2e275a91e5a904e64729e935b3fad0",
+            hint:false,
+            preventBadQueries:true,
+        });
+    });
+</script>

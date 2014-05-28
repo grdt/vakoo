@@ -1,4 +1,4 @@
-<div class="modal fade bs-example-modal-lg" id="modal-cart">
+<div class="modal fade" id="modal-cart">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +16,7 @@
                                 {{title}}
                             </td>
                             <td>
-                                <span class="price">{{number-format price 0 '.' ' '}}</span> P
+                                <strong class="price">{{number-format price 0 '.' ' '}}</strong> <strong>P</strong>
                             </td>
                             <td>
                                 <div class="btn-group">
@@ -26,7 +26,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="total">{{number-format total 0 '.' ' '}}</span> P
+                                <strong class="total">{{number-format total 0 '.' ' '}}</strong> <strong>P</strong>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-default add-to-cart no-popover" data-id="{{_id}}" data-value="0"><span class="glyphicon glyphicon-remove"></span></button>
@@ -47,10 +47,10 @@
 
                             </td>
                             <td>
-                                Всего:
+                                <h3>Всего:</h3>
                             </td>
                             <td colspan="2">
-                                <span class="total-price">{{number-format total 0 '.' ' '}}</span> P
+                                <h3><span class="total-price">{{number-format total 0 '.' ' '}}</span> P</h3>
                             </td>
                         </tr>
                     {{/if}}
