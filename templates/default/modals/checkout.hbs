@@ -5,9 +5,11 @@
         <form class="modal-content form-horizontal">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{title}}<br/><small>Общая сумма заказа {{number-format price}} P</small></h4>
+                <h4 class="modal-title">{{title}}<br/><small>Общая сумма заказа {{number-format total}} P</small></h4>
             </div>
             <div class="modal-body">
+
+                {{#with product}}
 
                 <div class="well">
                     <div class="form-group">
@@ -21,6 +23,8 @@
                 </div>
 
                 <input type="hidden" name="id" value="{{_id}}"/>
+
+                {{/with}}
 
                 <div class="form-group">
                     <label for="contact" class="col-sm-4 control-label">Способ связи</label>

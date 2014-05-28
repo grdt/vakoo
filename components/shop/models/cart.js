@@ -85,6 +85,13 @@ var Cart = function($c){
 		return true;
 	}
 
+	this.clean = function(){
+		this.products = {};
+		this.count = 0;
+		this.total = 0;
+		this.save();
+	}
+
 	var cart;
 	if(cart = $c.session('cart')){
 		for(var key in cart){

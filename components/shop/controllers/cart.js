@@ -55,10 +55,10 @@ var Controller = function(){
 					$c.json({success:true});
 				});
 			}else{
-				var cart = this.model('cart');
-				cart.products.forEach(function(item){
-					order.products.push(item);
-				});
+				var cart = this.model('cart',this);
+				for(var key in cart.products){
+					order.products.push(cart.products[key]);
+				}
 
 				order.count = cart.count;
 				order.total = cart.total;
@@ -68,7 +68,7 @@ var Controller = function(){
 		}
 	}
 
-	this.oneclick = function(){
+	this.form = function(){
 		if(!this.isAjax()){
 			this.exception(403,'Access Denied');
 			return;
@@ -76,8 +76,14 @@ var Controller = function(){
 
 		if(this.get('id')){
 			this.model('product').where({_id:this.get('id')}).findOne(function(product){
-				$c.tmpl().render('modals.cart_one_click',product);
+				$c.tmpl().render('modals.checkout',{product:product,total:product.price,count:1,title:product.title});
 			});
+		}else{
+			var cart = this.model('cart',this);
+			var params = cart.clone();
+			cart.clean();
+			params.title = 'Оформление заказа';
+			$c.tmpl().render('modals.checkout',params);
 		}
 	}
 

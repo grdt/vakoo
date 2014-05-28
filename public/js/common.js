@@ -13,7 +13,7 @@ $(document).on('click','.add-to-cart',function(){
 		.success(function(cart){
 
 			if($button.hasClass('one-click')){
-				var modal = new Modal('one-click','/shop/cart/oneclick?id='+$button.data('id'));
+				var modal = new Modal('one-click','/shop/cart/form?id='+$button.data('id'));
 			}else{
 
 				if(!$button.hasClass('no-popover')){
@@ -61,6 +61,12 @@ var Cart = function(){
 };
 
 var Modal = function(name,url){
+
+	for(key in openModals){
+		if(openModals[key].$modal){
+			openModals[key].$modal.modal('hide');
+		}
+	}
 
 	var self = this;
 
@@ -110,11 +116,7 @@ var Modal = function(name,url){
 
 	if(name == 'dialog' && typeof url == "object"){
 
-		for(key in openModals){
-			if(openModals[key].$modal){
-				openModals[key].$modal.modal('hide');
-			}
-		}
+		cart.update();
 
 		this.$modal = $("#modal-dialog");
 		this.$modal.modal();
@@ -167,7 +169,12 @@ var Modal = function(name,url){
 			if($(e.target).hasClass('save-count')){
 
 			}
-			
+
+			if($(e.target).data('action')){
+				if($(e.target).data('action') == 'checkout'){
+					var modal = new Modal('one-click','/shop/cart/form');
+				}
+			}
 
 			if(!$(e.target).hasClass('form-control')){
 				self.$modal.find('.popover').remove();
