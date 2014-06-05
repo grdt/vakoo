@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	dateFormating();
 });
 
 $(window).load(function(){
@@ -248,6 +249,19 @@ var Modal = function(name,url){
 var cart = new Cart;
 cart.update();
 
+
+var dateFormating = function(){
+	moment.lang('ru');
+	$(".date").each(function(){
+		var date = new Date($(this).html());
+		if(moment(date).format('L') == moment().format('L')){
+			//today
+			$(this).html('сегодня в ' + moment(date).format('HH:mm'));
+		}else{
+			$(this).html(moment(date).format('LLLL'));
+		}
+	});
+}
 
 var numberFormat = function(number, decimals, dec_point, thousands_sep){
 	var i, j, kw, kd, km;

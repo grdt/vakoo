@@ -1,0 +1,7 @@
+{
+	"comments/<method>(/)":{
+		"option":"comments",
+		"controller":":controller",
+		"method":":method"
+	}
+}

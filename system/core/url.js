@@ -18,6 +18,8 @@ var Url = function(request,response){
         }
     }
 
+	this.initPlugin('query',request,response);
+
     return this;
 }
 

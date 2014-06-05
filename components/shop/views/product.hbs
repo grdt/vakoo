@@ -1,5 +1,23 @@
 <div class="row">
+    <div class="col-md-12">
+        {{factory 'module' 'catalog:breadcrumbs'}}
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-6">
         <img src="{{product.image}}" alt="" class="col-md-12"/>
+    </div>
+    <div class="col-md-6">
+        <h1>{{product.title}}</h1>
+        <a href="#" class="btn btn-primary add-to-cart" data-id="{{product._id}}" role="button"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;В корзину</a>
+        <a href="#" class="btn btn-primary add-to-cart one-click" role="button" data-id="{{product._id}}"><span class="glyphicon glyphicon-hand-up"></span>&nbsp;Купить</a>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        {{factory 'module' 'comments' product.url}}
     </div>
 </div>

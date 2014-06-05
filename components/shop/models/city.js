@@ -4,7 +4,7 @@ var City = function(){
 
 	this._id = '';
 
-
+	this.alias = '';
 	this.cid = 0;
 	this.block = [];
 	this.name_ru = '';

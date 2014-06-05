@@ -12,27 +12,37 @@ var Breadcrumbs = function(){
 		];
 
 		if(factory.from.url.executor.option == 'shop'){
-			
-			if(factory.from.url.executor.controller == 'categories'){
-				if(factory.from.url.executor.method == 'index'){
-					var ancestors = data.category.ancestors;
-					var categories = data['catalog:menu'].categories;		
-					ancestors.forEach(function(ancestor){
-						categories.forEach(function(category){
-							if(category._id == ancestor){
-								crumbs.push({
-									url: category.url(),
-									title: category.title
-								});
-							}	
-						});
-					});
 
-					crumbs.push({
-						url:data.category.url(),
-						title:data.category.title
+			var item;
+
+			if(factory.from.url.executor.controller == 'categories'){
+				item = 'category';
+			}
+
+			if(factory.from.url.executor.controller == 'products'){
+				item = 'product';
+			}
+
+			if(factory.from.url.executor.method == 'index'){
+				var ancestors = data[item].ancestors;
+				var categories = data['catalog:menu'].categories;
+
+				ancestors.forEach(function(ancestor){
+					categories.forEach(function(category){
+						if(category._id == ancestor){
+							crumbs.push({
+								url: category.url(),
+								title: category.title
+							});
+						}
 					});
-				}
+				});
+
+				crumbs.push({
+					url:data[item].url(),
+					title:data[item].title
+				});
+
 			}
 		}
 

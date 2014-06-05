@@ -1,0 +1,39 @@
+<div class="row" id="comments">
+
+    <div class="col-md-12 comments-list">
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="well">
+            <form role="form">
+                <div class="form-group">
+                    <label for="comment-name">Имя</label>
+                    <input type="text" class="form-control" id="comment-name" placeholder="Инкогнито">
+                </div>
+                <div class="form-group">
+                    <label for="comment-body">Комментарий</label>
+                    <textarea class="form-control" id="comment-body" placeholder="Текст комментария"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Комментировать</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $.get('/comments/list',{url:document.URL},function(html){
+        $("#comments .comments-list").replaceWith(html);
+        dateFormating();
+    });
+
+    $("#comments form").submit(function(){
+        $.post('/comments/add',{url:document.URL,name:$('#comment-name').val(),body:$("#comment-body").val()},function(html){
+            $('#comment-body').val('');
+            $("#comments .comments-list").replaceWith(html);
+            dateFormating();
+        });
+        return false;
+    });
+
+</script>

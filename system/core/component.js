@@ -51,6 +51,9 @@ var Component = function(name){
 
     this.model = function(name,options){
         if(!!this._models[name]){
+	        if(this._models[name].prototype.isEmpty()){
+		        this._models[name].prototype = this.coreModel();
+	        }
             var m = new this._models[name](options);
 	        m._keys = m.keys();
             return m;

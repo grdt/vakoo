@@ -10,6 +10,8 @@ var Model = function(){
 
 	this._limit = 0;
 
+	this._order = [];
+
     this._reservedKeys = ['COLLECTION_NAME','_collection'];
 
 //	this._items = null;
@@ -30,6 +32,17 @@ var Model = function(){
 
 	    return this;
     }
+
+	this.order = function(params){
+
+		this._order = [];
+
+		for(var key in params){
+			this._order = [key,(params[key] < 0) ? 'descending' : 'ascending'];
+		}
+
+		return this;
+	}
 
 	this.limit = function(skip,limit){
 
@@ -58,10 +71,16 @@ var Model = function(){
 		    if(err){
 			    console.log(err);
 		    }else{
+
+			    if(!_this._order.isEmpty()){
+				    cursor.sort(_this.order[0],_this.order[1]);
+			    }
+
 			    if(_this._limit){
 				    cursor.skip(_this._skip);
 				    cursor.limit(_this._limit);
 			    }
+
 			    cursor.toArray(function(err,items){
 				    if(err){
 					    console.log(err);
@@ -288,6 +307,10 @@ var Model = function(){
         this._collection = this.interface.collection(this.COLLECTION_NAME);
         return this._collection;
     }
+
+	this.isEmpty = function(){
+		return false;
+	}
 
     return this;
 }
