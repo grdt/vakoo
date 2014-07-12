@@ -1,4 +1,4 @@
-var Product = function(){
+var Product = function () {
 
 	this.COLLECTION_NAME = 'products';
 
@@ -14,22 +14,42 @@ var Product = function(){
 
 	this.price = 0;
 
-	this.image = '';
+	this.tradePrice = 0;
 
 	this.sku = '';
 
 	this.desc = '';
 
+	this.shortDesc = '';
+
 	this.status = 'active';
+
+	this.available = false;
 
 	this.params = [];
 
+	this.size = {
+		current:'XS-L',
+		sizes:{}
+	};
+
+	this.group = {
+		current:'',
+		groups:[]
+	};
+
+	this.videos = [];
+
+	this.image = '';
+
+	this.images = [];
+
 	this.import = {
-		id:0,
-		categoryId:0
+		id: 0,
+		categoryId: 0
 	}
 
-	this.url = function(){
+	this.url = function () {
 		return '/' + this.ancestors.join('/') + '/' + this.alias;
 	}
 

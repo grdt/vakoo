@@ -1,7 +1,129 @@
 var xml2js = require('xml2js');
 
 var Import = function(){
-	$c = this;
+	var $c = this, 
+		that = this;
+
+	var startTime = new Date();
+	
+	this.index = function(){
+		var csv = require('csv');
+
+		var Buffer = require('buffer').Buffer;
+		var Iconv  = require('iconv').Iconv;
+		var assert = require('assert');
+
+		var iconv = new Iconv('UTF-8', 'CP1251');
+
+		csv()
+			.from.path('/home/pasa/vakoo/PriceList-2.csv',{delimiter:';'})
+			.to.array(function(data){
+				for(key in data){
+					if(key != 0 && key > 2139 && key < 10000){
+						var sku = data[key][0];
+						var tradePrice = data[key][1];
+						var price = data[key][2];
+						var product = that.model('product');
+						var buffer = iconv.convert('Много');
+						if(buffer.toString() == data[key][4]){
+							product.available = true;
+						}
+						product.sku = sku;
+						product.tradePrice = tradePrice;
+						product.price = price;
+						that.parseProduct(product,key,function(){
+							product = null;
+							delete data[key];
+						});
+
+					}
+				}
+			});
+	}
+
+	this.parseProduct = function(product,i,done){
+		var url = 'http://www.condom-shop.ru/products/' + product.sku;
+//		console.log('start parse product',i,url);
+		var jsdom  = require('jsdom');
+		var fs     = require('fs');
+		var jquery = fs.readFileSync(this.APP_PATH + '/public/js/jquery.js').toString();
+
+
+		jsdom.env({
+			url:url,
+			src:[jquery],
+			done:function(error,window){
+				var $ = window.$;
+				
+				product.title = $("#name").html().trim();
+				product.shortDesc = $("#sub_name").html().trim();
+				product.alias = translit(product.title);
+				product.params = {
+					benefits:[],
+					items:[]
+				};
+
+				$("#descriptions p").each(function(i,p){
+					product.desc += '<p>' + $(p).html().trim() + '</p>';
+				});
+
+				$("#benefits ul li").each(function(i,li){
+					var $li = $(li);
+					$li.find('span').remove();
+					product.params.benefits.push($li.html().trim());
+				});
+
+				$("#propertys ul li").each(function(i,li){
+					var name = $(li).find('.name>span').html().trim();
+					var value = $(li).find('.value').html().trim();
+					product.params.items.push([name,value]);
+				});
+
+				if($("#groups").size()){
+					if($("#groups a").size()){
+						product.size.current = $("#groups>form>div>span").html().toLowerCase().replace('размер','').trim().toUpperCase();
+						$("#groups a").each(function(i,a){
+							var size = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+							if(size.indexOf('.') >= 0){
+								product.size = false;
+								product.group.current = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+								product.group.groups.push(
+									{group:size,sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')}
+								)
+							}else{
+								product.group = false;
+								product.size.sizes[size] = {sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')};
+							}
+						});
+					}else{
+						product.size.current = 'XS-L';
+					}
+				}else{
+					product.size = false;
+				}
+
+				$("#videos a").each(function(i,a){
+					product.videos.push($(a).attr('href'));
+				});
+
+				product.image = $("#main-image>img").attr('src');
+
+				$("#images #more-views ul li a img").each(function(i,img){
+					if($(img).attr('src') != product.image){
+						product.images.push($(img).attr('src'));
+					}
+				});
+				
+				product.save();
+
+				console.log('product save.',i,' sku:',product.sku,'time',((new Date).getTime() - startTime.getTime()) / 1000);
+
+				done();
+			}
+		});
+
+		this.where();
+	}
 
 	this.products = function(){
 

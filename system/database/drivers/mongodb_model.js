@@ -169,6 +169,10 @@ var Model = function(){
         }
     }
 
+	this.beforeInsert = function(done){
+		done();
+	}
+
     this.insert = function(callback){
 
         var _this = this;
@@ -181,29 +185,33 @@ var Model = function(){
 		    obj = obj.clean();
 	    }
 
-        this.collection().insert(obj,function(err,items){
-            if(err){
-                console.log(err);
-	            if(typeof callback == "function"){
-		            callback(null);
-	            }
-            }else{
-                if(items.length == 1){
-                    for(key in items[0]){
-                        if(_this.hasOwnProperty(key)){
-                            _this[key] = items[0][key];
-                        }
-                    }
+		this.beforeInsert(
+			function(){
+				_this.collection().insert(obj,function(err,items){
+					if(err){
+						console.log(err);
+						if(typeof callback == "function"){
+							callback(null);
+						}
+					}else{
+						if(items.length == 1){
+							for(key in items[0]){
+								if(_this.hasOwnProperty(key)){
+									_this[key] = items[0][key];
+								}
+							}
 
-                    if(typeof callback == "function"){
-                        callback(_this);
-                    }
+							if(typeof callback == "function"){
+								callback(_this);
+							}
 
-                }else{
-                    //todo collection return
-                }
-            }
-        });
+						}else{
+							//todo collection return
+						}
+					}
+				})
+			}
+		);
 
         return this;
     }
