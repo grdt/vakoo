@@ -187,7 +187,10 @@ var Component = function(name){
                 if(component.getExtension(component.MODEL_PATH + component.SEPARATOR + model_file) == component.EXT_JS){
 	                if(i == (files.length - 1)){
 		                component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''),function(){
-			                component.initPlugin('after_' + component.COMPONENT_NAME + '_init');
+							//todo kill timeout
+							setTimeout(function(){
+								component.initPlugin('after_' + component.COMPONENT_NAME + '_init');
+							},300);
 		                });
 	                }else{
 		                component.preloadModel(model_file.replace(component.EXT_JS,''),(component.MODEL_PATH + component.SEPARATOR + model_file).replace(component.EXT_JS,''));

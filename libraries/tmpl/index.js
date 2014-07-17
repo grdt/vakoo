@@ -49,6 +49,7 @@ var Tmpl = function(params){
 
     this.compile = function(html,data){
         var template = Handlebars.compile(html);
+		data.factory = $l.factory();
         return template(data);
     }
     
@@ -56,7 +57,17 @@ var Tmpl = function(params){
         return this.from.template(name);
     }
 
-    this.layout = function(){
+    this.layout = function(layout){
+		if(typeof layout != "undefined"){
+			var templates_destination = (this.from.isAdmin()) ? this._admin_templates : this._templates;
+			if(!!templates_destination['layout_' + layout]){
+				var lay = Handlebars.compile(templates_destination['layout_' + layout]);
+				this._layout = lay;
+				return this;
+			}else{
+				throw new Error('layout not found');
+			}
+		}
 	    if(this._layout){
 		    return this._layout;
 	    }
@@ -185,7 +196,7 @@ var Tmpl = function(params){
 		if(this._config){
 			return this._config;
 		}else{
-			var config = require('./config.json');
+			var config = require(this.vakoo.APP_PATH + '/config.json');
 			this._config = config;
 			return this._config;
 		}

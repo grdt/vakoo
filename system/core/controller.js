@@ -4,7 +4,15 @@ var Controller = function(url){
 
     this.url = url;
 
-
+	this.setFlash = function(type, title, message){
+		if(typeof message == "undefined"){
+			message = title;
+			title = null;
+		}
+		var flashes = this.session('flash') || [];
+		flashes.push({type:type,message:message,title:title});
+		this.session('flash',flashes);
+	}
 
     this.index = function(){
         this.echo("method 'index' not found");

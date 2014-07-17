@@ -1,0 +1,33 @@
+<div class="row clearfix">
+    <div class="col-md-3 column">
+    </div>
+    <div class="col-md-6 column well" style="margin-top:50px;">
+
+        <h1 class="text-center" style="margin-top: 100px 0px 100px 0;">
+            Vakoo eCommerce. <br/>
+            <small>Admin Panel</small>
+        </h1>
+
+        {{{factory.flash}}}
+
+        <form class="form-horizontal" role="form" method="post" action="/admin/?task=user.login">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input type="email" class="form-control" name="email" placeholder="Email"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input type="password" class="form-control" name="password" placeholder="Password"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-default">Sign in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3 column">
+    </div>
+</div>

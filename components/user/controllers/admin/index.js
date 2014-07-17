@@ -6,7 +6,7 @@ var Controller = function(){
         if(this.post()){
             var user = this.model('user');
             user.where({email:this.post('email'),password:this.post('password')});
-            user.findOne(function(){
+            user.findOne(function(user){
                 if(user._id && user.status == 'admin'){
                     user.last_login = new Date();
                     user.save();
@@ -18,7 +18,9 @@ var Controller = function(){
                         controller.redirect();
                     }
                 }else{
-                    controller.render('login');
+					//todo const errors
+					controller.setFlash('error','Неправильный логин или пароль!');
+                    controller.tmpl().layout('login').display('login');
                 }
             })
         }else{
@@ -26,7 +28,7 @@ var Controller = function(){
                 if(user){
                     controller.redirect('/admin');
                 }else{
-                    controller.render('login');
+					controller.tmpl().layout('login').display('login');
                 }
             })
         }

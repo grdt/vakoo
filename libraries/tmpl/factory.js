@@ -11,6 +11,20 @@ var Factory = function(){
 		keywords:'key1,key2,key3'
 	};
 
+	this.flashTypes = {
+		error:'danger',
+		success:'success',
+		warning:'warning',
+		info:'info'
+	}
+
+	this.flashTitles = {
+		error:'Ошибка!',
+		success:'Успешно!',
+		warning:'Внимание!',
+		info:'Информация:'
+	}
+
 	this.title = function(){
 		if(typeof $f._data == "undefined"){
 			return $f.config().title;
@@ -24,6 +38,21 @@ var Factory = function(){
 
 	this.content = function(){
 		var content = $f.compile($f.template($f._view),$f._data);
+		return new $f.hbs.SafeString(content);
+	}
+
+	this.flash = function(){
+		var flashes = $f.from.session('flash') || [];
+		var data = {flashes:[]};
+		flashes.forEach(function(flash){
+			data.flashes.push({
+				type:$f.flashTypes[flash.type],
+				title:flash.title || $f.flashTitles[flash.type],
+				message: flash.message
+			});
+		});
+		$f.from.session('flash',null);
+		var content = $f.compile($f.template('flash'),data);
 		return new $f.hbs.SafeString(content);
 	}
 
