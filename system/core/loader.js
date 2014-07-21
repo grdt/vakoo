@@ -1,6 +1,10 @@
 var Susanin = require('susanin');
 var url = require('url');
 
+/**
+ * @class Loader
+ * @augments Vakoo
+ */
 var Loader = function(vakoo){
 
     var loader = this;

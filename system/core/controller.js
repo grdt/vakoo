@@ -1,8 +1,20 @@
-var Controller = function(url){
+/**
+ * @class CoreController
+ * @augments CoreComponent
+ * @param url {Query}
+ */
+var CoreController = function(url){
 
     var _this = this;
 
+	/**
+	 * @type {Query}
+	 */
     this.url = url;
+
+	this.VIEW_NAMESPACE = null;
+
+	const RETURN_URL_PARAM = 'return';
 
 	this.setFlash = function(type, title, message){
 		if(typeof message == "undefined"){
@@ -18,23 +30,35 @@ var Controller = function(url){
         this.echo("method 'index' not found");
     }
 
-    this.where = function(){
+	this.createReturnUrl = function(url){
+		var returnUrl = url || this.url.referrer(),
+			requestUrl = this.url.requestUrl();
+		if(!this.get(RETURN_URL_PARAM)){
+			var obj = {};
+			obj[RETURN_URL_PARAM] = returnUrl;
+			this.redirect(this.url.mergeUrl(requestUrl,obj));
+		}
+	}
+
+    this.where = function(obj){
         this.url.response.send({
             admin:this.isAdmin(),
             executor:this.url.executor,
             "get":this.get(),
-            "post":this.post()
+            "post":this.post(),
+			"and":obj || false
         });
     }
 
-    this.get = function(param){
+    this.get = function(param, def){
         if(typeof param == "undefined"){
             return this.url.request.params;
         }else{
 	        if(typeof this.url.executor[param] != "undefined"){
 		        return this.url.executor[param];
 	        }
-            return (typeof this.url.request.param(param) == "undefined") ? null : this.url.request.param(param);
+			var empty = (typeof def == "undefined") ? null : def;
+            return (typeof this.url.request.param(param) == "undefined") ? empty : this.url.request.param(param);
         }
     }
 
@@ -64,6 +88,18 @@ var Controller = function(url){
         }
         this.url.response.redirect(url);
     }
+
+	this.back = function(){
+		this.redirect(this.get(RETURN_URL_PARAM) || this.url.referrer());
+	}
+
+	this.display = function(view,data){
+		if(this.VIEW_NAMESPACE){
+			view = this.VIEW_NAMESPACE + '.' + view;
+		}
+
+		this.tmpl().display(view,data);
+	}
 
 	this.tmpl = function(){
 		if(typeof this._tmpl != "undefined"){
@@ -162,4 +198,11 @@ var Controller = function(url){
 }
 
 
-module.exports = Controller;
+/**
+ * @constructor
+ * @extends CoreController
+ */
+var CoreAdminController = function(){};
+
+
+module.exports = CoreController;

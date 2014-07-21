@@ -1,4 +1,8 @@
-var Controller = function(){
+/**
+ * @constructor
+ * @extends CoreAdminController
+ */
+var AdminController = function(){
 
     var controller = this;
 
@@ -33,7 +37,7 @@ var Controller = function(){
     }
     
     this.executor = function(){
-
+		//todo refactoring
         var executor = this.router().executor();
 
         if(this.get('task')){
@@ -41,20 +45,19 @@ var Controller = function(){
             executor.method = task[task.length - 1];
             if(task.length == 2){
                 executor.option = task[0];
+
+				var subtask = task[1].split('/');
+
+				if(subtask.length == 2){
+					executor.controller = subtask[0];
+					executor.method = subtask[1];
+				}
             }
         }else{
             if(this.get('method')){
                 executor.method = this.get('method');
             }
         }
-
-//        if(this.get('option')){
-//            executor.option = this.get('option');
-//        }
-//
-//        if(this.get('method')){
-//            executor.method = this.get('method');
-//        }
         
         executor = this.router().executor(executor);
 
@@ -69,4 +72,4 @@ var Controller = function(){
 }
 
 
-module.exports = Controller;
+module.exports = AdminController;

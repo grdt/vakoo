@@ -54,7 +54,8 @@ var Tmpl = function(params){
     }
     
     this.template = function(name){
-        return this.from.template(name);
+		var template = this.from.template(name);
+		return template || '';
     }
 
     this.layout = function(layout){

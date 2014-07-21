@@ -7,7 +7,10 @@ var Loader = require('./core/loader'),
 
 require('./core/global');
 
-var vakoo = function(){
+/**
+ * @class Vakoo
+ */
+var Vakoo = function(){
 
     var vakoo = this;
 
@@ -140,4 +143,4 @@ var vakoo = function(){
 };
 
 
-module.exports = vakoo;
+module.exports = Vakoo;

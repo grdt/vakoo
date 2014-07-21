@@ -1,4 +1,8 @@
-var Component = function(name){
+/**
+ * @class CoreComponent
+ * @augments Loader
+ */
+var CoreComponent = function(name){
 
     var component = this;
 
@@ -30,6 +34,8 @@ var Component = function(name){
 
     this.config = {};
 
+	this._executiveController = null;
+
     this.execute = function(url){
         var controller = this.controller(url.executor.controller,url);
         if(controller){
@@ -43,6 +49,9 @@ var Component = function(name){
         if(!!this._controllers[name]){
             var c = new this._controllers[name]();
             c.url = url;
+			if(typeof url != "undefined"){
+				this._executiveController = c;
+			}
             return c;
         }else{
             return false;
@@ -83,8 +92,18 @@ var Component = function(name){
             return templates_destination[name];
         }
 
-	    throw new Error('template ' + name + ' not found');
+		var message = 'template <strong>&laquo;'+name+'&raquo;</strong> not found';
+		var template = this._executiveController.tmpl().compile(templates_destination.error,{message:message});
+
+		return template;
     }
+
+	this.throw = function(message){
+		var templates_destination = (this.isAdmin()) ? this._admin_templates : this._templates;
+		var template = this._executiveController.tmpl().compile(templates_destination.error,{message:message});
+		this._executiveController.json(template);
+		return false;
+	}
 
     this.isAdmin = function(){
         return false;
@@ -251,4 +270,4 @@ var Component = function(name){
 }
 
 
-module.exports = Component;
+module.exports = CoreComponent;

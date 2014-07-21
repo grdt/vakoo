@@ -1,4 +1,11 @@
-var Url = function(request,response){
+var url = require('url'),
+	querystring = require('querystring');
+
+/**
+ * @class Query
+ * @extends Loader
+ */
+var Query = function(request,response){
 
     this.request = request;
 
@@ -18,11 +25,33 @@ var Url = function(request,response){
         }
     }
 
-	this.initPlugin('query',request,response);
+	this.requestUrl = function(){
+		return this.request.url;
+	}
 
-    return this;
+	this.referrer = function(){
+		var ref = this.request.headers.referer;
+		var parsed = url.parse(ref);
+		var headers = this.request.headers;
+
+		if(parsed.hostname == headers.host){
+			return parsed.path;
+		}else{
+			return ref;
+		}
+	}
+
+	this.mergeUrl = function(from, needle){
+		var parsedFrom = url.parse(from),
+			queryFrom = parsedFrom.query,
+			pathFrom = parsedFrom.pathname,
+			objQueryFrom = querystring.parse(queryFrom);
+		return pathFrom + '?' + querystring.stringify(objQueryFrom.defaults(needle));
+	}
+
+	this.initPlugin('query',request,response);
 }
 
 
 
-module.exports = Url;
+module.exports = Query;

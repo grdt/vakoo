@@ -1,4 +1,9 @@
-var AdminComponent = function(name){
+/**
+ * @param name
+ * @constructor
+ * @extends CoreComponent
+ */
+var CoreAdminComponent = function(name){
 
     var component = this;
 
@@ -44,11 +49,7 @@ var AdminComponent = function(name){
     }
 
     this.preload();
-    
-
-
-    return this;
 }
 
 
-module.exports = AdminComponent;
+module.exports = CoreAdminComponent;

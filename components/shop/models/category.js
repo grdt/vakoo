@@ -1,4 +1,9 @@
-var Category = function(){
+/**
+ *
+ * @class ShopCategoryModel
+ * @extends CoreModel
+ */
+var ShopCategoryModel = function(){
 
 	this.COLLECTION_NAME = 'categories';
 
@@ -26,4 +31,4 @@ var Category = function(){
 	}
 }
 
-module.exports = Category;
+module.exports = ShopCategoryModel;

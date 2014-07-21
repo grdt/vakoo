@@ -1,6 +1,9 @@
 var ObjectID = require('mongodb').ObjectID;
 
-var Model = function(){
+/**
+ * @class CoreModel
+ */
+var CoreModel = function(){
 
     this._where = {};
 
@@ -292,6 +295,16 @@ var Model = function(){
         return object;
     }
 
+	this.setAttributes = function(attributes){
+		var clean = this.clean();
+
+		for(var key in clean){
+			this[key] = attributes[key] || this[key];
+		}
+
+		return this;
+	}
+
     this.ObjectID = function(id){
 	    var oid = id;
 
@@ -319,8 +332,6 @@ var Model = function(){
 	this.isEmpty = function(){
 		return false;
 	}
-
-    return this;
 }
 
-module.exports = Model;
+module.exports = CoreModel;

@@ -1,0 +1,40 @@
+{{factory.flash}}
+
+<div class="well">
+    <a href="/admin/?task=shop.categories/index" class="btn btn-primary">Списком</a>
+    <a href="/admin/?task=shop.categories/index&view=tree" class="btn btn-default">Деревом</a>
+    <a href="/admin/?task=shop.categories/edit" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span> Новая</a>
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Заголовок
+        </th>
+        <th>
+            Путь
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    {{#each categories}}
+        <tr>
+            <td>
+                {{_id}}
+            </td>
+            <td>
+                {{title}}
+            </td>
+            <td>
+                {{url}}
+            </td>
+            <td>
+                <a href="/admin/?task=shop.categories/edit&id={{_id}}" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a>
+            </td>
+        </tr>
+    {{/each}}
+</table>
