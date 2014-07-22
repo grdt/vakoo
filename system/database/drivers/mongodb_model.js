@@ -219,6 +219,9 @@ var CoreModel = function(){
         return this;
     }
 
+	/**
+	 * @param {requestCallback} callback
+	 */
     this.update = function(callback){
         var _this = this;
 
@@ -295,6 +298,10 @@ var CoreModel = function(){
         return object;
     }
 
+	/**
+	 * @param attributes
+	 * @returns {CoreModel}
+	 */
 	this.setAttributes = function(attributes){
 		var clean = this.clean();
 

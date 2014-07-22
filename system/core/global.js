@@ -85,7 +85,9 @@ Object.defineProperties(Object.prototype,{
     }
 });
 
-/** @global */
+/**
+ * @global
+ * */
 var translit = function(text){
 	var space = '-';
 	text = text.toLowerCase();

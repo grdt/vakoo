@@ -74,6 +74,14 @@ var CoreController = function(url){
         }
     }
 
+	this.file = function(param){
+		if(typeof param == "undefined"){
+			return this.url.request.files;
+		}else{
+			return (typeof this.url.request.files[param] == "undefined") ? null : this.url.request.files[param];
+		}
+	}
+
     this.createUrl = function(executor){
         if(typeof executor == "undefined"){
             executor = {};

@@ -5,11 +5,35 @@
  */
 var ShopCategoryModel = function(){
 
+	var that = this;
+
+	const imageObject = {
+		id:'id',
+		name:'name',
+		title:'title',
+		alt:'alt',
+		path:''
+	};
+
+	const metaObject = {
+		description:'',
+		title:'',
+		keywords:''
+	};
+
 	this.COLLECTION_NAME = 'categories';
 
 	this._id = '';
 
 	this.title = '';
+
+	this.description = '';
+
+	this.anonce = '';
+
+	this.image = imageObject;
+
+	this.meta = metaObject;
 
 	this.ancestors = [];
 

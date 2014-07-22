@@ -103,7 +103,7 @@ var Vakoo = function(){
 			},
 			{
 				name:'multipart',
-				handler:multipart()
+				handler:multipart({uploadDir:this.APP_PATH + '/tmp'})
 			},
 			{
 				name:'session',

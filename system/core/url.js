@@ -31,6 +31,7 @@ var Query = function(request,response){
 
 	this.referrer = function(){
 		var ref = this.request.headers.referer;
+		if(!ref)return false;
 		var parsed = url.parse(ref);
 		var headers = this.request.headers;
 
@@ -39,6 +40,10 @@ var Query = function(request,response){
 		}else{
 			return ref;
 		}
+	}
+
+	this.getHost = function(){
+		return url.parse(this.request.url).headers.host;
 	}
 
 	this.mergeUrl = function(from, needle){

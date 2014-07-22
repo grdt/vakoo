@@ -107,8 +107,27 @@ var Tmpl = function(params){
 
 		Handlebars.registerHelper('keyin', function(context, options) {
 			var ret = "";
-			for(key in context){
+			for(var key in context){
 				ret = ret + options.fn(context[key]);
+			}
+			return ret;
+		});
+
+		Handlebars.registerHelper('keyIn', function(context, options) {
+			var ret = "";
+			for(var key in context){
+				ret = ret + options.fn(context[key]);
+			}
+			return ret;
+		});
+
+		Handlebars.registerHelper('keys', function(context, options) {
+			var ret = "";
+			for(var key in context){
+				var content = {};
+				content['key'] = key;
+				content['val'] = context[key];
+				ret = ret + options.fn(content);
 			}
 			return ret;
 		});

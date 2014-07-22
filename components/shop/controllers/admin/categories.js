@@ -12,7 +12,7 @@ var ShopCategoriesAdminController = function(){
 	this.VIEW_NAMESPACE = 'category';
 
 	/**
-	 * @param {Object} where
+	 * @param {Object=} where
 	 * @returns ShopCategoryModel class
 	 */
 	function categoryModel(where){
@@ -40,7 +40,7 @@ var ShopCategoriesAdminController = function(){
 			var model = this.model('category');
 
 			model.where({_id:this.get('id')}).findOne(function(category){
-				model.where({}).find(function(categories){
+				categoryModel().find(function(categories){
 					var cats = [];
 					categories.forEach(function(cat){
 						cat.selected = (cat._id == category.parent);
@@ -48,6 +48,9 @@ var ShopCategoriesAdminController = function(){
 							cats.push(cat);
 						}
 					});
+
+					cats = that.tree(cats);
+
 					that.tmpl().render('category.parent',{category:category,categories:cats});
 				});
 			});
@@ -87,22 +90,43 @@ var ShopCategoriesAdminController = function(){
 	this.edit = function(){
 
 		this.createReturnUrl();
-		
-		categoryModel({_id:this.get('id','')}).findOne(function(category){
 
+		categoryModel({_id:this.get('id','')}).findOne(function(category){
 			if(that.post()){
-				category.setAttributes(that.post()).save();
-				that.setFlash('success','Категория сохранена');
-				if(that.post('exit') == '1'){
-					that.back();
-					return;
+				category.setAttributes(that.post());
+
+				if(!that.get('id')){
+					if(!that.post('_id')){
+						category.createId();
+					}
+					categoryModel({_id:category._id}).findOne(function(already){
+						if(already._id){
+							that.setFlash('error','Категория с таким ID уже существует');
+							category._id = null;
+						}else{
+							category.insert();
+							that.setFlash('success','Категория сохранена');
+							if(that.post('exit') == '1'){
+								that.back();
+							}
+						}
+					});
+				}else{
+					category.save();
+					that.setFlash('success','Категория сохранена');
+					if(that.post('exit') == '1'){
+						that.back();
+					}
 				}
 			}
-
 			that.display('form',{category:category});
 		});
 	}
-	
+
+	/**
+	 * @param {ShopCategoryModel[]} categories
+	 * @returns {Array}
+	 */
 	this.tree = function(categories){
 		var tree = [];
 		
@@ -111,11 +135,15 @@ var ShopCategoriesAdminController = function(){
 		});
 
 		categories.forEach(function(category){
-
 			var parent;
+			
+			if(category.selected){
+				console.log(category._id);
+			}
 
 			if(category.ancestors.length == 0){
 				tree[category._id] = category.clean();
+				tree[category._id].selected = category.selected;
 				tree[category._id].path = category.url();
 				tree[category._id].childs = [];
 			}else{
@@ -128,20 +156,24 @@ var ShopCategoriesAdminController = function(){
 					}
 					if(parent){
 						parent.childs[category._id] = category.clean();
+						parent.childs[category._id].selected = category.selected;
 						parent.childs[category._id].path = category.url();
 						parent.childs[category._id].childs = [];
 					}else{
 						tree[category._id] = category.clean();
+						tree[category._id].selected = category.selected;
 						tree[category._id].path = category.url();
 						tree[category._id].childs = [];
 					}
 				}else{
 					if(parent){
 						parent.childs[category._id] = category.clean();
+						parent.childs[category._id].selected = category.selected;
 						parent.childs[category._id].path = category.url();
 						parent.childs[category._id].childs = [];
 					}else{
 						tree[category._id] = category.clean();
+						tree[category._id].selected = category.selected;
 						tree[category._id].path = category.url();
 						tree[category._id].childs = [];
 					}

@@ -1,17 +1,52 @@
 {{factory.flash}}
-
 <form class="form-horizontal" role="form" action="" method="post">
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">Заголовок</label>
         <div class="col-sm-10">
-            <input type="email" class="form-control" name="title" placeholder="Заголовок" value="{{category.title}}">
+            <input type="text" class="form-control" name="title" placeholder="Заголовок" value="{{category.title}}">
         </div>
     </div>
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">ID</label>
         <div class="col-sm-10">
-            <input type="email" class="form-control" name="_id" placeholder="Заголовок" value="{{category._id}}" readonly>
+            <input type="text" class="form-control" name="_id" placeholder="Идентификатор должен быть уникальным" value="{{category._id}}" {{#if category._id}}readonly{{/if}}>
         </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description" class="col-sm-2 control-label">Описание</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" name="description">{{category.description}}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description" class="col-sm-2 control-label">Анонс</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" name="anonce">{{category.anonce}}</textarea>
+        </div>
+    </div>
+
+
+    {{factory.module 'image' category.image}}
+
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading"><strong>Мета-тэги</strong></div>
+
+        <div class="panel-body">
+
+            {{#keys category.meta}}
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">{{key}}</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="meta[{{key}}]">{{val}}</textarea>
+                    </div>
+                </div>
+            {{/keys}}
+        </div>
+
     </div>
 
 
@@ -23,3 +58,25 @@
         </div>
     </div>
 </form>
+
+{{factory 'js' '/js/codemirror.js'}}
+{{factory 'js' '/js/javascript.js'}}
+{{factory 'js' '/js/css.js'}}
+{{factory 'js' '/js/xml.js'}}
+{{factory 'js' '/js/vbscript.js'}}
+{{factory 'js' '/js/htmlmixed.js'}}
+{{factory 'css' '/css/codemirror.css'}}
+
+
+<script type="text/javascript">
+    var mixedMode = {
+        name: "htmlmixed",
+        scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
+            mode: null},
+            {matches: /(text|application)\/(x-)?vb(a|script)/i,
+                mode: "vbscript"}]
+    };
+
+    var editor = CodeMirror.fromTextArea($("textarea[name=description]").get(0), {mode: mixedMode});
+    var editor2 = CodeMirror.fromTextArea($("textarea[name=anonce]").get(0), {mode: mixedMode});
+</script>

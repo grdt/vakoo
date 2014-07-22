@@ -6,9 +6,18 @@
     </div>
     <div class="modal-body">
         <select name="parent">
-            {{#each categories}}
+            {{#keyIn categories}}
                 <option value="{{_id}}" {{#selected}}selected{{/selected}}>{{title}} ({{_id}})</option>
-            {{/each}}
+                {{#keyIn childs}}
+                    <option value="{{_id}}" {{#selected}}selected{{/selected}}>&nbsp;&nbsp;└&nbsp;{{title}} ({{_id}})</option>
+                    {{#keyIn childs}}
+                        <option value="{{_id}}" {{#selected}}selected{{/selected}}>&nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} ({{_id}})</option>
+                        {{#keyIn childs}}
+                            <option value="{{_id}}" {{#selected}}selected{{/selected}}>{{title}} ({{_id}})</option>
+                        {{/keyIn}}
+                    {{/keyIn}}
+                {{/keyIn}}
+            {{/keyIn}}
         </select>
     </div>
     <div class="modal-footer">
