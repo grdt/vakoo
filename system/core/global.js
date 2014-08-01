@@ -16,6 +16,13 @@ Object.defineProperties(Object.prototype,{
             return this;
         }
     },
+	isArray:{
+		writable: true,
+		configurable: true,
+		value: function(){
+			return _.isArray(this);
+		}
+	},
     isEmpty:{
         writable: true,
         configurable: true,

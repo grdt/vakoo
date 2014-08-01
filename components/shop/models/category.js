@@ -1,5 +1,4 @@
 /**
- *
  * @class ShopCategoryModel
  * @extends CoreModel
  */

@@ -1,4 +1,8 @@
-var Product = function () {
+/**
+ * @class ShopProductModel
+ * @extends CoreModel
+ */
+var ShopProductModel = function () {
 
 	this.COLLECTION_NAME = 'products';
 
@@ -55,4 +59,4 @@ var Product = function () {
 
 }
 
-module.exports = Product;
+module.exports = ShopProductModel;

@@ -58,7 +58,12 @@ var CoreController = function(url){
 		        return this.url.executor[param];
 	        }
 			var empty = (typeof def == "undefined") ? null : def;
-            return (typeof this.url.request.param(param) == "undefined") ? empty : this.url.request.param(param);
+			var param = (typeof this.url.request.param(param) == "undefined") ? empty : this.url.request.param(param);
+			if(parseInt(param) === param*1){
+				return parseInt(param);
+			}else{
+				return param;
+			}
         }
     }
 
@@ -202,6 +207,20 @@ var CoreController = function(url){
         }
     }
 
+	/**
+	 * @param name
+	 * @return CoreComponent
+	 */
+	this.option = function(name){
+		if(typeof name == "undefined"){
+			name = this.COMPONENT_NAME;
+		}
+		if(this.isAdmin() && name.indexOf('admin.') < 0){
+			name = 'admin.' + name;
+		}
+		return this.parent().option(name);
+	}
+
     return this;
 }
 
@@ -209,8 +228,17 @@ var CoreController = function(url){
 /**
  * @constructor
  * @extends CoreController
+ * @property {CoreController} prototype
  */
-var CoreAdminController = function(){};
+var CoreAdminController = function(){
+	/**
+	 * @param name
+	 * @return CoreAdminComponent
+	 */
+	this.option = function(){
+		return this.parent().option();
+	}
+};
 
 
 module.exports = CoreController;

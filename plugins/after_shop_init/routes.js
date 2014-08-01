@@ -6,6 +6,9 @@ var Plugin = function(){
 	var $p = this;
 
 	this.init = function(){
+
+		return;
+
 		this.option('shop').model('category').find(function(categories){
 			categories.forEach(function(category){
 

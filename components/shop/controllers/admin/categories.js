@@ -7,7 +7,6 @@ var ShopCategoriesAdminController = function(){
 	var that = this;
 
 	const CATEGORY = 'category';
-	const PRODUCT = 'product';
 
 	this.VIEW_NAMESPACE = 'category';
 

@@ -53,8 +53,13 @@ var CoreModel = function(){
 		this._limit = 0;
 
 		if(typeof limit == "undefined"){
-			limit = skip;
-			skip = 0;
+			if(skip.isArray() && skip.length == 2){
+				limit = skip[1];
+				skip = skip[0];
+			}else{
+				limit = skip;
+				skip = 0;
+			}
 		}
 
 		if(!skip){

@@ -59,7 +59,19 @@ var Loader = function(vakoo){
         }
     }
 
+	/**
+	 * @param name
+	 * @returns CoreComponent
+	 */
     this.option = function(name){
+		if(typeof name == "undefined"){
+			if(typeof this.COMPONENT_NAME != "undefined"){
+				name = this.COMPONENT_NAME;
+			}else{
+				throw new Error('OPTION IS NOT DEFINED');
+				return;
+			}
+		}
         if(!!this._options[name]){
             return this._options[name];
         }else{

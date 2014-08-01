@@ -5,8 +5,252 @@ var Import = function(){
 		that = this;
 
 	var startTime = new Date();
-	
+
+	this.timedOut = {};
+
 	this.index = function(){
+
+		var skus = fs.readFileSync(that.APP_PATH + '/sku.txt').toString().split('\n');
+
+		var already = [];
+		
+		var added = [];
+
+		this.model('product').find(function(products){
+			products.forEach(function(product){
+				already[parseInt(product.sku)] = true;
+			});
+
+			skus.forEach(function(sku){
+				if(typeof already[parseInt(sku)] == "undefined"){
+					that.getProduct(sku);
+				}else{
+					added.push(sku);
+				}
+			});
+			
+			console.log('already added',added.join(','));
+		});
+
+//		skus.forEach(function(sku){
+//			that.model('product').where({sku:parseInt(sku)}).findOne(function(product){
+//				if(!product._id){
+////					console.log('start get',sku);
+//					that.getProduct(sku);
+//				} else {
+//					console.log(sku,'already added');
+//				}
+//			});
+//		});
+	}
+
+	this.getProduct = function(sku){
+
+		var http = require('http');
+		var options = {
+			host: 'www.condom-shop.ru',
+			port: '80',
+			path: '/products/' + sku,
+			method: 'POST',
+			headers: {
+				'Cookie': 'sid=6fdfbfa5bb472f77925d581e95f0a649',
+			}
+		};
+
+		var req = http.request(options,function(res){
+
+			var result = '';
+
+			res.on('data',function(chunk){
+				result = result + chunk;
+			});
+
+			res.on('end',function(){
+				var jsdom  = require('jsdom');
+				var fs     = require('fs');
+				var jquery = fs.readFileSync(that.APP_PATH + '/public/js/jquery.js').toString();
+				jsdom.env({
+					html:result,
+					src:[jquery],
+					done:function(error,window){
+						if(error){
+							console.log(error.code);
+							return;
+						}
+
+						var $ = window.$;
+
+						that.storeProduct($);
+					}
+				})
+			});
+		});
+
+		req.on('socket', function (socket) {
+			socket.setTimeout(5000);
+			socket.on('timeout', function() {
+				req.end();
+				console.log('product',sku,'timeout');
+				return;
+				if(typeof that.timedOut[sku] == "undefined"){
+					that.timedOut[sku] = true;
+					that.getProduct(sku);
+					console.log('product',sku,'timeout, get again');
+				}else{
+					console.log('product',sku,'timeout, close');
+				}
+			});
+		});
+
+		req.end();
+	};
+
+	this.storeProduct = function($){
+
+		if($(".message.error").length){
+			return;
+		}
+
+		var product = that.model('product');
+		product.sku = parseInt($("#article").html().replace('Артикул: ',''));
+		product.tradePrice = parseInt($(".regular-price").html());
+		product.price = parseInt($(".price-wholesale").html().replace('РРЦ: ',''));
+		product.available = $("#status").html();
+
+
+
+		product.title = $("#name").html().trim();
+		product.shortDesc = $("#sub_name").html().trim();
+		product.alias = translit(product.title);
+		product.params = {
+			benefits:[],
+			items:[]
+		};
+
+		$("#descriptions p").each(function(i,p){
+			product.desc += '<p>' + $(p).html().trim() + '</p>';
+		});
+
+		$("#benefits ul li").each(function(i,li){
+			var $li = $(li);
+			$li.find('span').remove();
+			product.params.benefits.push($li.html().trim());
+		});
+
+		$("#propertys ul li").each(function(i,li){
+			var name = $(li).find('.name>span').html().trim();
+			var value = $(li).find('.value').html().trim();
+			product.params.items.push([name,value]);
+		});
+
+		if($("#groups").size()){
+			if($("#groups a").size()){
+				product.size.current = $("#groups>form>div>span").html().toLowerCase().replace('размер','').trim().toUpperCase();
+				$("#groups a").each(function(i,a){
+					var size = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+					if(size.indexOf('.') >= 0){
+						product.size = false;
+						product.group.current = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+						product.group.groups.push(
+							{group:size,sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')}
+						)
+					}else{
+						product.group = false;
+						product.size.sizes[size] = {sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')};
+					}
+				});
+			}else{
+				product.size.current = 'XS-L';
+			}
+		}else{
+			product.size = false;
+		}
+
+		$("#videos a").each(function(i,a){
+			product.videos.push($(a).attr('href'));
+		});
+
+		product.image = $("#main-image>img").attr('src');
+
+		$("#images #more-views ul li a img").each(function(i,img){
+			if($(img).attr('src') != product.image){
+				product.images.push($(img).attr('src'));
+			}
+		});
+
+
+//		product.save(function(product){
+//			console.log('product save',product._id,product.sku,product.price,product.tradePrice,product.title);
+//		});
+
+		this.addToStack(product);
+
+		var memory = process.memoryUsage();
+		console.log('memory', memory.rss / 1024 / 1024);
+	}
+	
+	this.stack = [];
+
+	this.stackSchedule = false;
+	
+	this.addToStack = function(product){
+		console.log('add to stack',product.sku);
+		this.stack.push(product.clean('_id'));
+		if(this.stack.length >= 10 && !this.stackSchedule){
+			this.stackSchedule = this.stack.clone();
+			this.stack = [];
+			console.log('stackoverflow, inserting');
+			this.model('product').collection().insert(this.stackSchedule,function(err,items){
+				if(err){
+					console.log(err);
+				}else{
+					console.log(items.length,'inserted');
+					if(items.length == that.stackSchedule.length){
+						that.stackSchedule = false;
+					}else{
+						console.log('ERRRORRR!!!! WTFFFFF!!!');
+					}
+				}
+			});
+		}
+	}
+	
+	this.index2 = function(){
+
+		this.where();
+		return;
+
+		var url = 'http://www.condom-shop.ru/products/35566';
+		var jsdom  = require('jsdom');
+		var fs     = require('fs');
+		var jquery = fs.readFileSync(this.APP_PATH + '/public/js/jquery.js').toString();
+		
+		console.log('sid = 74efb67761f6f754643b4824297d5be4; expires = '+(new Date(2015, 4, 23, 16, 53, 37)).toUTCString()+'; path=/; domain = .condom-shop.ru');
+		
+		jsdom.env({
+			url:url,
+			src:[jquery],
+			document:{
+				referrer:'http://www.condom-shop.ru/eroticheskoe-belie-i-odezhda/kiss-me-gogo-girl-belyj-otkrytyj-byustik-stringi-poyas-i-podvyazka',
+				cookie:'sid=74efb67761f6f754643b4824297d5be4; Expires = '+(new Date(2015, 4, 23, 16, 53, 37)).toUTCString()+'; Path=/; Domain = .condom-shop.ru'
+			},
+			done:function(error,window){
+				if(error){
+					console.log(error.code);
+					return;
+				}
+
+				var $ = window.$;
+				
+				console.log($("#prices").html());
+				
+			}
+		});
+
+		this.where();
+
+
+		return;
 		var csv = require('csv');
 
 		var Buffer = require('buffer').Buffer;
@@ -14,45 +258,73 @@ var Import = function(){
 		var assert = require('assert');
 
 		var iconv = new Iconv('UTF-8', 'CP1251');
-
-		csv()
-			.from.path('/home/pasa/vakoo/PriceList-2.csv',{delimiter:';'})
-			.to.array(function(data){
-				for(key in data){
-					if(key != 0 && key > 2139 && key < 10000){
-						var sku = data[key][0];
-						var tradePrice = data[key][1];
-						var price = data[key][2];
-						var product = that.model('product');
-						var buffer = iconv.convert('Много');
-						if(buffer.toString() == data[key][4]){
-							product.available = true;
-						}
-						product.sku = sku;
-						product.tradePrice = tradePrice;
-						product.price = price;
-						that.parseProduct(product,key,function(){
-							product = null;
-							delete data[key];
-						});
-
-					}
-				}
+		
+		var skus = [];
+		
+		this.model('product').find(function(products){
+			products.forEach(function(p){
+				skus.push(p.sku);
 			});
+
+			csv()
+				.from.path(this.APP_PATH + '/PriceList-3.csv',{delimiter:';'})
+				.to.array(function(data){
+					for(var key in data){
+						if(key != 0 && key > 3000 && key < 3002){
+							if(skus.indexOf(data[key][0])*1 == -1){
+								var product = that.model('product');
+								var sku = data[key][0];
+								var memory = process.memoryUsage();
+								var tradePrice = data[key][1];
+								var price = data[key][2];
+								var buffer = iconv.convert('Много');
+								if(buffer.toString() == data[key][4]){
+									product.available = true;
+								}
+								product.sku = sku;
+								product.tradePrice = tradePrice;
+								product.price = price;
+								that.parseProduct(product,key,function(){
+									product = null;
+								});
+							}else{
+								
+							}
+
+
+						}
+					}
+				});
+			
+		});
+		
+
+
+		this.where();
+		
+		return;
+
+		
 	}
 
 	this.parseProduct = function(product,i,done){
 		var url = 'http://www.condom-shop.ru/products/' + product.sku;
-//		console.log('start parse product',i,url);
 		var jsdom  = require('jsdom');
 		var fs     = require('fs');
 		var jquery = fs.readFileSync(this.APP_PATH + '/public/js/jquery.js').toString();
-
-
 		jsdom.env({
 			url:url,
 			src:[jquery],
+			document:{
+				cookie:'sid=74efb67761f6f754643b4824297d5be4; expires=Sat, 23 2015 16:53:37 GMT+4; path=/',
+				cookieDomain:'.condom-shop.ru'
+			},
 			done:function(error,window){
+				if(error){
+					console.log(error.code,i,product.sku);
+					return;
+				}
+
 				var $ = window.$;
 				
 				product.title = $("#name").html().trim();
@@ -117,8 +389,12 @@ var Import = function(){
 				product.save();
 
 				console.log('product save.',i,' sku:',product.sku,'time',((new Date).getTime() - startTime.getTime()) / 1000);
+				var memory = process.memoryUsage();
+				console.log('memory', memory.rss / 1024 / 1024);
 
 				done();
+
+				delete jsdom;
 			}
 		});
 

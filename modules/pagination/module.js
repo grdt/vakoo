@@ -7,8 +7,20 @@ var Pagination = function(){
 	this.render = function(factory,data,options){
 		var pages = Math.ceil(options.count / options.perPage);
 		var pagesArr = [];
-		
-		var parsedUrl = url.parse(factory.from.url.request.url);
+		var link = factory.from.url.request.url;
+		var parsedUrl = url.parse(link);
+
+
+
+		var PAGE = '?p=';
+
+		if(parsedUrl.query){
+			PAGE = '&p=';
+		}
+
+		if(factory.from.get('p')){
+			link = link.replace(PAGE+factory.from.get('p'),'');
+		}
 
 		var pagesMax = 10;
 
@@ -23,7 +35,7 @@ var Pagination = function(){
 				if(i>0){
 					pagesArr.push({
 						page:i,
-						url:parsedUrl.pathname + (((i-1) == 0) ? '' : '?p=' + (i-1)),
+						url:link + (((i-1) == 0) ? '' : PAGE + (i-1)),
 						active:(options.page == i)});
 					addedBefore++;
 				}
@@ -33,7 +45,7 @@ var Pagination = function(){
 				if(i<=pages){
 					pagesArr.push({
 						page:i,
-						url:parsedUrl.pathname + (((i-1) == 0) ? '' : '?p=' + (i-1)),
+						url:link + (((i-1) == 0) ? '' : PAGE + (i-1)),
 						active:(options.page == i)});
 					addedAfter++;
 				}
@@ -51,7 +63,7 @@ var Pagination = function(){
 
 					pagesArr.unshift({
 						page:'...',
-						url:parsedUrl.pathname + '?p=' + firstDotes
+						url:link + PAGE + firstDotes
 					});
 				}
 
@@ -65,13 +77,13 @@ var Pagination = function(){
 				if(to < (pages - 1)){
 					pagesArr.push({
 						page:'...',
-						url:parsedUrl.pathname + '?p=' + to
+						url:link + PAGE + to
 					});
 				}
 
 				pagesArr.push({
 					page:pages,
-					url:parsedUrl.pathname + '?p=' + (pages - 1)
+					url:link + PAGE + (pages - 1)
 				});
 			}
 
@@ -79,13 +91,13 @@ var Pagination = function(){
 			for(var i=1;i<=pages;i++){
 				pagesArr.push({
 					page:i,
-					url:parsedUrl.pathname + (((i-1) == 0) ? '' : '?p=' + (i-1)),
+					url:link + (((i-1) == 0) ? '' : PAGE + (i-1)),
 					active:(options.page == i)});
 			}
 		}
 
 		var prev = {
-			url:parsedUrl.pathname + (((options.page - 2) == 0) ? '' : '?p=' + (options.page - 2)),
+			url:link + (((options.page - 2) == 0) ? '' : PAGE + (options.page - 2)),
 			enable:false
 		};
 
@@ -94,7 +106,7 @@ var Pagination = function(){
 		}
 
 		var next = {
-			url:parsedUrl.pathname + '?p=' + options.page,
+			url:link + PAGE + options.page,
 			enable:false
 		};
 
@@ -103,6 +115,27 @@ var Pagination = function(){
 		}
 
 		return {view:'modules.pagination',data:{pagesArr:pagesArr,prev:prev,next:next}};
+	}
+
+	/**
+	 * @param {CoreModel} model
+	 * @param {number} perPage
+	 * @param {number} page
+	 * @param {function} callback
+	 */
+	this.get = function(model, perPage, page, callback){
+		model.count(function(count){
+			var limit = [0,perPage],
+				pagination = false;
+			if(perPage < count){
+				limit = [page * perPage, perPage];
+				pagination = {page:page + 1,count:count,perPage:perPage};
+			}
+
+			model.limit(limit).find(function(result){
+				callback(result,pagination);
+			});
+		});
 	}
 }
 

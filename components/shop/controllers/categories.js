@@ -1,4 +1,8 @@
-var Categories = function(){
+/**
+ * @constructor
+ * @extends {CoreController}
+ */
+var ShopCategoriesController = function(){
 	var $c = this;
 
 	this.index = function(){
@@ -69,4 +73,4 @@ var Categories = function(){
 
 }
 
-module.exports = Categories;
+module.exports = ShopCategoriesController;
