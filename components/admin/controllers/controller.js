@@ -16,7 +16,7 @@ var AdminController = function(){
                 }
             }else{
                 if(!controller.executor().isEqual(controller.router().executor()) && !controller.executor().isEqual(controller.loginExecutor())){
-                    controller.session('redirect_after_login',controller.url.request.url);
+                    controller.session('redirect_after_login',controller.query.request.url);
 					if(controller.executor().isEqual({option:'admin',controller:'controller',method:'index'})){
 						controller.exec({option:'user',method:'login'});
 					}else{
@@ -32,7 +32,7 @@ var AdminController = function(){
     this.exec = function(executor){
         executor = this.router().executor(executor);
         var option = this.option('admin.' + executor.option);
-        var controller = option.controller(executor.controller,this.url);
+        var controller = option.controller(executor.controller,this.query);
         controller.run(executor.method);
     }
     

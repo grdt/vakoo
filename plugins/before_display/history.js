@@ -16,7 +16,7 @@ var Plugin = function(){
 		}else{
 			var history = $l.from.session('history');
 			var title = $l.factory().title().replace($l.factory().TITLE_SEPARATOR,'').replace($l.factory().config().title,'');
-			var url = Url.parse($l.from.url.request.url).pathname;
+			var url = Url.parse($l.from.query.request.url).pathname;
 			if(title == ''){
 				title = $l.factory().config().title;
 			}

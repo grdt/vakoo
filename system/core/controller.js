@@ -1,18 +1,20 @@
 /**
  * @class CoreController
  * @augments CoreComponent
- * @param url {Query}
+ * @param query {Query}
  */
-var CoreController = function(url){
+var CoreController = function(query){
 
-    var _this = this;
+    var that = this;
 
 	/**
 	 * @type {Query}
 	 */
-    this.url = url;
+    this.query = query;
 
 	this.VIEW_NAMESPACE = null;
+
+	const REQUEST_TIMEOUT = 2000;
 
 	const RETURN_URL_PARAM = 'return';
 
@@ -31,19 +33,19 @@ var CoreController = function(url){
     }
 
 	this.createReturnUrl = function(url){
-		var returnUrl = url || this.url.referrer(),
+		var returnUrl = url || this.query.referrer(),
 			requestUrl = this.url.requestUrl();
 		if(!this.get(RETURN_URL_PARAM)){
 			var obj = {};
 			obj[RETURN_URL_PARAM] = returnUrl;
-			this.redirect(this.url.mergeUrl(requestUrl,obj));
+			this.redirect(this.query.mergeUrl(requestUrl,obj));
 		}
 	}
 
     this.where = function(obj){
-        this.url.response.send({
+        this.query.response.send({
             admin:this.isAdmin(),
-            executor:this.url.executor,
+            executor:this.query.executor,
             "get":this.get(),
             "post":this.post(),
 			"and":obj || false
@@ -52,13 +54,13 @@ var CoreController = function(url){
 
     this.get = function(param, def){
         if(typeof param == "undefined"){
-            return this.url.request.params;
+            return this.query.request.params;
         }else{
-	        if(typeof this.url.executor[param] != "undefined"){
-		        return this.url.executor[param];
+	        if(typeof this.query.executor[param] != "undefined"){
+		        return this.query.executor[param];
 	        }
 			var empty = (typeof def == "undefined") ? null : def;
-			var param = (typeof this.url.request.param(param) == "undefined") ? empty : this.url.request.param(param);
+			var param = (typeof this.query.request.param(param) == "undefined") ? empty : this.query.request.param(param);
 			if(parseInt(param) === param*1){
 				return parseInt(param);
 			}else{
@@ -69,21 +71,21 @@ var CoreController = function(url){
 
     this.post = function(param){
         if(typeof param == "undefined"){
-            if(this.url.request.method.toLowerCase() == 'post'){
-                return this.url.request.body;
+            if(this.query.request.method.toLowerCase() == 'post'){
+                return this.query.request.body;
             }else{
                 return false;
             }
         }else{
-            return (typeof this.url.request.body[param] == "undefined") ? null : this.url.request.body[param];
+            return (typeof this.query.request.body[param] == "undefined") ? null : this.query.request.body[param];
         }
     }
 
 	this.file = function(param){
 		if(typeof param == "undefined"){
-			return this.url.request.files;
+			return this.query.request.files;
 		}else{
-			return (typeof this.url.request.files[param] == "undefined") ? null : this.url.request.files[param];
+			return (typeof this.query.request.files[param] == "undefined") ? null : this.query.request.files[param];
 		}
 	}
 
@@ -91,7 +93,7 @@ var CoreController = function(url){
         if(typeof executor == "undefined"){
             executor = {};
         }
-        executor = executor.defaults(this.url.executor);
+        executor = executor.defaults(this.query.executor);
         return this.router().createUrl(executor);
     }
 
@@ -99,11 +101,11 @@ var CoreController = function(url){
         if(typeof url == "undefined"){
             url = (this.isAdmin()) ? '/admin' :'/';
         }
-        this.url.response.redirect(url);
+        this.query.response.redirect(url);
     }
 
 	this.back = function(){
-		this.redirect(this.get(RETURN_URL_PARAM) || this.url.referrer());
+		this.redirect(this.get(RETURN_URL_PARAM) || this.query.referrer());
 	}
 
 	this.display = function(view,data){
@@ -120,20 +122,22 @@ var CoreController = function(url){
 		}
 
 		var lib = this.vakoo.config().tmpl_lib;
-		var tmpl = this.library(lib,{url:this.url,from:this});
+		var tmpl = this.library(lib,{url:this.query,from:this});
 		return tmpl;
 	}
 
     this.json = function(data){
-        this.url.response.send(data);
+		this.cleanTimeout();
+        this.query.response.send(data);
     }
 
     this.echo = function(data){
-        this.url.response.send(data);
+		this.cleanTimeout();
+        this.query.response.send(data);
     }
 
 	this.isAjax = function(){
-		return this.url.request.xhr;
+		return this.query.request.xhr;
 	}
 
 	this.exception = function(code,message){
@@ -141,24 +145,24 @@ var CoreController = function(url){
 			message = code;
 			code = 404;
 		}
-		this.url.response.status(code);
-		this.url.response.send(message);
+		this.query.response.status(code);
+		this.query.response.send(message);
 	}
 
     this.session = function(key,value){
         if(typeof value == "undefined"){
             if(typeof key == "undefined"){
-                return this.url.request.session;
+                return this.query.request.session;
             }else{
-                return (typeof this.url.request.session[key] != "undefined") ? this.url.request.session[key] : null;
+                return (typeof this.query.request.session[key] != "undefined") ? this.query.request.session[key] : null;
             }
         }else{
             if(value == null){
-                if(typeof this.url.request.session[key] != "undefined"){
-                    delete this.url.request.session[key];
+                if(typeof this.query.request.session[key] != "undefined"){
+                    delete this.query.request.session[key];
                 }
             }else{
-                this.url.request.session[key] = value;
+                this.query.request.session[key] = value;
             }
         }
 
@@ -175,17 +179,17 @@ var CoreController = function(url){
         if(!this.post())return false;
 
         if(typeof param == "undefined"){
-            return this.url.request.files;
+            return this.query.request.files;
         }else{
-            if(typeof this.url.request.files[param] != "undefined"){
+            if(typeof this.query.request.files[param] != "undefined"){
                 
-                if(typeof this.url.request.files[param].size == "number"){
-                    return (this.url.request.files[param].size) ? this.url.request.files[param] : null;
+                if(typeof this.query.request.files[param].size == "number"){
+                    return (this.query.request.files[param].size) ? this.query.request.files[param] : null;
                 }else{
 
                     var files = [];
 
-                    this.url.request.files[param].forEach(function(file){
+                    this.query.request.files[param].forEach(function(file){
                         if(file.size){
                             files.push(file);
                         }
@@ -200,10 +204,11 @@ var CoreController = function(url){
     }
 
     this.run = function(method){
+		this.startTimeout();
         if(typeof this[method] == "function"){
             this[method]();
         }else{
-            this.show404(404,'method not found',this.url.response);
+            this.show404(404,'method not found',this.query.response);
         }
     }
 
@@ -221,7 +226,23 @@ var CoreController = function(url){
 		return this.parent().option(name);
 	}
 
-    return this;
+	this.onRequestTimeout = function(){
+		if(this._executiveController){
+			this._executiveController.echo('Request TimedOut');
+		}
+	}
+
+	this.startTimeout = function(){
+		if(this.COMPONENT_NAME != 'admin' && typeof this.query != "undefined"){
+			this.requestTimeout = setTimeout(function(){
+				that.onRequestTimeout();
+			}, REQUEST_TIMEOUT);
+		}
+	}
+
+	this.cleanTimeout = function(){
+		clearTimeout(this.requestTimeout);
+	}
 }
 
 

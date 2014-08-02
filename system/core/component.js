@@ -36,20 +36,20 @@ var CoreComponent = function(name){
 
 	this._executiveController = null;
 
-    this.execute = function(url){
-        var controller = this.controller(url.executor.controller,url);
+    this.execute = function(query){
+        var controller = this.controller(query.executor.controller,query);
         if(controller){
-            controller.run(url.executor.method);
+            controller.run(query.executor.method);
         }else{
-            this.show404(404,'controller not found',url.response);
+            this.show404(404,'controller not found',query.response);
         }
     }
 
-    this.controller = function(name,url){
+    this.controller = function(name,query){
         if(!!this._controllers[name]){
             var c = new this._controllers[name]();
-            c.url = url;
-			if(typeof url != "undefined"){
+            c.query = query;
+			if(typeof query != "undefined"){
 				this._executiveController = c;
 			}
             return c;

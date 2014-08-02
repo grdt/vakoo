@@ -6,6 +6,8 @@ var url = require('url'),
  * @extends Loader
  */
 var Query = function(request,response){
+	
+	var that = this;
 
     this.request = request;
 

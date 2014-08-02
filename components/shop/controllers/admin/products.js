@@ -71,7 +71,9 @@ var ShopProductsAdminController = function(){
 	}
 
 	this.edit = function(){
-		this.where();
+		productModel({_id:this.get('id','')}).findOne(function(product){
+			that.display('form',product);
+		});
 	}
 
 }

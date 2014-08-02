@@ -50,10 +50,10 @@ var Loader = function(vakoo){
     this._components_routes = [];
 
     this.execute = function(req,res){
-        var url = this.url(req,res);
-        var option = this.option(url.executor.option);
+        var query = this.query(req,res);
+        var option = this.option(query.executor.option);
         if(option){
-            option.execute(url);
+            option.execute(query);
         }else{
             this.show404(404,'Component not found',res);
         }
@@ -408,10 +408,10 @@ var Loader = function(vakoo){
         return fs.existsSync(path);
     }
 
-    this.url = function(req,res){
-        var url = require('./url');
-        url.prototype = this;
-        return new url(req,res);
+    this.query = function(req,res){
+        var query = require('./url');
+		query.prototype = this;
+        return new query(req,res);
     }
 
     this.router = function(){
