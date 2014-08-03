@@ -37,8 +37,21 @@ var ShopProductsAdminController = function(){
 		return model;
 	}
 	
-	function getCategoryTree(callback){
+	function getCategoryTree(selected, callback){
+		if(typeof selected == "function" && typeof callback == "undefined"){
+			callback = selected;
+			selected = false;
+		}
 		that.model('category').find(function(categories){
+			if(selected){
+				categories.forEach(function(category){
+					if(category._id == selected){
+						category.selected = true;
+					}else{
+						category.selected = false;
+					}
+				});
+			}
 			categories = that.option().controller('categories').tree(categories);
 			callback(categories);
 		});
@@ -71,8 +84,29 @@ var ShopProductsAdminController = function(){
 	}
 
 	this.edit = function(){
-		productModel({_id:this.get('id','')}).findOne(function(product){
-			that.display('form',product);
+
+		this.createReturnUrl();
+
+		var where;
+
+		if(!this.get('id') && this.get('sku')){
+			where = {sku:this.get('sku')};
+		}else{
+			where = {_id:this.get('id')};
+		}
+
+		productModel(where).findOne(function(product){
+			if(that.post()){
+				product.setAttributes(that.post()).save();
+				that.setFlash('success','Товар сохранен');
+				if(that.post('exit') == '1'){
+					that.back();
+				}
+			}
+
+			getCategoryTree(product.category,function(categories){
+				that.display('form',{product:product,categories:categories});
+			});
 		});
 	}
 

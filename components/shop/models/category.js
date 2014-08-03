@@ -7,10 +7,9 @@ var ShopCategoryModel = function(){
 	var that = this;
 
 	const imageObject = {
-		id:'id',
-		name:'name',
-		title:'title',
-		alt:'alt',
+		id:'',
+		name:'',
+		alt:'',
 		path:''
 	};
 

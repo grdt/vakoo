@@ -77,6 +77,6 @@
                 mode: "vbscript"}]
     };
 
-    var editor = CodeMirror.fromTextArea($("textarea[name=description]").get(0), {mode: mixedMode});
-    var editor2 = CodeMirror.fromTextArea($("textarea[name=anonce]").get(0), {mode: mixedMode});
+    var editor = CodeMirror.fromTextArea($("textarea[name=description]").get(0), {mode: mixedMode,lineWrapping:true});
+    var editor2 = CodeMirror.fromTextArea($("textarea[name=anonce]").get(0), {mode: mixedMode,lineWrapping:true});
 </script>

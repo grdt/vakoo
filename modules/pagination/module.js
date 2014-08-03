@@ -7,7 +7,7 @@ var Pagination = function(){
 	this.render = function(factory,data,options){
 		var pages = Math.ceil(options.count / options.perPage);
 		var pagesArr = [];
-		var link = factory.from.url.request.url;
+		var link = factory.from.query.request.url;
 		var parsedUrl = url.parse(link);
 
 

@@ -5,7 +5,7 @@
         <h4 class="modal-title" id="myModalLabel"><small>смена родителя категории</small>&nbsp;{{category.title}} </h4>
     </div>
     <div class="modal-body">
-        <select name="parent">
+        <select name="parent" class="form-control">
             {{#keyIn categories}}
                 <option value="{{_id}}" {{#selected}}selected{{/selected}}>{{title}} ({{_id}})</option>
                 {{#keyIn childs}}

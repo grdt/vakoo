@@ -14,7 +14,7 @@ var CoreController = function(query){
 
 	this.VIEW_NAMESPACE = null;
 
-	const REQUEST_TIMEOUT = 2000;
+	const REQUEST_TIMEOUT = 5000;
 
 	const RETURN_URL_PARAM = 'return';
 
@@ -34,7 +34,7 @@ var CoreController = function(query){
 
 	this.createReturnUrl = function(url){
 		var returnUrl = url || this.query.referrer(),
-			requestUrl = this.url.requestUrl();
+			requestUrl = this.query.requestUrl();
 		if(!this.get(RETURN_URL_PARAM)){
 			var obj = {};
 			obj[RETURN_URL_PARAM] = returnUrl;
@@ -61,8 +61,8 @@ var CoreController = function(query){
 	        }
 			var empty = (typeof def == "undefined") ? null : def;
 			var param = (typeof this.query.request.param(param) == "undefined") ? empty : this.query.request.param(param);
-			if(parseInt(param) === param*1){
-				return parseInt(param);
+			if(param*1+'' === param){
+				return param*1;
 			}else{
 				return param;
 			}

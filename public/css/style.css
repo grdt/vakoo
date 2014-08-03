@@ -153,4 +153,17 @@ textarea{
     overflow: hidden;
 }
 
-/*  suggestions */
+/*  end suggestions */
+
+
+/* rouble */
+@font-face {
+	font-family: Rouble;
+	src: url("/font/rouble.otf") format("opentype");
+}
+
+.rouble{
+	font-family: Rouble;
+	font-size: 18px;
+}
+/* end rouble */

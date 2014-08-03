@@ -143,6 +143,10 @@ var CoreModel = function(){
 		});
 	}
 
+	this.afterFind = function(done){
+		done();
+	}
+
     this.findOne = function(callback){
         var _this = this;
         this.collection().findOne(this._where,function(err,item){
@@ -157,7 +161,9 @@ var CoreModel = function(){
                     }
 
                     if(typeof callback == "function"){
-                        callback(_this);
+						_this.afterFind(function(){
+							callback(_this);
+						});
                     }
                 }else{
                     if(typeof callback == "function"){
@@ -170,14 +176,25 @@ var CoreModel = function(){
     }
 
     this.save = function(callback){
-        if(this._id){
-            this.update(callback);
-        }else{
-            this.insert(callback);
-        }
+		var that = this;
+		this.beforeSave(function(){
+			if(that._id){
+				that.update(callback);
+			}else{
+				that.insert(callback);
+			}
+		});
     }
 
+	this.beforeUpdate = function(done){
+		done();
+	}
+
 	this.beforeInsert = function(done){
+		done();
+	}
+
+	this.beforeSave = function(done){
 		done();
 	}
 

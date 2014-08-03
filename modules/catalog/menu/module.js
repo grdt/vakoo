@@ -59,7 +59,7 @@ var Menu = function(){
 		
 		var open = '';
 
-		if(factory.from.url.request.url == '/'){
+		if(factory.from.query.request.url == '/'){
 			open = 'open';
 		}
 

@@ -3,12 +3,13 @@ var crypto = require('crypto');
  * @constructor
  * @extends {CoreModel}
  */
-var FileFileModel = function(){
+var FileModel = function(){
+
+	var that = this;
 
 	this.COLLECTION_NAME = 'files';
 
 	const UPLOAD_PATH = '/public/files/';
-
 
 	this._id = '';
 
@@ -51,9 +52,45 @@ var FileFileModel = function(){
 	}
 
 	this.getHash = function(){
-		return this._id.clone().toString().substr(0,8);
+		var date = new Date();
+		var monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		var loader = this.vakoo.load;
+		if(!loader.isDir(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + monthes[date.getMonth()])){
+			fs.mkdirSync(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + monthes[date.getMonth()]);
+		}
+		var path = date.getFullYear() + monthes[date.getMonth()] + this.SEPARATOR + date.getDate();
+		return path;
+//		return this._id.clone().toString().substr(0,8);
+	}
+
+	this.loadFromSource = function(link, name, callback){
+		var http = require('http');
+		var fs = require('fs');
+		var ext = link.split('.')[link.split('.').length - 1];
+		var hash = this.getHash();
+		var loader = this.vakoo.load;
+		var path = this.APP_PATH + UPLOAD_PATH;
+		path += hash;
+		if(!loader.isDir(path)){
+			fs.mkdirSync(path);
+		}
+		
+		path += this.SEPARATOR + name + '.' + ext;
+
+		var file = fs.createWriteStream(path);
+		var request = http.get(link, function(response) {
+			response.pipe(file);
+			response.on('end',function(){
+				that.name = name + '.' + ext;
+				that.originalName = link.split('/')[link.split('/').length - 1];
+				that.path = path.replace(that.APP_PATH,'').replace('/public','');
+				that.size = fs.statSync(path).size;
+				that.type = "image/jpeg";
+				callback();
+			})
+		});
 	}
 
 }
 
-module.exports = FileFileModel;
+module.exports = FileModel;

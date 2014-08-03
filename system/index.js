@@ -10,9 +10,11 @@ require('./core/global');
 /**
  * @class Vakoo
  */
-var Vakoo = function(){
+var Vakoo = function(fastPort){
 
     var vakoo = this;
+
+	this.fastPort = fastPort;
 
     this.SEPARATOR = '/';
     this.SYSTEM_PATH = __dirname;
@@ -43,8 +45,9 @@ var Vakoo = function(){
 	}
 
 	this.serverStart = function(){
-		this._server.listen(this.config().port);
-		console.log('Vakoo start at port ',this.config().port);
+		var port = this.fastPort || this.config().port;
+		this._server.listen(port);
+		console.log('Vakoo start at port ',port);
 	}
 
 	this.serverRestart = function(){

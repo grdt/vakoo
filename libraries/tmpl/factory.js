@@ -1,5 +1,8 @@
-
-var Factory = function(){
+/**
+ * @returns {TemplateFactory}
+ * @constructor
+ */
+var TemplateFactory = function(){
 
 	var $f = this;
 
@@ -101,4 +104,4 @@ var Factory = function(){
     return this;
 }
 
-module.exports = Factory;
+module.exports = TemplateFactory;

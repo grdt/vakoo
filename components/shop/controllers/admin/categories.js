@@ -135,10 +135,6 @@ var ShopCategoriesAdminController = function(){
 
 		categories.forEach(function(category){
 			var parent;
-			
-			if(category.selected){
-				console.log(category._id);
-			}
 
 			if(category.ancestors.length == 0){
 				tree[category._id] = category.clean();
