@@ -69,7 +69,7 @@ var Pagination = function(){
 
 				pagesArr.unshift({
 					page:1,
-					url:parsedUrl.pathname
+					url:link
 				});
 			}
 			
