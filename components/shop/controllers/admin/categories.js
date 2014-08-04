@@ -105,9 +105,7 @@ var ShopCategoriesAdminController = function(){
 						}else{
 							category.insert();
 							that.setFlash('success','Категория сохранена');
-							if(that.post('exit') == '1'){
-								that.back();
-							}
+							that.redirect(that.query.mergeUrl('/admin/?task=shop.categories/edit&id=' + category._id,{"return":that.get('return','false')}));
 						}
 					});
 				}else{
