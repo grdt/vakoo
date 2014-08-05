@@ -181,7 +181,7 @@ var ShopProductModel = function () {
 			that.tradePrice = newProduct.tradePrice;
 			that.lastUpdate = new Date();
 			that.save();
-			done(newProduct);
+			done(result);
 		});
 	}
 

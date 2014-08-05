@@ -233,10 +233,11 @@ var CoreController = function(query){
 	}
 
 	this.startTimeout = function(timeout){
+		var time = timeout || REQUEST_TIMEOUT;
 		if(this.COMPONENT_NAME != 'admin' && typeof this.query != "undefined"){
 			this.requestTimeout = setTimeout(function(){
 				that.onRequestTimeout();
-			}, REQUEST_TIMEOUT);
+			}, time);
 		}
 	}
 

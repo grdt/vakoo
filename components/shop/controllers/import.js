@@ -145,12 +145,12 @@ var Import = function(){
 
 		if($("#groups").size()){
 			if($("#groups a").size()){
-				product.size.current = $("#groups>form>div>span").html().toLowerCase().replace('размер','').trim().toUpperCase();
+				product.size.current = $("#groups>form>div>span").html().replace('размер','').trim();
 				$("#groups a").each(function(i,a){
-					var size = $(a).find('div>span').html().toLowerCase().replace('размер','').trim();
+					var size = $(a).find('div>span').html().replace('размер','').trim();
 					if(size.indexOf('.') >= 0){
 						product.size = false;
-						product.group.current = $(a).closest('form').find('div>span').html().trim();
+						product.group.current = $('#groups>form>div>span').html().trim();
 						product.group.groups.push(
 							{group:size,sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')}
 						)

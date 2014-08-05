@@ -111,6 +111,7 @@ var ShopProductsAdminController = function(){
 	}
 
 	this.update = function(){
+		this.cleanTimeout();
 		productModel({_id:this.get('id')}).findOne(function(product){
 			product.getActualInfo(function(data){
 				that.json(data);
