@@ -44,7 +44,7 @@ var Import = function(){
 //		});
 	}
 
-	this.getProduct = function(sku){
+	this.getProduct = function(sku,done){
 
 		var http = require('http');
 		var options = {
@@ -80,7 +80,7 @@ var Import = function(){
 
 						var $ = window.$;
 
-						that.storeProduct($);
+						that.storeProduct($,done);
 					}
 				})
 			});
@@ -94,7 +94,7 @@ var Import = function(){
 				return;
 				if(typeof that.timedOut[sku] == "undefined"){
 					that.timedOut[sku] = true;
-					that.getProduct(sku);
+					that.getProduct(sku,done);
 					console.log('product',sku,'timeout, get again');
 				}else{
 					console.log('product',sku,'timeout, close');
@@ -105,7 +105,7 @@ var Import = function(){
 		req.end();
 	};
 
-	this.storeProduct = function($){
+	this.storeProduct = function($, done){
 
 		if($(".message.error").length){
 			return;
@@ -147,10 +147,10 @@ var Import = function(){
 			if($("#groups a").size()){
 				product.size.current = $("#groups>form>div>span").html().toLowerCase().replace('размер','').trim().toUpperCase();
 				$("#groups a").each(function(i,a){
-					var size = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+					var size = $(a).find('div>span').html().toLowerCase().replace('размер','').trim();
 					if(size.indexOf('.') >= 0){
 						product.size = false;
-						product.group.current = $(a).find('div>span').html().toLowerCase().replace('размер','').trim().toUpperCase();
+						product.group.current = $(a).closest('form').find('div>span').html().trim();
 						product.group.groups.push(
 							{group:size,sku:1*$(a).attr('href').replace('http://www.condom-shop.ru/products/','')}
 						)
@@ -166,11 +166,17 @@ var Import = function(){
 			product.size = false;
 		}
 
+		if(product.group.isEqual({current:"",groups:[]})){
+			product.group = false;
+		}
+
 		$("#videos a").each(function(i,a){
 			product.videos.push($(a).attr('href'));
 		});
 
 		product.image = $("#main-image>img").attr('src');
+
+		product.images = [];
 
 		$("#images #more-views ul li a img").each(function(i,img){
 			if($(img).attr('src') != product.image){
@@ -178,15 +184,13 @@ var Import = function(){
 			}
 		});
 
-
-//		product.save(function(product){
-//			console.log('product save',product._id,product.sku,product.price,product.tradePrice,product.title);
-//		});
-
-		this.addToStack(product);
-
-		var memory = process.memoryUsage();
-		console.log('memory', memory.rss / 1024 / 1024);
+		if(typeof done == "function"){
+			done(product);
+		}else{
+			this.addToStack(product);
+			var memory = process.memoryUsage();
+			console.log('memory', memory.rss / 1024 / 1024);
+		}
 	}
 	
 	this.stack = [];

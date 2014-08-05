@@ -232,7 +232,7 @@ var CoreController = function(query){
 		}
 	}
 
-	this.startTimeout = function(){
+	this.startTimeout = function(timeout){
 		if(this.COMPONENT_NAME != 'admin' && typeof this.query != "undefined"){
 			this.requestTimeout = setTimeout(function(){
 				that.onRequestTimeout();

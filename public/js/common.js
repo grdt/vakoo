@@ -252,13 +252,31 @@ cart.update();
 
 var dateFormating = function(){
 	moment.lang('ru');
+	const JUST_NOW_TIMEOUT = 5 * 60 * 1000;
 	$(".date").each(function(){
 		var date = new Date($(this).html());
-		if(moment(date).format('L') == moment().format('L')){
-			//today
-			$(this).html('сегодня в ' + moment(date).format('HH:mm'));
-		}else{
-			$(this).html(moment(date).format('LLLL'));
+
+		switch($(this).data('moment')){
+			case 'calendar':
+				$(this).html(moment(date).calendar());
+				break;
+			case "no":
+				break;
+			case 'fromnow':
+				if(((new Date).getTime() - date.getTime()) <= JUST_NOW_TIMEOUT){
+					$(this).html('только что');
+				}else{
+					$(this).html(moment(date).fromNow());
+				}
+				break;
+			default:
+				if(moment(date).format('L') == moment().format('L')){
+					//today
+					$(this).html('сегодня в ' + moment(date).format('HH:mm'));
+				}else{
+					$(this).html(moment(date).format('LLLL'));
+				}
+				break;
 		}
 	});
 }

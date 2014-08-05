@@ -66,6 +66,8 @@ var ShopProductModel = function () {
 
 	this.images = [imageObject];
 
+	this.lastUpdate = false;
+
 	this.url = function () {
 		return '/' + this.ancestors.join('/') + '/' + this.alias;
 	}
@@ -124,32 +126,39 @@ var ShopProductModel = function () {
 					that.image.path = file.path;
 					that.image.name = file.name;
 					that.image.alt = that.shortDesc;
+					that.save();
 				});
 			});
-
 			if(this.images.length){
 				var images = this.images.clone();
 				this.images = [];
 				images.forEach(function(image, i, array){
-					var last = (i == (array.length - 1));
-					var file = that.option('file').model('file');
-					file.loadFromSource(image,i + '-' + that.alias, function(){
-						file.save(function(){
-							var obj = imageObject.clone();
-							obj.id = file._id;
-							obj.path = file.path;
-							obj.name = file.name;
-							obj.alt = that.shortDesc;
-							that.images.push(obj);
-							
-							if(last){
-								that.save();
-								done();
-							}
-							
+					if(!_.isString(image)){
+						that.images.push(image);
+						if(last){
+							that.save();
+							done();
+						}
+					}else{
+						var last = (i == (array.length - 1));
+						var file = that.option('file').model('file');
+						file.loadFromSource(image,i + '-' + that.alias, function(){
+							file.save(function(){
+								var obj = imageObject.clone();
+								obj.id = file._id;
+								obj.path = file.path;
+								obj.name = file.name;
+								obj.alt = that.shortDesc;
+								that.images.push(obj);
+
+								if(last){
+									that.save();
+									done();
+								}
+
+							});
 						});
-					});
-					
+					}
 				});
 			}else{
 				done();
@@ -157,6 +166,23 @@ var ShopProductModel = function () {
 		}else{
 			done();
 		}
+
+		if(this.group.isEqual({current:"",groups:[]})){
+			this.group = false;
+			this.save();
+		}
+		
+	}
+	
+	this.getActualInfo = function(done){
+		this.option('shop').controller('import').getProduct(this.sku,function(newProduct){
+			var result = newProduct.clean();
+			that.group = result.group;
+			that.tradePrice = newProduct.tradePrice;
+			that.lastUpdate = new Date();
+			that.save();
+			done(newProduct);
+		});
 	}
 
 }

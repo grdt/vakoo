@@ -110,6 +110,15 @@ var ShopProductsAdminController = function(){
 		});
 	}
 
+	this.update = function(){
+		productModel({_id:this.get('id')}).findOne(function(product){
+			product.getActualInfo(function(data){
+				that.json(data);
+			});
+		});
+	}
+
+
 }
 
 module.exports = ShopProductsAdminController;
