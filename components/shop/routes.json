@@ -3,5 +3,8 @@
 		"option":"shop",
 		"controller":":controller",
 		"method":":method"
+	},
+	"sitemap.xml":{
+		"method":"sitemap"
 	}
 }

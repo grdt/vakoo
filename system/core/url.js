@@ -45,7 +45,7 @@ var Query = function(request,response){
 	}
 
 	this.getHost = function(){
-		return url.parse(this.request.url).headers.host;
+		return this.request.headers.host;
 	}
 
 	this.mergeUrl = function(from, needle){
