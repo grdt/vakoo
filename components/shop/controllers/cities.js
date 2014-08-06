@@ -31,7 +31,7 @@ var Controller = function(){
 	}
 	
 	this.choose = function(){
-		this.model('city').where({alias:{$in:this.get('aliases')}}).find(function(finded){
+		this.model('city').where({alias:{$in:this.get('aliases')},status:'active'}).find(function(finded){
 			var data = {cities:[]};
 
 			finded.forEach(function(city){

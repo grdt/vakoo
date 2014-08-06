@@ -16,6 +16,10 @@ var Order = function(){
 
 	this.total = 0;
 
+	this.status = 'new';
+
+	this.comment = '';
+
 	this.date = new Date();
 
 }

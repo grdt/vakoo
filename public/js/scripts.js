@@ -110,7 +110,8 @@ var Modal = function(name,url,settings){
 
 		$.get(url).success(function(html){
 			
-			self.$modal.html($(html).html());
+//			self.$modal.html($('<div>' + html + '</div>').html());
+			self.$modal.html(html);
 
 			self.$modal.modal();
 
@@ -134,6 +135,7 @@ var Modal = function(name,url,settings){
 								}
 							]
 						});
+						cart.update();
 					});
 					return false;
 				});
@@ -159,14 +161,21 @@ var Modal = function(name,url,settings){
 		}
 
 		if(params.buttons){
+
+			self.$modal.find('.modal-footer').empty();
+
 			$(params.buttons).each(function(i,button){
 				var $button = $('<input/>',{
 					type:'button',
 					"class":'btn ' + ((button.class) ? button.class : ''),
 				});
+				
+				if(button.onClick){
+					$button.on('click', button.onClick);
+				}
 
 				for(key in button){
-					if(key != 'class'){
+					if(key != 'class' && key != 'onClick'){
 						$button.attr(key,button[key]);
 					}
 				}
@@ -177,7 +186,7 @@ var Modal = function(name,url,settings){
 					$button.val('Сохранить');
 				}
 
-				self.$modal.find('.modal-footer').empty().append($button);
+				self.$modal.find('.modal-footer').append($button);
 
 			});
 		}
@@ -190,7 +199,7 @@ var Modal = function(name,url,settings){
 	}
 
 	this.initCart = function(){
-		this.$modal.on('click',function(e){
+		this.$modal.off('click').on('click',function(e){
 
 
 			if($(e.target).hasClass('save-count')){
@@ -201,6 +210,34 @@ var Modal = function(name,url,settings){
 				if($(e.target).data('action') == 'checkout'){
 					var modal = new Modal('one-click','/shop/cart/form');
 				}
+
+				if($(e.target).data('action') == 'clean'){
+					var modal = new Modal('dialog',{
+						title:'Очистка корзины!',
+						body:'Вы уверены что хотите очистить корзину? Это действие необратимо!',
+						buttons:[
+							{
+								"data-dismiss":'modal',
+								"class":"btn-danger",
+								"html":'Да, я уверен!',
+								"onClick":function(){
+									$.get('/shop/cart/clean',function(){
+										cart.update();
+									});
+								}
+							},
+							{
+								"data-dismiss":'modal',
+								"class":"btn-primary",
+								"html":'Нет'
+							}
+						]
+					});
+				}
+			}
+
+			if($(e.target).data('dismiss') == 'modal'){
+				$(e.target).closest('.modal').modal('hide');
 			}
 
 			if(!$(e.target).hasClass('form-control')){
@@ -240,7 +277,6 @@ var Modal = function(name,url,settings){
 				});
 
 				$okButton.click(function(){
-					console.log('save');
 					self.$modal.find('.popover').remove();
 				});
 

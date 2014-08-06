@@ -1,6 +1,7 @@
 var Controller = function(){
 
 	var $c = this;
+	var that = this;
 
 	this.index = function(){
 		if(!this.isAjax()){
@@ -39,7 +40,8 @@ var Controller = function(){
 
 		if(this.post()){
 
-			var order = this.model('order');
+			var order = this.model('order'),
+				cart = this.model('cart',this);
 
 			order.name = this.post('name');
 			order.contact = this.post('contact');
@@ -51,21 +53,30 @@ var Controller = function(){
 					item.count = order.count = 1;
 					item.total = order.total = product.price;
 					order.products.push(item);
-					order.save();
-					$c.json({success:true});
+					order.save(function(){
+						that.json({success:true});
+					});
+
 				});
 			}else{
-				var cart = this.model('cart',this);
 				for(var key in cart.products){
 					order.products.push(cart.products[key]);
 				}
 
 				order.count = cart.count;
 				order.total = cart.total;
-				order.save();
-				$c.json({success:true});
+				order.save(function(){
+					cart.clean();
+					that.json({success:true});
+				});
+
 			}
 		}
+	}
+
+	this.clean = function(){
+		this.model('cart',this).clean();
+		this.json({success:true});
 	}
 
 	this.form = function(){
@@ -81,7 +92,6 @@ var Controller = function(){
 		}else{
 			var cart = this.model('cart',this);
 			var params = cart.clone();
-			cart.clean();
 			params.title = 'Оформление заказа';
 			$c.tmpl().render('modals.checkout',params);
 		}
