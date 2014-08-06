@@ -5,6 +5,7 @@
 var TemplateFactory = function(){
 
 	var $f = this;
+	var that = this;
 
 	this.TITLE_SEPARATOR = ' | ';
 
@@ -28,6 +29,10 @@ var TemplateFactory = function(){
 		info:'Информация:'
 	}
 
+	this.get = function(param){
+		return that.from.get(param);
+	}
+	
 	this.title = function(){
 		if(typeof $f._data == "undefined"){
 			return $f.config().title;

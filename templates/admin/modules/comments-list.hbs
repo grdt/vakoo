@@ -1,0 +1,12 @@
+<div class="col-md-12 comments-list">
+    {{#each comments}}
+        <div class="panel panel-default">
+            <div class="panel-heading hide">
+                <h3 class="panel-title">{{author}} <small class="date pull-right">{{date}}</small></h3>
+            </div>
+            <div class="panel-body">
+                {{body}}
+            </div>
+        </div>
+    {{/each}}
+</div>

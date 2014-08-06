@@ -64,7 +64,13 @@ var CoreComponent = function(name){
 		        this._models[name].prototype = this.coreModel();
 	        }
             var m = new this._models[name](options);
-	        m._keys = m.keys();
+			m._keys = [];
+			var keys = m.keys();
+			for(var k in keys){
+				if(keys[k][0] != '_' || keys[k] == '_id'){
+					m._keys.push(keys[k]);
+				}
+			}
             return m;
         }else{
             throw new Error('model ' + name + ' not found');

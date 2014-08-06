@@ -1,0 +1,78 @@
+{{factory.flash}}
+
+<div class="well">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{model._statuses factory.get 'status'}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="/admin/?task=shop.orders/index">Все</a></li>
+            {{#each model._statuses}}
+                <li><a href="/admin/?task=shop.orders/index&status={{@key}}">{{this}}</a></li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            Имя, контакты / Комментарий
+        </th>
+        <th>
+            Товаров
+        </th>
+        <th>
+            Сумма
+        </th>
+        <th>
+            Себестоимость
+        </th>
+        <th>
+            Дата заказа
+        </th>
+        <th>
+            Статус
+        </th>
+    </tr>
+    {{#each orders}}
+        <tr>
+            <td>
+                <a href="/admin/?task=shop.orders/item&id={{_id}}" class="btn btn-default">{{name}}, {{contact}}</a>
+                <!--<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>-->
+                <br/>
+                <small>{{adminComment}}</small>
+            </td>
+            <td>
+                {{productCount}}
+            </td>
+            <td>
+                {{total}} <span class="rouble">a</span>
+            </td>
+            <td>
+                {{tradeSum}} <span class="rouble">a</span>
+            </td>
+            <td>
+                <span class="date" data-moment="fromnow">{{date}}</span>
+                <br/><small class="date">{{date}}</small>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        {{_statuses status}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        {{#each _statuses}}
+                            <li><a href="/admin/?task=shop.orders/changeStatus&id={{../_id}}&status={{@key}}">{{this}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {{/each}}
+</table>
+
+
+{{#if pagination}}
+    {{factory 'module' 'pagination' pagination}}
+{{/if}}

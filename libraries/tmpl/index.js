@@ -5,6 +5,7 @@ HandlebarsHelpers.help(Handlebars);
 var Tmpl = function(params){
 
 	var $l = this;
+	var that = this;
 	this.hbs = Handlebars;
 
     if(!!params.url){
@@ -30,7 +31,7 @@ var Tmpl = function(params){
 			$l._data = data;
 			$l._view = view;
 			var html = $l.layout()({factory:$l.factory()});
-			$l.url.response.send(html);
+			that.from.echo(html);
 		});
 	}
 
@@ -38,12 +39,12 @@ var Tmpl = function(params){
 		var html = this.template(view);
 		var template = this.compile(html,data);
 		if(typeof ret == "undefined"){
-			$l.url.response.send(template);
+			that.from.echo(template);
 		}else{
 			if(ret)
 				return template;
 			else
-				$l.url.response.send(template);
+				that.from.echo(template);
 		}
 	}
 
@@ -117,6 +118,17 @@ var Tmpl = function(params){
 			var ret = "";
 			for(var key in context){
 				ret = ret + options.fn(context[key]);
+			}
+			return ret;
+		});
+
+		Handlebars.registerHelper('keys', function(context, options) {
+			var ret = "";
+			for(var key in context){
+				var content = {};
+				content['key'] = key;
+				content['val'] = context[key];
+				ret = ret + options.fn(content);
 			}
 			return ret;
 		});

@@ -1,0 +1,46 @@
+<div class="row" id="comments">
+
+    <div class="col-md-12 comments-list">
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="well">
+            <div class="form-group hide">
+                <label for="comment-name">Имя</label>
+                <input type="text" class="form-control" id="comment-name" placeholder="Инкогнито">
+            </div>
+            <div class="form-group">
+                <label for="comment-body">Комментарий</label>
+                <textarea class="form-control" id="comment-body" placeholder="Текст комментария"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary">Комментировать</button>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $.get('/comments/list',{url:document.URL},function(html){
+        $("#comments .comments-list").replaceWith(html);
+        dateFormating();
+    });
+
+    $("#comment-body").keyup(function(e){
+        if(e.keyCode == 13){
+            $.post('/comments/add',{url:document.URL,name:$('#comment-name').val(),body:$("#comment-body").val()},function(html){
+                $('#comment-body').val('');
+                $("#comments .comments-list").replaceWith(html);
+                dateFormating();
+            });
+        }
+    })
+
+    $("#comments button").click(function(){
+        $.post('/comments/add',{url:document.URL,name:$('#comment-name').val(),body:$("#comment-body").val()},function(html){
+            $('#comment-body').val('');
+            $("#comments .comments-list").replaceWith(html);
+            dateFormating();
+        });
+    })
+
+</script>

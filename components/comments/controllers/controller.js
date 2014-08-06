@@ -7,14 +7,14 @@ var Controller = function(){
 	this.list = function(destination){
 		if(typeof destination == "undefined"){
 			var parseUrl = url.parse(this.get('url'));
-			var destination = parseUrl.pathname;
+			var destination = parseUrl.path;
 		}
+		
 		this.model('collection',this).where({_id:destination}).findOne(function(collection){
 			if(!collection._id){
 				collection._id = destination;
 				collection.insert();
 			}
-
 
 			collection.getComments(function(comments){
 				if(self.isAjax()){
@@ -28,11 +28,15 @@ var Controller = function(){
 	this.add = function(){
 		if(this.post()){
 			var parseUrl = url.parse(this.post('url'));
-			var destination = parseUrl.pathname;
+			var destination = parseUrl.path;
 			var comment = self.model('comment');
 			
 			comment.author = this.post('name');
 			comment.body = this.post('body');
+			if(!comment.body){
+				this.list(destination);
+				return;
+			}
 			comment.save(function(){
 				self.model('collection',self).where({_id:destination}).findOne(function(collection){
 					if(!collection._id){

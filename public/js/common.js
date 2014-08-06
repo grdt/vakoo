@@ -15,6 +15,9 @@ var dateFormating = function(){
 				break;
 			case "no":
 				break;
+			case "format":
+				$(this).html(moment(date).format($(this).data('format')));
+				break;
 			case 'fromnow':
 				if(((new Date).getTime() - date.getTime()) <= JUST_NOW_TIMEOUT){
 					$(this).html('только что');

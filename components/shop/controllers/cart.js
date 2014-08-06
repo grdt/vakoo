@@ -43,14 +43,12 @@ var Controller = function(){
 			var order = this.model('order'),
 				cart = this.model('cart',this);
 
-			order.name = this.post('name');
-			order.contact = this.post('contact');
-			order.address = this.post('address');
+			order.setAttributes(this.post());
 
 			if(this.post('id')){
 				this.model('product').where({_id:this.post('id')}).findOne(function(product){
 					var item = product.clean('params');
-					item.count = order.count = 1;
+					item.count = order.productCount = 1;
 					item.total = order.total = product.price;
 					order.products.push(item);
 					order.save(function(){
@@ -63,7 +61,7 @@ var Controller = function(){
 					order.products.push(cart.products[key]);
 				}
 
-				order.count = cart.count;
+				order.productCount = cart.count;
 				order.total = cart.total;
 				order.save(function(){
 					cart.clean();

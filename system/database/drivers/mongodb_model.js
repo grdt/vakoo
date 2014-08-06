@@ -41,7 +41,8 @@ var CoreModel = function(){
 		this._order = [];
 
 		for(var key in params){
-			this._order = [key,(params[key] < 0) ? 'descending' : 'ascending'];
+//			this._order = [key,(params[key] < 0) ? 'descending' : 'ascending'];
+			this._order = [key,params[key]];
 		}
 
 		return this;
@@ -81,7 +82,7 @@ var CoreModel = function(){
 		    }else{
 
 			    if(!_this._order.isEmpty()){
-				    cursor.sort(_this.order[0],_this.order[1]);
+				    cursor.sort(_this._order[0],_this._order[1]);
 			    }
 
 			    if(_this._limit){
