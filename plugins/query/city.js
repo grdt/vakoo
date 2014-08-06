@@ -9,6 +9,17 @@ var Plugin = function(){
 
 	this.init = function(query,callback,next){
 
+		if(query.executor.option == 'admin'){
+			if(typeof callback == "function"){
+				callback(query,next);
+			}else{
+				if(that.callback && typeof that.callback == "function"){
+					that.callback(query);
+				}
+			}
+			return;
+		}
+
 		if(!query.getSubdomain()){
 
 			var ip = query.request.headers['x-forwarded-for'] || query.request.connection.remoteAddress;
