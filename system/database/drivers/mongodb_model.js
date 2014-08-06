@@ -273,7 +273,11 @@ var CoreModel = function(){
 
 		    if(_.isString(without)){
 			    out.push(without);
-		    }
+		    }else if(_.isArray(without)){
+				for(var i in without){
+					out.push(without[i]);
+				}
+			}
 
 
 		    for(key in out){

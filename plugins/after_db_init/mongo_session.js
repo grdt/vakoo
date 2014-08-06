@@ -21,7 +21,10 @@ var Plugin = function(){
 					store:new MongoStore({url:'mongodb://' + this.vakoo.config().db.host + ':27017' + this.SEPARATOR + this.vakoo.config().db.database}),
 					secret:'vakoosecretkey',
 					key:"vakoo.sid",
-					cookie  : { maxAge  : new Date(Date.now() + this.vakoo.config().session_live) }
+					cookie  : {
+						maxAge  : new Date(Date.now() + this.vakoo.config().session_live),
+						domain: 'vakoo.ru'
+					}
 				});
 			}
 		}

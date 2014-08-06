@@ -22,7 +22,13 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-6"></div>
+    <div class="col-md-6">
+        {{#if factory.from.query.city}}
+            <a href="javascript:chooseCity()"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;{{factory.from.query.city.title}}</a>
+        {{else}}
+            <a href="javascript:chooseCity()"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;Указать город</a>
+        {{/if}}
+    </div>
     <div class="col-md-2 cart">
         <a href="#" class="btn btn-lg btn-default">
             <span class="glyphicon glyphicon-shopping-cart"></span>

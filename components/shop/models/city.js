@@ -22,19 +22,32 @@ var City = function(){
 
 	this.status = 'active';
 
+	this.short = function(){
+		var object = {
+			alias:this.alias,
+			title:this.name_ru,
+			titles:{
+				"in":this.title_in,
+				from:this.title_from
+			},
+			region: (this.data.region_type == 'г') ? '' : this.data.region + ' ' + (this.data.region_type_full || '')
+		};
+		return object;
+	}
+
 	this.byIP = function(ip){
 		if(!_.isNumber(ip)){
 			ip = this.ip2long(ip);
 		}
 
-		this.where({block:{$elemMatch:{begin_ip:{$lte:ip},end_ip:{$gte:ip}}}});
+		this.where({block:{$elemMatch:{begin_ip:{$lte:ip},end_ip:{$gte:ip}}},status:'active'});
 		return this;
 	}
 
 	this.byCoords = function(loc){
 		loc.lng = parseFloat(loc.lng);
 		loc.lat = parseFloat(loc.lat);
-		this.where({loc:{$near:[loc.lng,loc.lat]}});
+		this.where({loc:{$near:[loc.lng,loc.lat]},status:'active'});
 		return this;
 	}
 

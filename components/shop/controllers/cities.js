@@ -1,6 +1,63 @@
 var Controller = function(){
-	var $c = this;
+	var $c = this,
+		that = this;
 
+	this.getPosition = function(){
+		var lat = this.get('lat'),
+			lng = this.get('lng'),
+			ip = this.query.request.headers['x-forwarded-for'] || this.query.request.connection.remoteAddress,
+			result = {};
+
+		this.model('city').byIP(ip).find(function(byIp){
+			if(byIp.length){
+				byIp.forEach(function(city){
+					result[city.alias] = city.short();
+				})
+			}
+			if(lat && lng){
+				that.model('city').byCoords({lat:lat,lng:lng}).findOne(function(byCoords){
+					if(byCoords._id){
+						result[byCoords.alias] = byCoords.short();
+					}
+
+					that.json(result);
+
+				});
+			}else{
+				that.json(result);
+			}
+		});
+
+	}
+	
+	this.choose = function(){
+		this.model('city').where({alias:{$in:this.get('aliases')}}).find(function(finded){
+			var data = {cities:[]};
+
+			finded.forEach(function(city){
+				data.cities.push(city.short());
+			})
+
+			if(data.cities.length == 1){
+				data.city = data.cities[0];
+			}
+
+			that.tmpl().render('modals.city',data);
+		});
+	}
+
+	this.search = function(){
+		var result = [];
+		this.model('city').where({status:'active',name_ru:new RegExp(this.get('term'),'i')}).find(function(cities){
+			cities.forEach(function(city){
+				result.push(city.short());
+			});
+			that.json(result);
+		});
+	}
+
+	
+	/* not actual */
 
 	this.storedata = function(){
 		if(this.post()){
@@ -48,15 +105,14 @@ var Controller = function(){
 					cities2.push(city);
 				}
 			});
-			
+
 			console.log(cities2.length);
 
 
 			$c.tmpl().display('cities2',{cities:cities2});
 		})
 	}
-
-
+	
 	this.coords = function(){
 		if(this.post()){
 			var lat = this.post('lat');
@@ -71,14 +127,13 @@ var Controller = function(){
 		}else{
 			this.where();
 		}
-
 	}
 
 	this.getLocation = function(){
 
 		//{"loc":{"$near":[53.182612460368276, 56.879352315243075]}}
 
-		var ip = this.url.request.headers['x-forwarded-for'] || this.url.request.connection.remoteAddress;
+		var ip = this.query.request.headers['x-forwarded-for'] || this.query.request.connection.remoteAddress;
 
 		$c.model('city').byIP(ip).findOne(function(city){
 

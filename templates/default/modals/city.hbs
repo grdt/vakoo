@@ -1,0 +1,26 @@
+<div class="modal fade" id="modal-city">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Выбор города<small></small></h3>
+            </div>
+            <div class="modal-body">
+                <p>Мы работаем только ради вас, а для более комфортного сотрудничества нам нужно знать откуда вы.</p>
+                {{#if city}}
+                    <p>Наш робот определил что вы из <strong><a href="javascript:setCity('{{city.alias}}')">{{city.titles.from}} <small>({{city.region}})</small></a></strong>!</p>
+                    <p>Но мы могли ошибиться и нам нужна ваша помощь!</p>
+                    <p><a href="javascript:setCity('{{city.alias}}')" class="btn btn-primary btn-lg">Да, я из {{city.titles.from}}!</a></p>
+                {{else}}
+
+                {{/if}}
+                <p>Вы всегда можете найти город вручную, просто начните вводить название вашего города:</p>
+                <input type="text" class="form-control" id="choose-city-input" placeholder="Мой город"/>
+                <div class="btn-group" id="cities-list" style="margin-top:-25px;width:100%;">
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

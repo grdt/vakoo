@@ -17,6 +17,8 @@ var Query = function(request,response){
     
     this.error = false;
 
+	this.city = false;
+
     if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
         var params = this.router().fetchUrl(this.request.url);
         if(!params.params && !params.executor){
@@ -44,8 +46,27 @@ var Query = function(request,response){
 		}
 	}
 
-	this.getHost = function(){
+	this.getHost = function(domain){
+		if(typeof domain != "undefined" && domain == true){
+			var host = this.request.headers.host,
+				splitted = host.split('.');
+
+			return splitted.splice(splitted.length - 2,splitted.length).join('.');
+		}
 		return this.request.headers.host;
+	}
+
+	this.getSubdomain = function(){
+		var host = this.request.headers.host,
+			splitted = host.split('.');
+
+		if(splitted.length == 2){
+			return false;
+		}else if(splitted.length == 3){
+			return splitted[0];
+		}else{
+			return splitted.splice(0,splitted.length - 2).join('.');
+		}
 	}
 
 	this.mergeUrl = function(from, needle){
@@ -55,8 +76,6 @@ var Query = function(request,response){
 			objQueryFrom = querystring.parse(queryFrom);
 		return pathFrom + '?' + querystring.stringify(objQueryFrom.defaults(needle));
 	}
-
-	this.initPlugin('query',request,response);
 }
 
 

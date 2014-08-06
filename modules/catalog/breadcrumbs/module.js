@@ -1,7 +1,7 @@
 var Breadcrumbs = function(){
 	this.render = function(factory,data){
 
-		if(factory.from.url.request.url == '/')
+		if(factory.from.query.request.url == '/')
 			return false;
 
 		var crumbs = [
@@ -11,19 +11,19 @@ var Breadcrumbs = function(){
 			}
 		];
 
-		if(factory.from.url.executor.option == 'shop'){
+		if(factory.from.query.executor.option == 'shop'){
 
 			var item;
 
-			if(factory.from.url.executor.controller == 'categories'){
+			if(factory.from.query.executor.controller == 'categories'){
 				item = 'category';
 			}
 
-			if(factory.from.url.executor.controller == 'products'){
+			if(factory.from.query.executor.controller == 'products'){
 				item = 'product';
 			}
 
-			if(factory.from.url.executor.method == 'index'){
+			if(factory.from.query.executor.method == 'index'){
 				var ancestors = data[item].ancestors;
 				var categories = data['catalog:menu'].categories;
 

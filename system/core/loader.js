@@ -51,12 +51,15 @@ var Loader = function(vakoo){
 
     this.execute = function(req,res){
         var query = this.query(req,res);
-        var option = this.option(query.executor.option);
-        if(option){
-            option.execute(query);
-        }else{
-            this.show404(404,'Component not found',res);
-        }
+		this.initPlugin('query',query,function(query){
+			var option = loader.option(query.executor.option);
+			if(option){
+				option.execute(query);
+			}else{
+				loader.show404(404,'Component not found',res);
+			}
+		});
+
     }
 
 	/**
