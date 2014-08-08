@@ -34,6 +34,75 @@ var ShopCategoriesAdminController = function(){
 		});
 	}
 
+	this.loadProducts = function(){
+		this.cleanTimeout();
+		var link = this.get('link').replace('show_by.','show_by='),
+			http = require('http'),
+			html = '',
+			jquery = fs.readFileSync(that.APP_PATH + '/public/js/jquery.js').toString(),
+			jsdom  = require('jsdom');
+
+		console.log(link);
+		http.get(link,function(res){
+			res.setEncoding('utf8');
+			res.on('data', function (chunk) {
+				html += chunk;
+			});
+
+			res.on('end',function(){
+				
+				console.log('html recieved');
+				
+				jsdom.env({
+					html:html,
+					src:[jquery],
+					done:function(error,window){
+						if(error){
+							console.log(error.code);
+							return;
+						}
+
+						var $ = window.$;
+
+						var sku = [];
+
+						var result = {findedOnPage:0,added:0};
+
+						$(".price").each(function(){
+							var id = $(this).attr('id').replace('product-price-','')*1;
+							if(id > 0){
+								sku.push(id);
+							}
+						});
+						
+						console.log(result);
+
+
+						if(sku.length){
+							result.findedOnPage = sku.length;
+
+							console.log('res',result);
+
+							that.model('product').where({sku:{$in:sku}}).find(function(products){
+								console.log('products',products.length);
+
+								result.added = products.length;
+
+								products.forEach(function(product){
+									product.setCategory(that.get('id'));
+								});
+
+								that.json(result);
+							});
+						}
+
+					}
+				});
+
+			});
+		});
+	}
+
 	this.changeParent = function(){
 		if(this.isAjax()){
 			var model = this.model('category');
@@ -103,20 +172,53 @@ var ShopCategoriesAdminController = function(){
 							that.setFlash('error','Категория с таким ID уже существует');
 							category._id = null;
 						}else{
-							category.insert();
-							that.setFlash('success','Категория сохранена');
-							that.redirect(that.query.mergeUrl('/admin/?task=shop.categories/edit&id=' + category._id,{"return":that.get('return','false')}));
+							category.insert(function(){
+								that.setFlash('success','Категория сохранена');
+								if(that.post('exit') == '1'){
+									that.back();
+								}else{
+									that.redirect(that.query.mergeUrl('/admin/?task=shop.categories/edit&id=' + category._id,{"return":that.get('return','false')}));
+								}
+							});
 						}
 					});
 				}else{
-					category.save();
-					that.setFlash('success','Категория сохранена');
-					if(that.post('exit') == '1'){
-						that.back();
-					}
+					category.save(function(){
+						that.setFlash('success','Категория сохранена');
+						if(that.post('exit') == '1'){
+							that.back();
+						}else{
+							categoryModel().find(function(categories){
+								categories.forEach(function(cat){
+									if(that.get('parent') == cat._id){
+										cat.selected = true;
+									}
+								});
+								categories = that.tree(categories);
+								that.display('form',{category:category, categories:categories});
+							});
+						}
+					});
 				}
+			}else{
+				categoryModel().find(function(categories){
+					categories.forEach(function(cat){
+						if(that.get('parent')){
+							if(that.get('parent') == cat._id){
+								cat.selected = true;
+							}
+						}else{
+							if(category.parent = cat._id){
+								cat.selected = true;
+							}
+						}
+
+
+					});
+					categories = that.tree(categories);
+					that.display('form',{category:category, categories:categories});
+				});
 			}
-			that.display('form',{category:category});
 		});
 	}
 

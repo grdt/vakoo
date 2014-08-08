@@ -98,6 +98,7 @@ var CoreController = function(query){
     }
 
     this.redirect = function(url){
+		this.cleanTimeout();
         if(typeof url == "undefined"){
             url = (this.isAdmin()) ? '/admin' :'/';
         }

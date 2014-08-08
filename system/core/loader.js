@@ -14,6 +14,8 @@ var Loader = function(vakoo){
     this.EXT_JSON = '.json';
     this.EXT_VIEW = '.hbs';
 
+	this.DEFAULT_COMPONENT = 'main';
+
 
     this.SEPARATOR = '/';
     this.SYSTEM_PATH = __dirname.replace('/core','');
@@ -63,7 +65,6 @@ var Loader = function(vakoo){
     }
 
 	/**
-	 * @param name
 	 * @returns CoreComponent
 	 */
     this.option = function(name){
@@ -71,8 +72,7 @@ var Loader = function(vakoo){
 			if(typeof this.COMPONENT_NAME != "undefined"){
 				name = this.COMPONENT_NAME;
 			}else{
-				throw new Error('OPTION IS NOT DEFINED');
-				return;
+				name = this.DEFAULT_COMPONENT;
 			}
 		}
         if(!!this._options[name]){

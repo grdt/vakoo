@@ -28,7 +28,7 @@
             {{#each items}}
                 <div class="col-md-3">
                     <div class="thumbnail product-thumb">
-                        <a href="{{url}}" data-href="{{alias}}"><img src="{{image}}" alt="..."></a>
+                        <a href="{{url}}" data-href="{{alias}}"><img src="{{image.path}}" alt="..."></a>
                         <div class="caption">
                             <h4><a href="{{factory 'data' 'category' 'url'}}/{{alias}}" data-href="{{alias}}">{{title}}</a></h4>
                             <p><span class="price">{{number-format price}} P</span></p>

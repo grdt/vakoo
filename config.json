@@ -11,5 +11,27 @@
         "database":"vakoo"
     },
     "tmpl_lib":"tmpl",
-    "template":"default"
+    "template":"default",
+	"smtp":{
+		"incoming":{
+			"host":"imap.yandex.ru",
+			"port":143,
+			"options":{
+				"auth":{
+					"user":"shop@luxy.sexy",
+					"pass":"085bdb2261"
+				}
+			}
+		},
+		"outgoing":{
+			"host":"smtp.yandex.ru",
+			"port":25,
+			"options":{
+				"auth":{
+					"user":"shop@luxy.sexy",
+					"pass":"085bdb2261"
+				}
+			}
+		}
+	}
 }

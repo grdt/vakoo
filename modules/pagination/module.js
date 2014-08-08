@@ -8,18 +8,17 @@ var Pagination = function(){
 		var pages = Math.ceil(options.count / options.perPage);
 		var pagesArr = [];
 		var link = factory.from.query.request.url;
+
+		if(factory.from.get('p')){
+			link = link.replace('?p='+factory.from.get('p'),'');
+			link = link.replace('&p='+factory.from.get('p'),'');
+		}
+
 		var parsedUrl = url.parse(link);
-
-
-
 		var PAGE = '?p=';
 
 		if(parsedUrl.query){
 			PAGE = '&p=';
-		}
-
-		if(factory.from.get('p')){
-			link = link.replace(PAGE+factory.from.get('p'),'');
 		}
 
 		var pagesMax = 10;

@@ -14,6 +14,54 @@
     </div>
 
     <div class="form-group">
+        <label for="parent" class="col-sm-2 control-label">Категория</label>
+        <div class="col-sm-10">
+            <select name="parent" class="form-control">
+                <option value="">Не выбрана</option>
+                {{#keyIn categories}}
+                    <option value="{{_id}}" {{#selected}}selected{{/selected}}>{{title}} ({{_id}})</option>
+                    {{#keyIn childs}}
+                        <option value="{{_id}}" {{#selected}}selected{{/selected}}>&nbsp;&nbsp;└&nbsp;{{title}} ({{_id}})</option>
+                        {{#keyIn childs}}
+                            <option value="{{_id}}" {{#selected}}selected{{/selected}}>&nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} ({{_id}})</option>
+                            {{#keyIn childs}}
+                                <option value="{{_id}}" {{#selected}}selected{{/selected}}>{{title}} ({{_id}})</option>
+                            {{/keyIn}}
+                        {{/keyIn}}
+                    {{/keyIn}}
+                {{/keyIn}}
+            </select>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="condom-shop-category" class="col-sm-2 control-label">Condom-Shop</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="text" class="form-control" id="condom-shop-category"/>
+                <span class="input-group-btn">
+                    <a href="#" class="btn btn-default" id="load-from-category">Загрузить</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $("#load-from-category").click(function(){
+            if($("#condom-shop-category").val()){
+                $(this).addClass('disabled');
+                $.get('/admin/?task=shop.categories/loadProducts&id={{category._id}}&link=' + $("#condom-shop-category").val(),function(response){
+                    alert('Добавлено ' + response.added + ' позиций');
+                    $(this).removeClass('disabled');
+                    $("#condom-shop-category").val('');
+                });
+            }
+
+            return false;
+        });
+    </script>
+
+    <div class="form-group">
         <label for="description" class="col-sm-2 control-label">Описание</label>
         <div class="col-sm-10">
             <textarea class="form-control" name="description">{{category.description}}</textarea>

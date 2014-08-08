@@ -14,12 +14,16 @@ var Vakoo = function(fastPort){
 
     var vakoo = this;
 
+	var that = this;
+
 	this.fastPort = fastPort;
 
     this.SEPARATOR = '/';
     this.SYSTEM_PATH = __dirname;
     this.APP_PATH = this.SYSTEM_PATH.replace('/system','');
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
+
+	this.ENVIRONMENT = process.env.NODE_ENV;
 
     this.EXT_JS = '.js';
     this.EXT_JSON = '.json';
@@ -47,6 +51,7 @@ var Vakoo = function(fastPort){
 	this.serverStart = function(){
 		var port = this.fastPort || this.config().port;
 		this._server.listen(port);
+		this.enableSmtp();
 		console.log('Vakoo start at port ',port);
 	}
 
@@ -59,7 +64,7 @@ var Vakoo = function(fastPort){
 		if(typeof mw == "undefined")
 			mw = this.middleware();
 
-		for(key in mw){
+		for(var key in mw){
 			this._express.use(mw[key].handler);
 		}
 	}
@@ -83,15 +88,7 @@ var Vakoo = function(fastPort){
 		if(typeof this._middleware != "undefined")
 			return this._middleware;
 
-		this._middleware = [
-			{
-				name:'logger',
-				handler:express.logger('dev')
-			},
-			{
-				name:'error',
-				handler:express.errorHandler()
-			},
+		var mustHave = [
 			{
 				name:'json',
 				handler:express.json()
@@ -112,7 +109,7 @@ var Vakoo = function(fastPort){
 				name:'session',
 				handler:express.session({
 					secret:'vakoo secret key',
-					key:'vakooFUCK.sid',
+					key:'vakoo.sid',
 					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
 				})
 			},
@@ -121,6 +118,31 @@ var Vakoo = function(fastPort){
 				handler:express.static(this.APP_PATH + this.SEPARATOR + 'public')
 			}
 		];
+
+		var middleWare = {
+			development:[
+				{
+					name:'logger',
+					handler:express.logger('dev')
+				},
+				{
+					name:'error',
+					handler:express.errorHandler()
+				},
+			],
+			production:[
+				{
+					name:'error',
+					handler:express.errorHandler()
+				},
+			]
+		};
+
+		this._middleware = (middleWare[this.ENVIRONMENT] || middleWare.development);
+
+		mustHave.forEach(function(mw){
+			that._middleware.push(mw);
+		});
 
 		return this._middleware;
 	}
@@ -140,6 +162,51 @@ var Vakoo = function(fastPort){
 
         return config;
     }
+
+	this.enableSmtp = function(){
+		console.log('enable smtp');
+		var config = this.config().smtp || false;
+		if(!config){
+			console.log('smtp config not found');
+			return;
+		}
+
+		var outgoingCfg = this.config().smtp.outgoing,
+			smtp = require('simplesmtp'),
+			client = smtp.createClientPool(outgoingCfg.port,outgoingCfg.host,outgoingCfg.options);
+
+		this.smtp = client;
+
+	}
+
+	this.sendMail = function(to, subject, html){
+		var mail = this.load.option('main').model('mail');
+
+		mail.recepient = to;
+		mail.body = html;
+		mail.subject = subject;
+
+		mail.save(function(){
+			if(!that.smtp){
+				mail.status = 'error';
+				mail.message = 'smtp client not runned';
+			}else{
+				that.smtp.sendMail(mail.compose(),function(error,response){
+					if(error){
+						mail.status = 'error';
+						mail.message = error;
+					}else{
+						mail.status = 'success';
+						mail.message = response;
+					}
+
+					mail.save();
+
+				});
+			}
+		});
+	}
+
 
 
     return this;

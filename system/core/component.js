@@ -73,6 +73,9 @@ var CoreComponent = function(name){
 			}
             return m;
         }else{
+			if(this.COMPONENT_NAME != this.DEFAULT_COMPONENT){
+				return this.option().model(name,options);
+			}
             throw new Error('model ' + name + ' not found');
             return false;
         }

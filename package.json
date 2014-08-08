@@ -1,23 +1,29 @@
 {
-	"name": "Vakoo",
-	"description": "Vakoo — NodeJS based CMS",
-	"version": "0.0.1",
-	"private": true,
-	"dependencies": {
-		"underscore": "~1.6.0",
-		"mongodb": "~1.3.23",
-		"susanin": "~0.1.10",
-		"express": "~3.5.1",
-		"handlebars": "~2.0.0-alpha.2",
-		"connect-multiparty": "~1.0.3",
-		"mime": "~1.2.11",
-		"csv": "~0.3.7",
-		"connect-mongo": "~0.4.1",
-		"handlebars-helper": "0.0.11"
-	},
-	"scripts": {
-		"dev": "supervisor -e js,json,hbs,css app.js",
-		"start": "forever start app.js",
-		"stop": "forever stop app.js"
-	}
+  "name": "Vakoo",
+  "description": "Vakoo — NodeJS based CMS",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "underscore": "~1.6.0",
+    "mongodb": "~1.3.23",
+    "susanin": "~0.1.10",
+    "express": "~3.5.1",
+    "handlebars": "~2.0.0-alpha.2",
+    "connect-multiparty": "~1.0.3",
+    "mime": "~1.2.11",
+    "csv": "~0.3.7",
+    "connect-mongo": "~0.4.1",
+    "handlebars-helper": "0.0.11",
+    "simplesmtp": "~0.3.32",
+    "jsdom": "^0.11.1",
+    "mailcomposer": "~0.2.12"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",
+    "start": "forever start -l log.log -o out.log -e error.log -p /var/www/vakoo.ru/logs/ app.js",
+    "stop": "forever stop app.js",
+	"luxy": "forever start -l luxy.log -o luxy-out.log -e luxy-error.log -p /var/www/vakoo.ru/logs/ luxy.js",
+	"luxy-restart": "forever restart luxy.js",
+	"luxy-stop": "forever stop luxy.js"
+  }
 }

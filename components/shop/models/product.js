@@ -90,6 +90,7 @@ var ShopProductModel = function () {
 	}
 
 	this.setCategory = function(categoryId){
+		var that = this;
 		this.option('shop').model('category').where({_id:categoryId}).findOne(function(category){
 			if(category._id){
 				that.ancestors = category.ancestors;
