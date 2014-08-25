@@ -15,6 +15,8 @@ var Plugin = function(){
 
 		var MongoStore = require('connect-mongo')(express);
 
+		var added = false;
+
 		for(key in middleware){
 			if(middleware[key].name == 'session'){
 				middleware[key].handler = express.session({
@@ -26,9 +28,26 @@ var Plugin = function(){
 						domain: 'vakoo.ru'
 					}
 				});
+
+				added = true;
 			}
 		}
-		
+
+		if(!added){
+			middleware.push({
+				name:'session',
+				handler:express.session({
+					store:new MongoStore({url:'mongodb://' + this.vakoo.config().db.host + ':27017' + this.SEPARATOR + this.vakoo.config().db.database}),
+					secret:'vakoosecretkey',
+					key:"vakoo.sid",
+					cookie  : {
+						maxAge  : new Date(Date.now() + this.vakoo.config().session_live),
+						domain: 'vakoo.ru'
+					}
+				})
+			});
+		}
+
 		this.vakoo.middlewareInit(middleware);
 		this.vakoo.executeInit();
 		this.vakoo.serverInit();
