@@ -1,5 +1,6 @@
 {
     "port":8773,
+	"domain":"vakoo.ru",
 	"default_executor":{
 		"option":"shop",
 		"controller":"controller",

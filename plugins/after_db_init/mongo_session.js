@@ -42,7 +42,7 @@ var Plugin = function(){
 					key:"vakoo.sid",
 					cookie  : {
 						maxAge  : new Date(Date.now() + this.vakoo.config().session_live),
-						domain: 'vakoo.ru'
+						domain: this.vakoo.config().session_live.domain
 					}
 				})
 			});
