@@ -46,6 +46,8 @@ var Plugin = function(){
 					}
 				})
 			});
+			
+			console.log('enable mongo session');
 		}
 
 		this.vakoo.middlewareInit(middleware);

@@ -105,14 +105,14 @@ var Vakoo = function(fastPort){
 				name:'multipart',
 				handler:multipart({uploadDir:this.APP_PATH + '/tmp'})
 			},
-			{
-				name:'session',
-				handler:express.session({
-					secret:'vakoo secret key',
-					key:'vakoo.sid',
-					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
-				})
-			},
+//			{
+//				name:'session',
+//				handler:express.session({
+//					secret:'vakoo secret key',
+//					key:'vakoo.sid',
+//					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
+//				})
+//			},
 			{
 				name:'public',
 				handler:express.static(this.APP_PATH + this.SEPARATOR + 'public')
