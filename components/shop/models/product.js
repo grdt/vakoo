@@ -69,6 +69,9 @@ var ShopProductModel = function () {
 	this.lastUpdate = false;
 
 	this.url = function () {
+		if(this.vakoo.ENVIRONMENT == 'development'){
+			return '/shop/products/index?id=' + this._id;
+		}
 		return '/' + this.ancestors.join('/') + '/' + this.alias;
 	}
 

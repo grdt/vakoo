@@ -39,47 +39,43 @@ var Plugin = function(){
 
 	this.init = function(){
 
-//		return;
+		if(this.vakoo.ENVIRONMENT == 'production'){
 
-		that.option('shop').model('category').find(function(categories){
-			categories.forEach(function(category){
+			that.option('shop').model('category').find(function(categories){
+				categories.forEach(function(category){
 
-				var route_string = category.url();
-//				if(route_string[0] == '/'){
-//					route_string = '/(<alias>-)'+route_string.substr(1);
-//				}
-				var route = Susanin.Route(route_string);
-				route.executor = {
-					option:"shop",
-					controller:"categories",
-					method:"index",
-					id:category._id
-				}
-				$p.addRoute(route);
+					var route_string = category.url();
+					var route = Susanin.Route(route_string);
+					route.executor = {
+						option:"shop",
+						controller:"categories",
+						method:"index",
+						id:category._id
+					}
+					$p.addRoute(route);
+				});
+
+				console.log('categories routes enabled');
 			});
 
-			console.log('categories routes enabled');
-		});
 
+			that.option('shop').model('product').where({category:{$ne:''}}).find(function(products){
+				products.forEach(function(product){
+					var route_string = product.url();
+					var route = Susanin.Route(route_string);
+					route.executor = {
+						option:"shop",
+						controller:"products",
+						method:"index",
+						id:product._id
+					}
+					$p.addRoute(route);
+				});
 
-		that.option('shop').model('product').where({category:{$ne:''}}).find(function(products){
-			products.forEach(function(product){
-				var route_string = product.url();
-//				if(route_string[0] == '/'){
-//					route_string = '/(<alias>-)'+route_string.substr(1);
-//				}
-				var route = Susanin.Route(route_string);
-				route.executor = {
-					option:"shop",
-					controller:"products",
-					method:"index",
-					id:product._id
-				}
-				$p.addRoute(route);
+				console.log('products routes enabled');
 			});
 
-			console.log('products routes enabled');
-		});
+		}
 	}
 }
 

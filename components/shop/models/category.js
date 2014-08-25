@@ -48,10 +48,10 @@ var ShopCategoryModel = function(query){
 	}
 
 	this.url = function(){
+		if(this.vakoo.ENVIRONMENT == 'development'){
+			return '/shop/categories/index?id=' + this._id;
+		}
 		var sep = '/';
-//		if(query && query.city){
-//			sep = '/' + query.city.alias + '-';
-//		}
 		var url = sep + ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
 		return url;
 	}
