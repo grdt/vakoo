@@ -11,8 +11,8 @@ var TemplateFactory = function(){
 
 	this.meta = {
 		title:this.config().title,
-		desc:'desc',
-		keywords:'key1,key2,key3'
+		description:'this default meta description',
+		keywords:'this,default,meta,keywords'
 	};
 
 	this.flashTypes = {

@@ -28,7 +28,7 @@ var ShopCategoriesAdminController = function(){
 
 		this.model('category').find(function(categories){
 			if(tree){
-				categories = that.tree(categories);
+				categories = that.tree(categories, true);
 			}
 			that.display(view,{categories:categories});
 		});
@@ -36,7 +36,7 @@ var ShopCategoriesAdminController = function(){
 
 	this.loadProducts = function(){
 		this.cleanTimeout();
-		var link = this.get('link').replace('show_by.','show_by='),
+		var link = this.get('link') + '?show_by=3000',
 			http = require('http'),
 			html = '',
 			jquery = fs.readFileSync(that.APP_PATH + '/public/js/jquery.js').toString(),
@@ -74,7 +74,10 @@ var ShopCategoriesAdminController = function(){
 								sku.push(id);
 							}
 						});
-						
+
+						$ = null;
+						window = null;
+
 						console.log(result);
 
 
@@ -89,7 +92,9 @@ var ShopCategoriesAdminController = function(){
 								result.added = products.length;
 
 								products.forEach(function(product){
-									product.setCategory(that.get('id'));
+									process.nextTick(function() {
+										product.setCategory(that.get('id'));
+									});
 								});
 
 								that.json(result);
@@ -100,7 +105,7 @@ var ShopCategoriesAdminController = function(){
 				});
 
 			});
-		});
+		}).end();
 	}
 
 	this.changeParent = function(){
@@ -162,7 +167,6 @@ var ShopCategoriesAdminController = function(){
 		categoryModel({_id:this.get('id','')}).findOne(function(category){
 			if(that.post()){
 				category.setAttributes(that.post());
-
 				if(!that.get('id')){
 					if(!that.post('_id')){
 						category.createId();
@@ -171,6 +175,7 @@ var ShopCategoriesAdminController = function(){
 						if(already._id){
 							that.setFlash('error','Категория с таким ID уже существует');
 							category._id = null;
+							that.back();
 						}else{
 							category.insert(function(){
 								that.setFlash('success','Категория сохранена');
@@ -208,7 +213,7 @@ var ShopCategoriesAdminController = function(){
 								cat.selected = true;
 							}
 						}else{
-							if(category.parent = cat._id){
+							if(category.parent == cat._id){
 								cat.selected = true;
 							}
 						}
@@ -216,6 +221,11 @@ var ShopCategoriesAdminController = function(){
 
 					});
 					categories = that.tree(categories);
+
+					if(!category._id){
+						category.title = that.get('title');
+					}
+
 					that.display('form',{category:category, categories:categories});
 				});
 			}
@@ -226,8 +236,12 @@ var ShopCategoriesAdminController = function(){
 	 * @param {ShopCategoryModel[]} categories
 	 * @returns {Array}
 	 */
-	this.tree = function(categories){
+	this.tree = function(categories, withCount){
 		var tree = [];
+
+		if(typeof withCount == "undefined"){
+			withCount = false;
+		}
 		
 		categories.sort(function(a,b){
 			return a.ancestors.length - b.ancestors.length;
@@ -236,44 +250,56 @@ var ShopCategoriesAdminController = function(){
 		categories.forEach(function(category){
 			var parent;
 
-			if(category.ancestors.length == 0){
-				tree[category._id] = category.clean();
-				tree[category._id].selected = category.selected;
-				tree[category._id].path = category.url();
-				tree[category._id].childs = [];
-			}else{
-				parent = tree[category.ancestors[0]];
-				if(category.ancestors.length > 1){
-					for(key in category.ancestors){
-						if(parent && typeof parent.childs[category.ancestors[key]] != "undefined"){
-							parent = (parent) ? parent.childs[category.ancestors[key]] : false;
+//			that.model('product').where({ancestors:category._id}).count(function(count){
+
+			var count = 0;
+
+				if(category.ancestors.length == 0){
+					tree[category._id] = category.clean();
+					tree[category._id].selected = category.selected;
+					tree[category._id].path = category.url();
+					tree[category._id].count = count;
+					tree[category._id].childs = [];
+				}else{
+					parent = tree[category.ancestors[0]];
+					if(category.ancestors.length > 1){
+						for(key in category.ancestors){
+							if(parent && typeof parent.childs[category.ancestors[key]] != "undefined"){
+								parent = (parent) ? parent.childs[category.ancestors[key]] : false;
+							}
+						}
+						if(parent){
+							parent.childs[category._id] = category.clean();
+							parent.childs[category._id].selected = category.selected;
+							parent.childs[category._id].path = category.url();
+							parent.childs[category._id].count = count;
+							parent.childs[category._id].childs = [];
+						}else{
+							tree[category._id] = category.clean();
+							tree[category._id].selected = category.selected;
+							tree[category._id].path = category.url();
+							tree[category._id].count = count;
+							tree[category._id].childs = [];
+						}
+					}else{
+						if(parent){
+							parent.childs[category._id] = category.clean();
+							parent.childs[category._id].selected = category.selected;
+							parent.childs[category._id].path = category.url();
+							parent.childs[category._id].count = count;
+							parent.childs[category._id].childs = [];
+						}else{
+							tree[category._id] = category.clean();
+							tree[category._id].selected = category.selected;
+							tree[category._id].path = category.url();
+							tree[category._id].count = count;
+							tree[category._id].childs = [];
 						}
 					}
-					if(parent){
-						parent.childs[category._id] = category.clean();
-						parent.childs[category._id].selected = category.selected;
-						parent.childs[category._id].path = category.url();
-						parent.childs[category._id].childs = [];
-					}else{
-						tree[category._id] = category.clean();
-						tree[category._id].selected = category.selected;
-						tree[category._id].path = category.url();
-						tree[category._id].childs = [];
-					}
-				}else{
-					if(parent){
-						parent.childs[category._id] = category.clean();
-						parent.childs[category._id].selected = category.selected;
-						parent.childs[category._id].path = category.url();
-						parent.childs[category._id].childs = [];
-					}else{
-						tree[category._id] = category.clean();
-						tree[category._id].selected = category.selected;
-						tree[category._id].path = category.url();
-						tree[category._id].childs = [];
-					}
 				}
-			}
+//			})
+
+
 		});
 		
 		return tree;

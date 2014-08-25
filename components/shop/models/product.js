@@ -104,7 +104,10 @@ var ShopProductModel = function () {
 	}
 	
 	this.beforeSave = function(done){
-		this.alias = translit(this.title);
+		if(!this.alias){
+			this.alias = translit(this.title);
+		}
+
 		if(this.available == 'Есть в наличии'){
 			this.available = true;
 		}
@@ -112,67 +115,44 @@ var ShopProductModel = function () {
 		if(!_.isBoolean(this.available)){
 			this.available = false;
 		}
-
 		done();
 	}
 	
 	this.afterFind = function(done){
-		if(_.isString(this.image)){
-			/** @type FileModel file */
-			var file = this.option('file').model('file');
-			file.loadFromSource(this.image,this.alias, function(){
-				file.save(function(){
-					that.image = imageObject.clone();
-					that.image.id = file._id;
-					that.image.path = file.path;
-					that.image.name = file.name;
-					that.image.alt = that.shortDesc;
-					that.save();
-				});
-			});
-			if(this.images.length){
-				var images = this.images.clone();
-				this.images = [];
-				images.forEach(function(image, i, array){
-					if(!_.isString(image)){
-						that.images.push(image);
-						if(last){
-							that.save();
-							done();
-						}
-					}else{
-						var last = (i == (array.length - 1));
-						var file = that.option('file').model('file');
-						file.loadFromSource(image,i + '-' + that.alias, function(){
-							file.save(function(){
-								var obj = imageObject.clone();
-								obj.id = file._id;
-								obj.path = file.path;
-								obj.name = file.name;
-								obj.alt = that.shortDesc;
-								that.images.push(obj);
-
-								if(last){
-									that.save();
-									done();
-								}
-
-							});
-						});
-					}
-				});
-			}else{
-				done();
-			}
-		}else{
-			done();
-		}
-
 		if(this.group.isEqual({current:"",groups:[]})){
 			this.group = false;
 			this.save();
 		}
-		
+
+		if(this.size && this.size.sizes.isEqual({})){
+			this.size.sizes = false;
+		}
+
+		if(this.size && this.size.sizes){
+			var sku = [];
+			for(var key in this.size.sizes){
+				sku.push(this.size.sizes[key].sku);
+			}
+
+			this.clone().where({sku:{$in:sku}}).find(function(products){
+				products.forEach(function(product){
+
+					product.ancestors = that.ancestors;
+
+					that.size.sizes[product.size.current] = {
+//						sku:product.sku,
+//						link:product.url(),
+						id:product._id,
+						size:product.size.current
+					};
+				})
+
+				done();
+			})
+
+		}else{
+			done();
+		}
 	}
 	
 	this.getActualInfo = function(done){
@@ -185,7 +165,6 @@ var ShopProductModel = function () {
 			done(result);
 		});
 	}
-
 }
 
 module.exports = ShopProductModel;

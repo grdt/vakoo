@@ -1,8 +1,10 @@
 <div class="row">
     <div class="col-md-6 page-header">
         <h1>{{category.title}}<br/><small>мы нашли {{text-count productCount 'product'}}</small></h1>
+        {{{category.description}}}
     </div>
     <div class="col-md-6">
+
     </div>
 </div>
 
@@ -28,10 +30,10 @@
             {{#each items}}
                 <div class="col-md-3">
                     <div class="thumbnail product-thumb">
-                        <a href="{{url}}" data-href="{{alias}}"><img src="{{image.path}}" alt="..."></a>
+                        <a href="{{url}}" data-href="{{alias}}"><img src="{{image.path}}" alt="{{image.alt}}" title="{{image.title}}"></a>
                         <div class="caption">
-                            <h4><a href="{{factory 'data' 'category' 'url'}}/{{alias}}" data-href="{{alias}}">{{title}}</a></h4>
-                            <p><span class="price">{{number-format price}} P</span></p>
+                            <h4><a href="{{url}}" data-href="{{alias}}">{{{title}}} <br/><small>{{shortDesc}}</small></a></h4>
+                            <p><span class="price">{{number-format price}} <span class="rouble">a</span></span></p>
                             <p>
                                 <a href="#" class="btn btn-primary add-to-cart" data-id="{{_id}}" role="button"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;В корзину</a>
                                 <a href="#" class="btn btn-primary add-to-cart one-click" role="button" data-id="{{_id}}"><span class="glyphicon glyphicon-hand-up"></span>&nbsp;Купить</a>

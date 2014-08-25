@@ -324,7 +324,7 @@ function getCookie(name) {
 }
 
 function setCookie(name, value, options) {
-	options = options || {domain:getHost(true),expires:25920000};
+	options = options || {domain:getHost(true),expires:25920000,path:'/'};
 
 	var expires = options.expires;
 

@@ -39,10 +39,15 @@ var Plugin = function(){
 
 	this.init = function(){
 
-		this.option('shop').model('category').find(function(categories){
+//		return;
+
+		that.option('shop').model('category').find(function(categories){
 			categories.forEach(function(category){
 
 				var route_string = category.url();
+//				if(route_string[0] == '/'){
+//					route_string = '/(<alias>-)'+route_string.substr(1);
+//				}
 				var route = Susanin.Route(route_string);
 				route.executor = {
 					option:"shop",
@@ -52,12 +57,18 @@ var Plugin = function(){
 				}
 				$p.addRoute(route);
 			});
+
+			console.log('categories routes enabled');
 		});
 
 
-		this.option('shop').model('product').where({category:{$ne:''}}).find(function(products){
+		that.option('shop').model('product').where({category:{$ne:''}}).find(function(products){
 			products.forEach(function(product){
-				var route = Susanin.Route(product.url());
+				var route_string = product.url();
+//				if(route_string[0] == '/'){
+//					route_string = '/(<alias>-)'+route_string.substr(1);
+//				}
+				var route = Susanin.Route(route_string);
 				route.executor = {
 					option:"shop",
 					controller:"products",
@@ -66,6 +77,8 @@ var Plugin = function(){
 				}
 				$p.addRoute(route);
 			});
+
+			console.log('products routes enabled');
 		});
 	}
 }

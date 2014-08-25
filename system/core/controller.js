@@ -227,6 +227,14 @@ var CoreController = function(query){
 		return this.parent().option(name);
 	}
 
+	this.model = function(name,options){
+		if(typeof options == "undefined" && this.query){
+			options = this.query;
+		}
+
+		return this.parent().model(name, options);
+	}
+
 	this.onRequestTimeout = function(){
 		if(this._executiveController){
 			this._executiveController.echo('Request TimedOut');

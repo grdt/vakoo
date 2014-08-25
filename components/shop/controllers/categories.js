@@ -14,7 +14,8 @@ var ShopCategoriesController = function(){
 
 				var data = {
 					title:category.title,
-					category:category
+					category:category,
+					meta:category.meta
 				};
 
 				var where = {parent:category._id};

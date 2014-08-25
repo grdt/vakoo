@@ -93,7 +93,7 @@ Object.defineProperties(Object.prototype,{
 });
 
 /** @global */
-var translit = function(text){
+var translit= function(text){
 	var space = '-';
 	text = text.toLowerCase();
 	var transl = {
@@ -132,4 +132,12 @@ var translit = function(text){
 	return result;
 }
 
+var ucfirst = function(str){
+	if(str.length) {
+		str = str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	return str;
+}
+
 global.translit = translit;
+global.ucfirst = ucfirst;

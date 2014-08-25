@@ -33,7 +33,12 @@ var AdminController = function(){
         executor = this.router().executor(executor);
         var option = this.option('admin.' + executor.option);
         var controller = option.controller(executor.controller,this.query);
-        controller.run(executor.method);
+		if(controller){
+			controller.run(executor.method);
+		}else{
+			this.echo('controller not found')
+		}
+
     }
     
     this.executor = function(){

@@ -21,7 +21,7 @@
     {{#keyin categories}}
         <tr data-category="{{_id}}" data-parent="{{parent}}">
             <td>
-                {{title}} <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
+                {{title}} ({{count}}) <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
             </td>
             <td>
                 {{_id}}
@@ -34,7 +34,7 @@
         {{#keyin childs}}
             <tr>
                 <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} ({{count}}) <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
                 </td>
                 <td>
                     {{_id}}
@@ -47,7 +47,7 @@
             {{#keyin childs}}
                 <tr>
                     <td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;{{title}} ({{count}}) <a href="/admin/?task=shop.categories/edit&parent={{_id}}" class="btn btn-default btn-success"><span class="glyphicon glyphicon-plus"></span></a>
                     </td>
                     <td>
                         {{_id}}

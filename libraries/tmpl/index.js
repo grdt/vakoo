@@ -92,6 +92,9 @@ var Tmpl = function(params){
 		    var Factory = require('./factory');
 		    Factory.prototype = this;
 		    this._factory = new Factory;
+			if(this._data && this._data.meta){
+				this._factory.meta = this._data.meta;
+			}
 		    return this._factory
 	    }
     }
@@ -188,6 +191,11 @@ var Tmpl = function(params){
 				return false;
 			}
 		});
+
+		Handlebars.registerHelper('json', function(context) {
+			return JSON.stringify(context);
+		});
+
 
 		Handlebars.registerHelper('number-format',function(number, decimals, dec_point, thousands_sep){
 				var i, j, kw, kd, km;

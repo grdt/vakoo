@@ -8,7 +8,7 @@ var Plugin = function(){
 			data = {};
 		}
 		
-			this.option('shop').model('category').find(function(categories){
+			this.option('shop').model('category',$l.from.query).find(function(categories){
 
 			data["catalog:menu"] = {categories:categories};
 			data["catalog:breadcrumbs"] = {categories:categories};

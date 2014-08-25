@@ -119,6 +119,126 @@ var ShopProductsAdminController = function(){
 		});
 	}
 
+	const imageObject = {
+		id:'id',
+		name:'name',
+		alt:'alt',
+		path:''
+	};
+
+//	this.afterFindAll = function(){
+//
+//		var col = productModel().collection();
+//		var bulk = col.initializeUnorderedBulkOp();
+//		productModel().where({images:new RegExp('//')}).find(function(products){
+//			products.forEach(function(product, p, parray){
+//				if(_.isString(product.image)){
+//
+//					console.log('product',product._id);
+//
+//					var originalName = _.last(product.image.split('/'));
+//					/** @type FileModel fileModel */
+//					var fileModel = that.option('file').model('file');
+//					fileModel.where({originalName:originalName}).findOne(function(file){
+//						if(file._id){
+//							var image = imageObject.clone();
+//							image.id = file._id;
+//							image.path = file.path;
+//							image.name = file.name;
+//							image.alt = product.title + ' ' + product.shortDesc;
+//							bulk.find({_id:product._id}).updateOne({$set:{image:image}});
+//						}
+//
+//						var plast = (p == (parray.length - 1));
+//
+//						if(plast && !product.images.length){
+//							console.log('start bulk');
+//							bulk.execute(function(err,res){
+//								if(err){
+//									console.log(err);
+//								}
+//								console.log(res.ok);
+//							})
+//						}
+//
+//					});
+//				}
+//
+//				if(_.isArray(product.images) && product.images.length){
+//
+//					console.log('product images',product._id);
+//
+//					var images = [];
+//
+//					var originalImages = product.images.clone();
+//
+//					product.images.forEach(function(pimage, i, array){
+//
+//						var last = (i == (array.length - 1));
+//						var plast = (p == (parray.length - 1));
+//
+//						if(_.isString(pimage)){
+//							var originalName = _.last(pimage.split('/'));
+//							/** @type FileModel fileModel */
+//							var fileModel = that.option('file').model('file');
+//							fileModel.where({originalName:originalName}).findOne(function(file){
+//
+//								var last = (i == (array.length - 1));
+//								var plast = (p == (parray.length - 1));
+//
+//								if(file._id){
+//									var image = imageObject.clone();
+//									image.id = file._id;
+//									image.path = file.path;
+//									image.name = file.name;
+//									image.alt = product.title + ' ' + product.shortDesc;
+//									images.push(image);
+//									if(last && plast){
+//										setTimeout(function(){
+//											if(images.length == originalImages.length){
+//												bulk.find({_id:product._id}).updateOne({$set:{images:images}});
+//
+//												if(plast){
+//													console.log('start bulk');
+//													bulk.execute(function(err,res){
+//														if(err){
+//															console.log(err);
+//														}
+//														console.log(res.ok);
+//													})
+//												}
+//
+//											}
+//										},1000);
+//									}
+//
+//								}else{
+//									console.log('not found file');
+//								}
+//							});
+//						}else{
+//							images.push(pimage);
+//							if(last && images.length == originalImages.length){
+//								bulk.find({_id:product._id}).updateOne({$set:{images:images}});
+//
+//								if(plast){
+//									console.log('start bulk');
+//									bulk.execute(function(err,res){
+//										if(err){
+//											console.log(err);
+//										}
+//										console.log(res.ok);
+//									})
+//								}
+//							}
+//						}
+//					})
+//				}
+//			});
+//
+//		})
+//	}
+
 
 }
 

@@ -159,7 +159,7 @@ textarea{
 /* rouble */
 @font-face {
 	font-family: Rouble;
-	src: url("/font/rouble.otf") format("opentype");
+	src: url(/font/rouble.otf) format("opentype");
 }
 
 .rouble{

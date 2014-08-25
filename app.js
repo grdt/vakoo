@@ -1,4 +1,4 @@
-console.log('\n\n\n\n\n\n');
+console.log('\n\n');
 
 var vakoo = require('./system/index')();
 

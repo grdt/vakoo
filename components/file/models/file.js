@@ -55,10 +55,19 @@ var FileModel = function(){
 		var date = new Date();
 		var monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 		var loader = this.vakoo.load;
-		if(!loader.isDir(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + monthes[date.getMonth()])){
-			fs.mkdirSync(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + monthes[date.getMonth()]);
+
+		var day = date.getDate();
+		var month = monthes[date.getMonth()];
+//		day = 7;
+//		month = 'Sep';
+
+		if(!loader.isDir(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + month)){
+			fs.mkdirSync(this.APP_PATH + UPLOAD_PATH + date.getFullYear() + month);
 		}
-		var path = date.getFullYear() + monthes[date.getMonth()] + this.SEPARATOR + date.getDate();
+
+
+
+		var path = date.getFullYear() + month + this.SEPARATOR + day;
 		return path;
 //		return this._id.clone().toString().substr(0,8);
 	}
@@ -87,6 +96,9 @@ var FileModel = function(){
 				that.size = fs.statSync(path).size;
 				that.type = "image/jpeg";
 				callback();
+			});
+			response.on('error',function(error){
+				console.log(error);
 			})
 		});
 	}

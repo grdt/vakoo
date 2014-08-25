@@ -2,7 +2,7 @@
  * @class ShopCategoryModel
  * @extends CoreModel
  */
-var ShopCategoryModel = function(){
+var ShopCategoryModel = function(query){
 
 	var that = this;
 
@@ -48,7 +48,11 @@ var ShopCategoryModel = function(){
 	}
 
 	this.url = function(){
-		var url = '/'+ ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
+		var sep = '/';
+//		if(query && query.city){
+//			sep = '/' + query.city.alias + '-';
+//		}
+		var url = sep + ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
 		return url;
 	}
 

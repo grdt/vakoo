@@ -247,8 +247,10 @@ var CoreModel = function(){
 	 */
     this.update = function(callback){
         var _this = this;
-
         this.collection().update({_id:this._id},this.clean(),function(err,items){
+			if(err){
+				console.log('update err',err);
+			}
             if(typeof callback == "function"){
                 callback(_this);
             }
