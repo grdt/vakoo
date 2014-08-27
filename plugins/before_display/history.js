@@ -5,13 +5,10 @@ var Plugin = function(){
 
 	this.callback = false;
 
-	this.init = function($l,view,data,callback,next){
-		if(typeof data == "undefined"){
-			data = {};
-		}
-		
+	this.init = function($l,next){
+
 		if(!$l.from.session('history')){
-			data.history = {};
+			$l._data.history = {};
 			$l.from.session('history',{});
 		}else{
 			var history = $l.from.session('history');
@@ -20,7 +17,7 @@ var Plugin = function(){
 			if(title == ''){
 				title = $l.factory().config().title;
 			}
-			data.history = history;
+			$l._data.history = history;
 
 			history[url] = {
 				title:title,
@@ -41,17 +38,11 @@ var Plugin = function(){
 			});
 
 			$l.from.session('history',history);
-			data.history = history;
+			$l._data.history = history;
 		}
 
-
-		if(typeof callback == "function"){
-			callback($l,view,data,next);
-		}else{
-			if(this.callback && typeof this.callback == "function"){
-				console.log(this.callback);
-				this.callback(view,data);
-			}
+		if(typeof next == "function"){
+			next($l);
 		}
 
 	}

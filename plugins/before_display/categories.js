@@ -3,18 +3,15 @@ var Plugin = function(){
 
 	this.callback = false;
 
-	this.init = function($l,view,data,callback,next){
-		if(typeof data == "undefined"){
-			data = {};
-		}
-		
-			this.option('shop').model('category',$l.from.query).find(function(categories){
+	this.init = function($l,next){
 
-			data["catalog:menu"] = {categories:categories};
-			data["catalog:breadcrumbs"] = {categories:categories};
+		this.option('shop').model('category',$l.from.query).find(function(categories){
 
-			if(typeof callback == "function"){
-				callback($l,view,data,next);
+			$l._data["catalog:menu"] = {categories:categories};
+			$l._data["catalog:breadcrumbs"] = {categories:categories};
+
+			if(typeof next == "function"){
+				next();
 			}
 		});
 	}

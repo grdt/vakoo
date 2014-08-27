@@ -22,6 +22,7 @@ var Vakoo = function(fastPort){
     this.SYSTEM_PATH = __dirname;
     this.APP_PATH = this.SYSTEM_PATH.replace('/system','');
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
+	this.PUBLIC_PATH = this.APP_PATH + this.SEPARATOR + 'public';
 
 	this.ENVIRONMENT = process.env.NODE_ENV;
 
@@ -115,7 +116,11 @@ var Vakoo = function(fastPort){
 //			},
 			{
 				name:'public',
-				handler:express.static(this.APP_PATH + this.SEPARATOR + 'public')
+				handler:express.static(this.PUBLIC_PATH)
+			},
+			{
+				name:'yandex',
+				handler:express.static(this.PUBLIC_PATH + '/yandex')
 			}
 		];
 

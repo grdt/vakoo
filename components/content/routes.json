@@ -12,5 +12,9 @@
 	},
 	"news(/)":{
 		"method":"news"
+	},
+	"page(/)":{
+		"option":"content",
+		"method":"article"
 	}
 }

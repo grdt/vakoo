@@ -31,6 +31,76 @@ $(document).on('click','.add-to-cart',function(){
 	return false;
 });
 
+
+$(document).on('submit',"#feedback-form",function(){
+	var $form = $(this),
+		data = $form.serializeArray(),
+		success = true;
+
+	$(data).each(function(i,item){
+		if(!item.value || item.value.length < 3){
+			$form.find('[name=' + item.name + ']')
+				.closest('.form-group')
+				.addClass('has-error')
+				.addClass('has-feedback')
+				.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+			
+			success = false;
+		}
+	});
+
+	
+	if(success){
+		$.post('/?option=main&task=feedback',$form.serialize(),function(response){
+			if(response.success){
+				var modal = new Modal('dialog',{
+					title:'Сообщение отправлено!',
+					body:'Наш менеджер уже получил сообщение и свяжется с вами в ближайшие минуты. Спасибо за ваше внимание!',
+					buttons:[
+						{
+							"data-dismiss":'modal',
+							"class":"btn-primary",
+							"html":'Закрыть'
+						}
+					]
+				});
+
+				$form.find('[name]').each(function(){
+					$(this).val('')
+						.closest('.form-group')
+						.removeClass('has-error')
+						.removeClass('has-success')
+						.removeClass('has-feedback');
+
+					$(this).closest('.form-group').find('.glyphicon').remove();
+				});
+			}
+		});
+	}
+	
+	return false;
+});
+
+$(document).on('blur','#feedback-form input, #feedback-form textarea',function(){
+
+	if($(this).val().length > 3){
+		$(this).closest('.form-group')
+			.addClass('has-success')
+			.addClass('has-feedback')
+			.append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
+	}
+
+});
+
+$(document).on('focus','#feedback-form input, #feedback-form textarea',function(){
+	$(this).closest('.form-group')
+		.removeClass('has-error')
+		.removeClass('has-success')
+		.removeClass('has-feedback');
+
+	$(this).closest('.form-group').find('.glyphicon').remove();
+});
+
 $(document).on('click','.cart>a',function(){
 	var modal = new Modal('cart','/shop/cart');
 	return false;
@@ -317,6 +387,7 @@ var storage = new Storage('vakoo');
 
 // возвращает cookie с именем name, если есть, если нет, то undefined
 function getCookie(name) {
+	console.log('get cookie',document.cookie);
 	var matches = document.cookie.match(new RegExp(
 		"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
 	));
@@ -325,6 +396,8 @@ function getCookie(name) {
 
 function setCookie(name, value, options) {
 	options = options || {domain:getHost(true),expires:25920000,path:'/'};
+	
+	console.log('options',options);
 
 	var expires = options.expires;
 
@@ -349,6 +422,8 @@ function setCookie(name, value, options) {
 		}
 	}
 
+	console.log('new cookie',updatedCookie);
+
 	document.cookie = updatedCookie;
 }
 
@@ -357,7 +432,9 @@ var getHost = function(domain){
 		var host = window.location.hostname,
 			splitted = host.split('.');
 
-		return splitted.splice(splitted.length - 2,splitted.length).join('.');
+		var result = splitted.splice(splitted.length - 2,splitted.length).join('.');
+		console.log('gethost true',result);
+		return result;
 	}
 	return window.location.hostname;
 }

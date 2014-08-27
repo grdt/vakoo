@@ -1,6 +1,6 @@
 var Controller = function(){
 
-    var $c = this;
+    var that = this;
 
     this.register = function(){
         this.url.response.send({aza:'aza'});
@@ -25,6 +25,20 @@ var Controller = function(){
 		this.echo('error page. code: ' + this.get('id'));
 	}
 
+	
+	this.feedback = function(){
+		if(this.isAjax()){
+			this.model('feedback').setAttributes(this.post()).save(function(){
+				that.vakoo.sendMail(
+					'a@pasa.me',
+					'LUXYsexy Feedback',
+					that.tmpl().render('feedback',that.post(),true)
+				);
+			});
+			this.json({success:true});
+		}
+	}
+	
     return this;
 }
 

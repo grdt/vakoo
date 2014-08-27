@@ -44,7 +44,22 @@ Object.defineProperties(Object.prototype,{
         writable: true,
         configurable: true,
         value: function(){
-            return _.clone(this);
+			var that = this,
+				clone = _.clone(that);
+
+			if(typeof that._keys != "undefined"){
+				that._keys.forEach(function(key){
+					if(typeof that.__lookupGetter__(key) == "function"){
+						clone.__defineGetter__(key,that.__lookupGetter__(key));
+					}
+
+					if(typeof that.__lookupSetter__(key) == "function"){
+						clone.__defineSetter__(key,that.__lookupSetter__(key));
+					}
+				});
+			}
+
+            return clone;
         }
     },
     pick:{
@@ -89,7 +104,25 @@ Object.defineProperties(Object.prototype,{
             }
             return this;
         }
-    }
+    },
+	asyncEach:{
+		writable: true,
+		configurable: true,
+		value: function(iterator, callback){
+			var iterate = function () {
+					pointer++;
+					if (pointer >= this.length) {
+						if(typeof callback == "function"){
+							callback();
+						}
+						return;
+					}
+					iterator.call(iterator, this[pointer], iterate, pointer);
+				}.bind(this),
+				pointer = -1;
+			iterate(this);
+		}
+	}
 });
 
 /** @global */

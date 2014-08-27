@@ -122,6 +122,19 @@ var ShopProductModel = function () {
 	}
 	
 	this.afterFind = function(done){
+
+		if(!this.meta.title){
+			this.meta.title = this.title + '. ' + this.shortDesc;
+		}
+
+		if(!this.meta.description){
+			this.meta.description = this.desc;
+		}
+
+//		if(!this.meta.keywords){
+//			this.meta.keywords = this.desc;
+//		}
+
 		if(this.group.isEqual({current:"",groups:[]})){
 			this.group = false;
 			this.save();
@@ -143,8 +156,6 @@ var ShopProductModel = function () {
 					product.ancestors = that.ancestors;
 
 					that.size.sizes[product.size.current] = {
-//						sku:product.sku,
-//						link:product.url(),
 						id:product._id,
 						size:product.size.current
 					};
@@ -168,6 +179,21 @@ var ShopProductModel = function () {
 			done(result);
 		});
 	}
+
+	this._price = 0;
+	this.defineSetGet('price',function(price){
+		this._price = price;
+	},function(){
+		var price = this._price;
+		if(price < this.tradePrice){
+			price = this.tradePrice;
+		}
+		if(price < 500){
+			return parseInt(price / 10) * 10;
+		}
+		price = parseInt(price / 100) * 100;
+		return price;
+	})
 }
 
 module.exports = ShopProductModel;

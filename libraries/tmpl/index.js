@@ -24,12 +24,10 @@ var Tmpl = function(params){
 
 	this.display = function(view,data){
 
-		$l._data = data;
+		$l._data = data || {};
 		$l._view = view;
 
-		this.initPlugin('before_display',this,view,data,function(l,view,data){
-			$l._data = data;
-			$l._view = view;
+		this.initPlugin('before_display',$l,function(){
 			var html = $l.layout()({factory:$l.factory()});
 			that.from.echo(html);
 		});
@@ -194,6 +192,25 @@ var Tmpl = function(params){
 
 		Handlebars.registerHelper('json', function(context) {
 			return JSON.stringify(context);
+		});
+
+		Handlebars.registerHelper('apply', function(object, method, params) {
+			if(object && typeof object[method] == "function"){
+				return object[method].apply(object,_.rest(arguments).slice(1,-1));
+			}
+		});
+
+		Handlebars.registerHelper('partial', function(content) {
+			var template = Handlebars.compile(content);
+			var args = _.rest(arguments).slice(0,-1);
+			var data = {};
+			for(var key in args){
+				for(var i in args[key]){
+					data[i] = args[key][i];
+				}
+			}
+			data.factory = $l.factory();
+			return template(data);
 		});
 
 

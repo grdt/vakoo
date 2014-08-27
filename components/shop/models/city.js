@@ -30,6 +30,7 @@ var City = function(){
 				"in":this.title_in,
 				from:this.title_from
 			},
+			code:this.data.postal_code,
 			region: (this.data.region_type == 'г') ? '' : this.data.region + ' ' + (this.data.region_type_full || '')
 		};
 		return object;

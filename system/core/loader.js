@@ -114,9 +114,17 @@ var Loader = function(vakoo){
 					this._plugins[event][0].init.apply(this, args);
 				}
 			}else{
+				
 				var callable = [];
-				var callback = (typeof args[args.length-1] == "function") ? args[args.length-1] : function(){};
-				for(key in this._plugins[event]){
+				var callback = function(){};
+
+				if(typeof _.last(args) == "function"){
+					callback = _.last(args);
+					args.pop();
+				}
+
+
+				for(var key in this._plugins[event]){
 					if(typeof this._plugins[event][key].callback != "undefined"){
 						this._plugins[event][key].callback = callback;
 						callable.push({handler:this._plugins[event][key].init,args:args});
@@ -126,17 +134,14 @@ var Loader = function(vakoo){
 						}
 					}
 				}
-
-				for(var i=0;i<callable.length;i++){
-					if(i != (callable.length - 1)){
-						callable[i].args[callable[i].args.length - 1] = callable[i+1].handler;
-					}
-				}
-
-				if(callable.length){
-					callable[0].args.push(callback);
-					callable[0].handler.apply(this,callable[0].args);
-				}
+				
+				
+				callable.asyncEach(function(item,done){
+					item.args.push(done);
+					item.handler.apply(loader,item.args);
+				},function(){
+					callback.apply(loader,args);
+				});
 				
 			}
 		}
@@ -361,6 +366,7 @@ var Loader = function(vakoo){
     }
 
     this.isFile = function(path){
+		if(!this.fileExists(path))return false;
         return fs.lstatSync(path).isFile();
     }
 

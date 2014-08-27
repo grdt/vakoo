@@ -72,6 +72,22 @@ var ShopCategoryModel = function(query){
 		}
 	}
 
+	this.afterFind = function(done){
+		if(!this.meta.title){
+			this.meta.title = this.title;
+		}
+
+		if(!this.meta.description){
+			this.meta.description = this.description;
+		}
+
+		if(!this.meta.keywords){
+			this.meta.keywords = this.description;
+		}
+
+		done();
+	}
+
 	this.setParent = function(done){
 		this.option('shop').model('category').where({_id:this.parent}).findOne(function(parent){
 			var catAncestors = parent.ancestors.clone();

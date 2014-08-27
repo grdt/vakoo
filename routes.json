@@ -1,1 +1,21 @@
-{}
+{
+	"sitemap-products<limit>.xml":{
+		"option":"shop",
+		"method":"sitemap",
+		"type":"products"
+	},
+	"sitemap-<type>.xml":{
+		"option":"shop",
+		"method":"sitemap"
+	},
+	"robots.txt":{
+		"option":"file",
+		"controller":"controller",
+		"method":"robots"
+	},
+	"yandex_(<id>).txt":{
+		"option":"file",
+		"controller":"controller",
+		"method":"yaVerify"
+	}
+}

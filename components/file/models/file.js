@@ -25,6 +25,8 @@ var FileModel = function(){
 
 	this.added = new Date();
 
+	this.finded = false;
+
 	this.upload = function(fileObj, callback){
 		var path = this.APP_PATH + UPLOAD_PATH;
 		var loader = this.vakoo.load;

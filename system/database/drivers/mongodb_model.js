@@ -368,6 +368,11 @@ var CoreModel = function(){
 	this.isEmpty = function(){
 		return false;
 	}
+
+	this.defineSetGet = function(field,setter,getter){
+		this.__defineGetter__(field,getter);
+		this.__defineSetter__(field,setter);
+	}
 }
 
 module.exports = CoreModel;

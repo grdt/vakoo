@@ -3,13 +3,13 @@ var Controller = function(){
 	var that = this;
 
 	this.index = function(){
-		this.model('category').find(function(categories){
-			that.tmpl().display('main');
+		this.option('content').model('page').where({alias:'main'}).findOne(function(page){
+			that.tmpl().display('main',{title:page.meta.title,page:page,meta:page.meta,partial:{city:that.query.city}});
 		});
 	}
 
 	this.sitemap = function(){
-		
+		this.cleanTimeout();
 		var host = this.query.getHost(),
 			root = 'http://' + host,
 			xmlObj = function(object){
@@ -19,27 +19,45 @@ var Controller = function(){
 						var date = new Date(object[key].toString());
 						object[key] = date.getFullYear() + '-' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : date.getMonth()+1) + '-' + ((date.getDate() < 10) ? '0' + date.getDate() : date.getDate());
 					}
-					res += '<' + key + '>';
-					res += object[key];
-					res += '</' + key + '>';
+					if(object[key] !== false){
+						res += '<' + key + '>';
+						res += object[key];
+						res += '</' + key + '>';
+					}
 				}
 				res += '</url>';
 				return res;
 			};
 
-		this.query.response.setHeader('Content-type','text/xml');
+		var xml = '<?xml version="1.0" encoding="UTF-8"?>' + '\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-		var xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
-		this.model('category').find(function(categories){
-			categories.forEach(function(category){
-				xml += xmlObj({
-					loc:root + category.url(),
-					changefreq:'weekly'
+		if(this.get('type') == 'categories'){
+			this.model('category').find(function(categories){
+				categories.forEach(function(category){
+					xml += xmlObj({
+						loc:root + category.url(),
+						changefreq:'weekly'
+					});
 				});
-			});
 
-			that.model('product').where({status:'active'}).find(function(products){
+				that.query.response.end(xml + '</urlset>');
+			});
+		}
+
+		if(this.get('type') == 'products'){
+
+			var limit = this.get('limit');
+
+			var perPage = 2000;
+
+			var model = this.model('product').where({status:'active'});
+
+			if(limit){
+				model.limit(limit * perPage, perPage);
+			}
+			
+
+			model.find(function(products){
 				products.forEach(function(product){
 					xml += xmlObj({
 						loc:root + product.url(),
@@ -48,19 +66,26 @@ var Controller = function(){
 					});
 				});
 
-				that.echo(xml + '</urlset>');
+				that.query.response.end(xml + '</urlset>');
 			});
-		});
+		}
 
-//		for(var i=0; i<=10;i++){
-//			xml += xmlObj({
-//				loc:root + '/aza',
-//				lastmod:new Date(),
-//				changefreq:'weekly',
-//				priority:0.8
-//			});
-//		}
+		if(this.get('type') == 'articles'){
 
+			var model = this.option('content').model('page');
+
+			model.find(function(pages){
+				pages.forEach(function(page){
+					xml += xmlObj({
+						loc:root + page.url(),
+						lastmod:page.publish,
+						changefreq:'weekly'
+					});
+				});
+
+				that.query.response.end(xml + '</urlset>');
+			});
+		}
 	}
 
 }

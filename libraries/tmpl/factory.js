@@ -34,13 +34,20 @@ var TemplateFactory = function(){
 	}
 	
 	this.title = function(){
+
+		var postfix = '';
+
+		if($f.from.query.city){
+			postfix = ' в ' + $f.from.query.city.titles.in;
+		}
+
 		if(typeof $f._data == "undefined"){
-			return $f.config().title;
+			return $f.config().title + postfix;
 		}
 		if(typeof $f._data.title == "undefined"){
-			return $f.config().title;
+			return $f.config().title + postfix;
 		}else{
-			return $f._data.title + $f.TITLE_SEPARATOR + $f.config().title;
+			return $f._data.title + $f.TITLE_SEPARATOR + $f.config().title + postfix;
 		}
 	}
 
@@ -72,8 +79,14 @@ var TemplateFactory = function(){
 			moduleArguments.push($f);
 			moduleArguments.push($f._data);
 			moduleArguments = moduleArguments.concat(_.rest(args));
-			var result = module.render.apply(this,moduleArguments);
+			var result = module.render.apply($f,moduleArguments);
 			if(result){
+				if(!result.data){
+					result.data = {};
+				}
+				if(typeof result.data.vakoo == "undefined"){
+					result.data.vakoo = $f.vakoo;
+				}
 				var content = $f.compile($f.template(result.view),result.data);
 				return new $f.hbs.SafeString(content);
 			}else{

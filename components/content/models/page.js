@@ -46,6 +46,14 @@ var PageModel = function(){
 		done();
 	}
 
+	this.url = function(){
+		if(this.vakoo.ENVIRONMENT == 'production'){
+			return '/' + this.alias;
+		}else{
+			return '/page?id=' + this._id;
+		}
+	}
+
 }
 
 module.exports = PageModel;

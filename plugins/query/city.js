@@ -9,8 +9,8 @@ var Plugin = function(){
 
 	this.init = function(query,callback,next){
 
-		console.log(process.memoryUsage().heapUsed / 1024 / 1024);
-		
+//		console.log(process.memoryUsage().heapUsed / 1024 / 1024);
+
 		if(query.executor.option == 'admin' || query.request.xhr){
 			if(typeof callback == "function"){
 				callback(query,next);

@@ -39,6 +39,9 @@ var Plugin = function(){
 
 	this.init = function(){
 
+		that.aza();
+		that.aza2();
+
 		if(this.vakoo.ENVIRONMENT == 'production'){
 
 			that.option('shop').model('category').find(function(categories){
@@ -76,6 +79,198 @@ var Plugin = function(){
 			});
 
 		}
+	}
+
+	this.aza2 = function(){
+
+//		var Model = function(){
+//			this._price = 1234;
+//
+//			this.price = 3214;
+//
+//			this.__defineGetter__('price',function(){
+//				console.log('get price');
+//				return this._price;
+//			});
+//
+//			this.__defineSetter__('price',function(price){
+//
+//				console.log('set price', price);
+//
+//				this._price = price;
+//			})
+//
+//		}
+//
+//		var proto = {
+//			aza:function(){
+//				return 'aza';
+//			}
+//		}
+//
+//
+//		var m = new Model();
+//
+//		console.log(m.__lookupGetter__('price'));
+//		console.log(m.__lookupSetter__('price'));
+//
+//		console.log(typeof m.price);
+//
+////		m.price = 2222;
+//		console.log(m.price);
+
+	}
+
+	this.aza = function(){
+
+//		return;
+
+		if(this.vakoo.ENVIRONMENT != 'test')
+			return;
+
+		var http = require('http');
+		var pathes = [
+			'astkol-sex',
+			'inspirit',
+			'condoms/mysize',
+			'condoms/gartelle',
+			'condoms/gartelle-gel',
+			'condoms/mysize-gel',
+			'condoms/viva',
+			'condoms/viva-gel',
+			'eroticfantasy',
+			'andrey',
+			'condoms/playboy',
+			'shunga',
+			'lelo',
+			'kazanova-sex',
+			'condoms/durex',
+			'condoms/domino',
+			'condoms/domino-gel',
+			'condoms/nabor',
+			'condoms/ganzo',
+			'condoms/okamoto',
+			'condoms/vizit',
+			'condoms/vizit-gel',
+			'bioritm',
+			'condoms/contex-gel',
+			'condoms/durex-gel',
+			'condoms/contex',
+			'condoms/luxe',
+			'condoms/luxe-gel',
+			'condoms/masculan',
+			'condoms/masculan-gel',
+			'condoms/sagami',
+			'condoms/sagami-gel',
+			'condoms/sico',
+			'condoms/sico-gel',
+			'condoms/feel',
+			'condoms/feel-gel',
+			'condoms/sitabella',
+			'kema-belie-baci',
+			'kema-sex',
+			'eroteam',
+			'kema-lashes-baci',
+			'erosklad',
+			'pipedream'
+		];
+
+		var loader = that.vakoo.load;
+
+		var stack = Array.apply(null, {length: 500}).map(Number.call, Number);
+
+		stack.asyncEach(function(i,doneStack){
+			(function(iterator){
+
+				var lim = 67;
+
+				that.option('file').model('file').where({"finded":{$ne:true}}).limit(iterator * lim, lim).find(function(files){
+
+					files.asyncEach(function(file,done){
+
+						if(file.finded){
+							console.log(file._id,'already finded');
+							done();
+							return;
+						}
+
+						if(loader.isFile(that.APP_PATH + '/public' + file.path)){
+							console.log(file._id,'file already downloaded');
+							file.finded = true;
+							file.save(function(){
+								done();
+							});
+							return;
+						}
+
+
+						console.log('start processing',file._id);
+
+						pathes.asyncEach(function(path,donePath){
+							var link = 'http://static.condom-shop.ru/' + path + '/' + file.originalName;
+
+							var req = http.request({
+									method:'HEAD',
+									host:'static.condom-shop.ru',
+									path:'/' + path + '/' + file.originalName
+								}, function(res) {
+
+									if(res.statusCode == 200){
+
+										console.log(file._id,'http://static.condom-shop.ru' + res.req.path, 'download ... ');
+
+										http.get('http://static.condom-shop.ru' + res.req.path, function(response) {
+											var uploadDirs = (that.APP_PATH + '/public' + file.path).split('/');
+
+											var uploadPath = '';
+
+											for(key in uploadDirs){
+												if(file.name != uploadDirs[key]){
+													uploadPath += uploadDirs[key] + '/';
+													if(!loader.isDir(uploadPath)){
+														fs.mkdirSync(uploadPath);
+													}
+												}else{
+													var stream = fs.createWriteStream(uploadPath + file.name);
+												}
+											}
+
+											response.pipe(stream);
+
+											file.finded = true;
+
+											response.on('end',function(){
+
+												file.save(function(){
+													done();
+												});
+
+											});
+										});
+
+									}else{
+										donePath();
+									}
+								}
+							);
+
+							req.end();
+
+						},function(){
+							if(!file.finded){
+								console.log(file._id,'file not found',file.name,file.originalName);
+							}
+							done();
+						});
+					},function(){
+						doneStack();
+						console.log('done stack');
+					});
+				});
+			}).call(this,i);
+		});
+
+
 	}
 }
 
