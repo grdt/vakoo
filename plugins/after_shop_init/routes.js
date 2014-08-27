@@ -40,7 +40,6 @@ var Plugin = function(){
 	this.init = function(){
 
 		that.aza();
-		that.aza2();
 
 		if(this.vakoo.ENVIRONMENT == 'production'){
 
@@ -78,52 +77,26 @@ var Plugin = function(){
 				console.log('products routes enabled');
 			});
 
+			that.option('content').model('page').find(function(pages){
+				pages.forEach(function(page){
+					var route_string = page.url();
+					var route = Susanin.Route(route_string);
+					route.executor = {
+						option:"content",
+						controller:"controller",
+						method:"article",
+						id:page._id
+					}
+					$p.addRoute(route);
+				});
+
+				console.log('pages routes enabled');
+			});
+
 		}
 	}
 
-	this.aza2 = function(){
-
-//		var Model = function(){
-//			this._price = 1234;
-//
-//			this.price = 3214;
-//
-//			this.__defineGetter__('price',function(){
-//				console.log('get price');
-//				return this._price;
-//			});
-//
-//			this.__defineSetter__('price',function(price){
-//
-//				console.log('set price', price);
-//
-//				this._price = price;
-//			})
-//
-//		}
-//
-//		var proto = {
-//			aza:function(){
-//				return 'aza';
-//			}
-//		}
-//
-//
-//		var m = new Model();
-//
-//		console.log(m.__lookupGetter__('price'));
-//		console.log(m.__lookupSetter__('price'));
-//
-//		console.log(typeof m.price);
-//
-////		m.price = 2222;
-//		console.log(m.price);
-
-	}
-
 	this.aza = function(){
-
-//		return;
 
 		if(this.vakoo.ENVIRONMENT != 'test')
 			return;
@@ -138,6 +111,10 @@ var Plugin = function(){
 			'condoms/mysize-gel',
 			'condoms/viva',
 			'condoms/viva-gel',
+			'condoms/one-touch',
+			'condoms/vitalis',
+			'condoms/vitalis-gel',
+			'condoms/one-touch-gel',
 			'eroticfantasy',
 			'andrey',
 			'condoms/playboy',
