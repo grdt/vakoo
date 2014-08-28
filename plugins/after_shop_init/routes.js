@@ -135,6 +135,7 @@ var Plugin = function(){
 			'condoms/contex',
 			'condoms/luxe',
 			'condoms/luxe-gel',
+			'books',
 			'condoms/masculan',
 			'condoms/masculan-gel',
 			'condoms/sagami',
