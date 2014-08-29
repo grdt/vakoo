@@ -4,7 +4,8 @@ var Pagination = function(){
 
 	this.foo = 'bar';
 
-	this.render = function(factory,data,options){
+	this.render = function(factory,input){
+		var options = _.last(input);
 		var pages = Math.ceil(options.count / options.perPage);
 		var pagesArr = [];
 		var link = factory.from.query.request.url;

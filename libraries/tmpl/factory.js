@@ -79,7 +79,10 @@ var TemplateFactory = function(){
 			moduleArguments.push($f);
 			moduleArguments.push($f._data);
 			moduleArguments = moduleArguments.concat(_.rest(args));
-			var result = module.render.apply($f,moduleArguments);
+			if($f._data && $f._data[modulename]){
+				moduleArguments[modulename] = $f._data[modulename];
+			}
+			var result = module.render($f,moduleArguments);
 			if(result){
 				if(!result.data){
 					result.data = {};
@@ -117,6 +120,10 @@ var TemplateFactory = function(){
 
 	this.js = function(source){
 		return new $f.hbs.SafeString('<script type="text/javascript" src="'+source+'"></script>');
+	}
+	
+	this.include = function(template,data){
+		console.log(template);
 	}
 
     return this;

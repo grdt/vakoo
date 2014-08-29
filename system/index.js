@@ -124,6 +124,13 @@ var Vakoo = function(fastPort){
 			}
 		];
 
+		if(this.config().template != 'default'){
+			mustHave.push({
+				name:'template_public',
+				handler:express.static(this.APP_PATH + '/templates/' + this.config().template +'/public')
+			});
+		}
+
 		var middleWare = {
 			development:[
 				{

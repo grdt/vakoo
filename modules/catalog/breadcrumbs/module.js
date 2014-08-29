@@ -1,5 +1,7 @@
 var Breadcrumbs = function(){
-	this.render = function(factory,data){
+	this.render = function(factory,input){
+
+		var data = input['catalog:breadcrumbs'];
 
 		if(factory.from.query.request.url == '/')
 			return false;
@@ -24,8 +26,8 @@ var Breadcrumbs = function(){
 			}
 
 			if(factory.from.query.executor.method == 'index'){
-				var ancestors = data[item].ancestors;
-				var categories = data['catalog:menu'].categories;
+				var ancestors = factory._data[item].ancestors;
+				var categories = data.categories;
 
 				ancestors.forEach(function(ancestor){
 					categories.forEach(function(category){
@@ -39,8 +41,8 @@ var Breadcrumbs = function(){
 				});
 
 				crumbs.push({
-					url:data[item].url(),
-					title:data[item].title
+					url:factory._data[item].url(),
+					title:factory._data[item].title
 				});
 
 			}

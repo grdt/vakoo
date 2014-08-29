@@ -12,7 +12,7 @@
         "database":"vakoo"
     },
     "tmpl_lib":"tmpl",
-    "template":"default",
+    "template":"luxy",
 	"smtp":{
 		"incoming":{
 			"host":"imap.yandex.ru",

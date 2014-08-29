@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{factory.title}}</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="{{factory.meta.description}}"/>
+    <meta name="title" content="{{factory.meta.title}}"/>
+    <meta name="keywords" content="{{factory.meta.keywords}}"/>
+
+    <!--Mobile Specific Meta Tag-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!--Master Slider Styles-->
+    <link href="/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
+    <!--Styles-->
+    <link href="/css/styles.css" rel="stylesheet" media="screen">
+    <!--Modernizr-->
+    <script src="/js/libs/modernizr.custom.js"></script>
+    <!--Adding Media Queries Support for IE8-->
+    <!--[if lt IE 9]>
+    <script src="/js/plugins/respond.js"></script>
+    <![endif]-->
+</head>
+
+<!--Body-->
+<body class="parallax"><!--Add this class if you have elements on the page with parallax backgrounds-->
+
+<!--Header-->
+<header data-offset-top="550" data-stuck="650"><!--data-offset-top is when header converts to small variant and data-stuck when it becomes visible. Values in px represent position of scroll from top. Make sure there is at least 100px between those two values for smooth animation-->
+
+
+    {{include 'modules.search'}}
+
+    <!--Split Background-->
+    <div class="left-bg"></div>
+    <div class="right-bg"></div>
+
+    <div class="container">
+        <a class="logo" href="index.html"><img src="/img/logo.png" alt="Bushido"/></a>
+
+        {{factory 'module' 'catalog:menu'}}
+
+        {{include 'modules.toolbar'}}
+
+    </div>
+</header><!--Header Close-->
+
+<!--Page Content-->
+<div class="page-content">
+
+    {{factory.content}}
+
+</div><!--Page Content Close-->
+
+
+    {{factory 'module' 'footer'}}
+
+
+<!--Javascript (jQuery) Libraries and Plugins-->
+<script src="/js/libs/jquery-1.11.1.min.js"></script>
+<script src="/js/libs/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="/js/libs/jquery.easing.min.js"></script>
+<script src="/js/plugins/bootstrap.min.js"></script>
+<script src="/js/plugins/smoothscroll.js"></script>
+<script src="/js/plugins/jquery.validate.min.js"></script>
+<script src="/js/plugins/icheck.min.js"></script>
+<script src="/js/plugins/jquery.placeholder.js"></script>
+<script src="/js/plugins/jquery.stellar.min.js"></script>
+<script src="/js/plugins/jquery.touchSwipe.min.js"></script>
+<script src="/js/plugins/jquery.shuffle.min.js"></script>
+<script src="/js/plugins/lightGallery.min.js"></script>
+<script src="/js/plugins/owl.carousel.min.js"></script>
+<script src="/js/plugins/masterslider.min.js"></script>
+<script src="/js/scripts.js"></script>
+<script src="/js/moment.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/ready.js"></script>
+
+</body><!--Body Close-->
+</html>

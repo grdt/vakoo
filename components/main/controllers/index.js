@@ -22,7 +22,8 @@ var Controller = function(){
 	}
 
 	this.error = function(){
-		this.echo('error page. code: ' + this.get('id'));
+		this.query.response.statusCode = 404;
+		this.tmpl().render('errors.404');
 	}
 
 	

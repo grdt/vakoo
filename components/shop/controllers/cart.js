@@ -33,12 +33,7 @@ var Controller = function(){
 	}
 
 	this.checkout = function(){
-		if(!this.isAjax()){
-			this.exception(403,'Access Denied');
-			return;
-		}
-
-		if(this.post()){
+		if(this.isAjax() && this.post()){
 
 			var order = this.model('order'),
 				cart = this.model('cart',this);
@@ -69,6 +64,8 @@ var Controller = function(){
 				});
 
 			}
+		}else{
+			this.where();
 		}
 	}
 

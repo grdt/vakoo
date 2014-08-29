@@ -1,0 +1,117 @@
+<!--Sticky Buttons-->
+<div class="sticky-btns">
+    <form class="quick-contact" method="post" name="quick-contact">
+        <div class="success-message" style="display: none;">
+            <h3>Сообщение отправлено</h3>
+            <p class="text-muted">Менеджер уже получил ваше сообщение и ответит вам в течении нескольких минут.</p>
+        </div>
+        <div class="form">
+            <h3>Свяжитесь с нами</h3>
+            <p class="text-muted">Ваше сообщение попадет прямо к менеджеру и он ответит вам через несколько минут.</p>
+            <div class="form-group">
+                <label for="qc-name">Ваше имя</label>
+                <input class="form-control input-sm" type="text" name="name" id="qc-name" placeholder="Имя, Фамилия" required>
+            </div>
+            <div class="form-group">
+                <label for="qc-email">Способ связи</label>
+                <input class="form-control input-sm" type="text" name="contact" id="qc-email" placeholder="Email, Skype или номер телефона" required>
+            </div>
+            <div class="form-group">
+                <label for="qc-message">Сообщение</label>
+                <textarea class="form-control input-sm" name="message" id="qc-message" placeholder="Задайте вопрос или опишите проблему" required></textarea>
+            </div>
+            <input class="btn btn-success btn-sm btn-block" type="submit" value="Отправить">
+        </div>
+    </form>
+    <span id="qcf-btn"><i class="fa fa-envelope"></i></span>
+    <span id="scrollTop-btn"><i class="fa fa-chevron-up"></i></span>
+</div><!--Sticky Buttons Close-->
+
+
+
+
+<!--Subscription Widget-->
+<section class="subscr-widget">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-8 col-sm-8">
+                <h2 class="light-color">Подпишитесь на наши новости</h2>
+                <form class="subscr-form" role="form" autocomplete="off">
+                    <div class="form-group">
+                        <label class="sr-only" for="subscr-name">Ваше имя</label>
+                        <input type="text" class="form-control" name="name" id="subscr-name" placeholder="Имя, фамилия" required>
+                        <button class="subscr-next"><i class="icon-arrow-right"></i></button>
+                    </div>
+                    <div class="form-group fff" style="display: none">
+                        <label class="sr-only" for="subscr-email">Ваш Email</label>
+                        <input type="email" class="form-control" name="contact" id="subscr-email" placeholder="Электронный адрес" required>
+                        <button type="submit" id="subscr-submit"><i class="icon-check"></i></button>
+                    </div>
+                    <input type="hidden" name="message" value="Я хочу подписаться на ваши новости"/>
+                </form>
+                <p class="p-style2">Пожалуйста заполните поля чтобы подписаться</p>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-lg-offset-1">
+                <p class="p-style3">Мы гарантируем полную анонимность ваших данных. Подписавшись вы будете получать только качественные и интересные новости а так же информацию об акциях и скидках нашего магазина.</p>
+            </div>
+        </div>
+    </div>
+</section><!--Subscription Widget Close-->
+
+<!--Footer-->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-sm-5">
+                <div class="info">
+                    <a class="logo" href="index.html"><img src="/img/logo.png" alt="Bushido"/></a>
+                    <p>LUXYsexy поставляет товары только самого высокого качества, с гарантией производителя и возможностью возврата. Подпишитесь на наши каналы в социальных сетях чтобы быть в курсе новостей, скидок и акций.</p>
+                    <div class="social">
+                        <a href="http://vk.com/luxy.sexy" target="_blank"><i class="fa fa-vk"></i></a>
+                        <a href="http://twitter.com/luxy.sexy" target="_blank"><i class="fa fa-twitter"></i></a>
+                        <a href="http://facebook.com/luxy.sexy" target="_blank"><i class="fa fa-facebook-square"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <h2>Полезная информация</h2>
+                <ul class="list-unstyled">
+                    <li><a href="{{apply about 'url'}}">Сексшоп LUXYsexy</li>
+                    <li><a href="{{apply delivery 'url'}}">{{delivery.title}}</a></li>
+                    <li><a href="{{apply anonymity 'url'}}">{{anonymity.title}}</a></li>
+                    <li><a href="{{apply guarantee 'url'}}">{{guarantee.title}}</a></li>
+                </ul>
+            </div>
+            <div class="contacts col-lg-3 col-md-3 col-sm-3">
+                <h2>Контакты</h2>
+                <p class="p-style3">
+                    {{!4120 Lenox Avenue, New York, NY,<br/>
+                    10035 76 Saint Nicholas Avenue<br/>}}
+                    С нами всегда можно связаться<br/>
+                    с помощью электронной почты:
+                    <a href="mailto:shop@luxy.sexy">shop@luxy.sexy</a><br/>
+                    {{!+48 543765234<br/>
+                    +48 555 234 54 34<br/>}}
+                </p>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-7">
+                    <p>&copy; 2014 LUXYsexy. Все права защищены</p>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    {{!
+                    <div class="payment">
+                        <img src="/img/payment/visa.png" alt="Visa"/>
+                        <img src="/img/payment/paypal.png" alt="PayPal"/>
+                        <img src="/img/payment/master.png" alt="Master Card"/>
+                        <img src="/img/payment/discover.png" alt="Discover"/>
+                        <img src="/img/payment/amazon.png" alt="Amazon"/>
+                    </div>
+                    }}
+                </div>
+            </div>
+        </div>
+    </div>
+</footer><!--Footer Close-->

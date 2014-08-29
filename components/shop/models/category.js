@@ -33,6 +33,12 @@ var ShopCategoryModel = function(query){
 
 	this.meta = metaObject;
 
+	this.mainImage = imageObject;
+
+	this.mainSmallImage = imageObject;
+
+	this.main = false;
+
 	this.ancestors = [];
 
 	this.parent = '';

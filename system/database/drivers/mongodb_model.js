@@ -335,7 +335,16 @@ var CoreModel = function(){
 		var clean = this.clean();
 
 		for(var key in clean){
-			this[key] = (typeof attributes[key] != "undefined") ? attributes[key] : this[key];
+			var res = (typeof attributes[key] != "undefined") ? attributes[key] : this[key];
+			if(res === 'false'){
+				res = false;
+			}
+
+			if(res === 'true'){
+				res = true;
+			}
+
+			this[key] = res;
 		}
 
 		return this;

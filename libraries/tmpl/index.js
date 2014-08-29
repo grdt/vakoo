@@ -2,7 +2,11 @@ var Handlebars = require('handlebars');
 var HandlebarsHelpers = require('handlebars-helper');
 HandlebarsHelpers.help(Handlebars);
 
-var Tmpl = function(params){
+/**
+ * @extends Loader
+ * @constructor
+ */
+var TemplateLibrary = function(params){
 
 	var $l = this;
 	var that = this;
@@ -28,13 +32,19 @@ var Tmpl = function(params){
 		$l._view = view;
 
 		this.initPlugin('before_display',$l,function(){
-			var html = $l.layout()({factory:$l.factory()});
+			var html = $l.layout()({
+				factory:$l.factory(),
+				root:$l.rootUrl()
+			});
 			that.from.echo(html);
 		});
 	}
 
 	this.render = function(view,data,ret){
 		var html = this.template(view);
+		data = data || {};
+		data.factory = that.factory();
+		data.root = that.rootUrl();
 		var template = this.compile(html,data);
 		if(typeof ret == "undefined"){
 			that.from.echo(template);
@@ -47,6 +57,10 @@ var Tmpl = function(params){
 	}
 
     this.compile = function(html,data){
+		if(!html){
+			console.log('html of template is not defined');
+			return '';
+		}
         var template = Handlebars.compile(html);
 		data.factory = $l.factory();
         return template(data);
@@ -96,6 +110,10 @@ var Tmpl = function(params){
 		    return this._factory
 	    }
     }
+	
+	this.rootUrl = function(){
+		return 'http://' + this.url.getHost();
+	}
 
 	this.helpers = function(){
 		Handlebars.registerHelper('factory', function() {
@@ -144,6 +162,40 @@ var Tmpl = function(params){
 			}
 			return ret;
 		});
+
+		Handlebars.registerHelper('include', function(templateName, data) {
+			var html = that.template(templateName);
+
+			if(html){
+				var template = Handlebars.compile(html);
+				data.factory = $l.factory();
+				data.root = that.rootUrl();
+				return new that.hbs.SafeString(template(data));
+			}else{
+				return false;
+			}
+
+		});
+
+
+		Handlebars.registerHelper('trimString', function(string, length, postfix) {
+
+			if(string.length < length){
+				return string;
+			}
+
+			if(!_.isString(postfix)){
+				postfix = '';
+			}
+
+
+			var trimmedString = string.substr(0, length);
+			trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+
+			return trimmedString + postfix;
+		});
+
+
 		
 		Handlebars.registerHelper('row',function(context,inRow,options){
 			if(typeof options == "undefined"){
@@ -269,4 +321,4 @@ var Tmpl = function(params){
 
 }
 
-module.exports = Tmpl;
+module.exports = TemplateLibrary;

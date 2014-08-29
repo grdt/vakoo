@@ -1,0 +1,165 @@
+<!--Categories Slider-->
+<section class="category-slider">
+    <div class="master-slider" id="cat-slider">
+
+
+        {{#each categories}}
+            {{#if this.category}}
+            <div class="ms-slide">
+                <!--Background-->
+
+                <img src="/masterslider/blank.gif" data-src="/img/categories/slides/bg_{{bg}}.png"/>
+
+
+                {{#with category}}
+                    <!--Text-->
+                    <div class="ms-layer text-block" data-effect="left(50,true)" data-duration="800" data-delay="250" data-ease="easeOutQuad">
+                        <h2 class="{{../color}}-color">{{{mainImage.alt}}}</h2>
+                        <p class="{{../color}}-color">{{{mainSmallImage.alt}}}</p>
+                        <a class="btn btn-primary" href="{{url}}">Хочу!</a>
+                        {{!<a class="btn btn-success" href="#">Browse all PC</a>}}
+                    </div>
+                    <!--Image-->
+                    <img style="right: 50px;" class="ms-layer img-block" src="{{mainImage.path}}" alt="{{mainImage.alt}}" data-effect="back(500)" data-duration="800" data-delay="350" data-ease="easeOutQuad"/>
+                    <div class="ms-thumb">
+                        <img src="{{mainSmallImage.path}}" alt="{{{mainSmallImage.alt}}}"/>
+                        <h3>{{title}}</h3>
+                    </div>
+                {{/with}}
+            </div>
+            {{/if}}
+        {{/each}}
+
+    </div>
+</section><!--Categories Slider Close-->
+
+<!--Catalog Grid-->
+<section class="catalog-grid">
+    <div class="container">
+        <h2 class="primary-color">Новинки</h2>
+        <div class="row">
+            {{#each newcomers}}
+                {{include 'shop.product-card' this}}
+            {{/each}}
+        </div>
+    </div>
+</section><!--Catalog Grid Close-->
+
+<!--Tabs Widget-->
+<section class="tabs-widget">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#bestsel" data-toggle="tab">Bestseller items</a></li>
+        <li><a href="#onsale" data-toggle="tab">Items on sale</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="bestsel">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>X-MAS LIGHT IPHONE LENS<span>$14.95</span></div></div>
+                            </div>
+                            <img src="/img/media/1.jpg" alt="1"/>
+                        </a>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Hedadset for iPhone<span>$19.40</span></div></div>
+                            </div>
+                            <img src="/img/media/2.jpg" alt="2"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Product Name<span>$24.15</span></div></div>
+                            </div>
+                            <img src="/img/media/3.jpg" alt="3"/>
+                        </a>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Product Name<span>$24.15</span></div></div>
+                            </div>
+                            <img src="/img/media/4.jpg" alt="4"/>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Product Name<span>$24.15</span></div></div>
+                            </div>
+                            <img src="/img/media/5.jpg" alt="5"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="onsale">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>X-MAS LIGHT IPHONE LENS<span>$14.95</span></div></div>
+                            </div>
+                            <img src="/img/media/6.jpg" alt="1"/>
+                        </a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Hedadset for iPhone<span>$19.40</span></div></div>
+                            </div>
+                            <img src="/img/media/6.jpg" alt="2"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Product Name<span>$24.15</span></div></div>
+                            </div>
+                            <img src="/img/media/6.jpg" alt="3"/>
+                        </a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <a class="media-link" href="#">
+                            <div class="overlay">
+                                <div class="descr"><div>Product Name<span>$24.15</span></div></div>
+                            </div>
+                            <img src="/img/media/6.jpg" alt="4"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!--Tabs Widget Close-->
+
+<!--Info Block with Image Background-->
+<section style="background-image: url(/img/info-blocks/parallax-bg-img1.jpg);" class="info-block-image" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12">
+                <h2>Awesome new cameras in our shop</h2>
+                <div class="row">
+                    <div class="icon col-lg-4 col-md-4 col-sm-4">
+                        <i class="icon-camera-2"></i>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        <p class="p-style3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!--Info Block Close-->

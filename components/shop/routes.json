@@ -3,5 +3,9 @@
 		"option":"shop",
 		"controller":":controller",
 		"method":":method"
+	},
+	"checkout":{
+		"controller":"cart",
+		"method":"checkout"
 	}
 }

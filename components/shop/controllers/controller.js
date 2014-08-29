@@ -4,7 +4,45 @@ var Controller = function(){
 
 	this.index = function(){
 		this.option('content').model('page').where({alias:'main'}).findOne(function(page){
-			that.tmpl().display('main',{title:page.meta.title,page:page,meta:page.meta,partial:{city:that.query.city}});
+			that.model('category').where({main:true}).find(function(categories){
+
+				var categoriesObject = {
+					"dlya-nee":{
+						bg:3,
+						color:'gray'
+					},
+					"dlya-nego":{
+						bg:'000',
+						color:'light'
+					},
+					"dlya-dvoih":{
+						bg:3,
+						color:'gray'
+					},
+					"eroticheskaya-odezhda-i-bele":{
+						bg:'dark',
+						color:'light'
+					},
+					"fetish-i-bdsm":{
+						bg:3,color:'gray'
+					}
+				};
+
+				categories.forEach(function(category){
+					categoriesObject[category._id].category = category;
+				})
+
+				that.model('product').where({isNew:true}).find(function(newcomers){
+					that.tmpl().display('main_page',{
+						title:page.meta.title,
+						page:page,
+						meta:page.meta,
+						partial:{city:that.query.city},
+						categories:categoriesObject,
+						newcomers:newcomers
+					});
+				})
+			});
 		});
 	}
 

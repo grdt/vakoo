@@ -1,5 +1,7 @@
 var Product = require('./product.js');
-
+/**
+ * @constructor
+ */
 var Cart = function($c){
 	this.products = {};
 	
@@ -22,6 +24,7 @@ var Cart = function($c){
 				item = 	this.products[product._id];
 			}else{
 				item = product.clean('params');
+				item.url = product.url();
 				delete item.import;
 				item.count = 0;
 				item.total = 0;
@@ -76,7 +79,28 @@ var Cart = function($c){
 	}
 	
 	this.data = function(){
-		return {total:this.total,count:this.count,item:this._lastMod};
+
+		var products = [];
+
+		for(var id in this.products){
+			var product = this.products[id];
+			products.push({
+				price:product.price,
+				count:product.count,
+				total:product.total,
+				image:product.image,
+				shortDesc:product.shortDesc,
+				title:product.title,
+				_id:product._id,
+				url:product.url
+			});
+		}
+
+		return {
+			total:this.total,
+			count:this.count,
+			products:products
+		};
 	}
 
 	this.save = function(){

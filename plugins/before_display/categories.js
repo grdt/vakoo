@@ -11,7 +11,7 @@ var Plugin = function(){
 			$l._data["catalog:breadcrumbs"] = {categories:categories};
 
 			if(typeof next == "function"){
-				next();
+				next($l);
 			}
 		});
 	}
