@@ -21,7 +21,6 @@ var Menu = function(){
 				tree[category._id] = category.clean();
 				tree[category._id].selected = category.selected;
 				tree[category._id].path = category.url();
-				tree[category._id].childs = [];
 			}else{
 				parent = tree[category.ancestors[0]];
 				if(category.ancestors.length > 1){
@@ -31,27 +30,30 @@ var Menu = function(){
 						}
 					}
 					if(parent){
+						if(!parent.childs){
+							parent.childs = [];
+						}
 						parent.childs[category._id] = category.clean();
 						parent.childs[category._id].selected = category.selected;
 						parent.childs[category._id].path = category.url();
-						parent.childs[category._id].childs = [];
+						parent.childs[category._id].childs = false;
 					}else{
 						tree[category._id] = category.clean();
 						tree[category._id].selected = category.selected;
 						tree[category._id].path = category.url();
-						tree[category._id].childs = [];
 					}
 				}else{
 					if(parent){
+						if(!parent.childs){
+							parent.childs = [];
+						}
 						parent.childs[category._id] = category.clean();
 						parent.childs[category._id].selected = category.selected;
 						parent.childs[category._id].path = category.url();
-						parent.childs[category._id].childs = [];
 					}else{
 						tree[category._id] = category.clean();
 						tree[category._id].selected = category.selected;
 						tree[category._id].path = category.url();
-						tree[category._id].childs = [];
 					}
 				}
 			}

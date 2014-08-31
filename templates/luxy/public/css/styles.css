@@ -12096,11 +12096,11 @@ header .search-form .close-search:hover {
 	padding-left: 20px;
 	z-index: 5;
 	top: 0;
-	right: -195px
+	right: -270px
 }
 
 .menu .catalog li .submenu .sub-submenu li {
-	width: 180px;
+	width: 256px;
 	border-top: 1px solid #2ba8db;
 	-webkit-transition: all .2s ease;
 	-moz-transition: all .2s ease;

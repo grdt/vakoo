@@ -51,7 +51,211 @@
         <li class="hide-sm"><a href="support.html">Support</a></li>
     </ul>
     <ul class="catalog">
-        <li class="has-submenu"><a href="shop-filters-left-3cols.html">Для неё<i class="fa fa-chevron-down"></i></a>
+        <li class="has-submenu"><a href="{{tree.dlya-nee.path}}">{{tree.dlya-nee.title}}<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+                {{#keyin tree.dlya-nee.childs}}
+                    {{#isset childs}}
+                        <li class="has-submenu">
+                            <a href="{{path}}">{{title}}</a>
+                            <ul class="sub-submenu">
+                                {{#keyin childs}}
+                                    <li><a href="{{path}}">{{title}}</a></li>
+                                {{/keyin}}
+                            </ul>
+                        </li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="has-submenu">
+                    <a href="{{tree.analnaya-stimulyaciya.path}}">{{tree.analnaya-stimulyaciya.title}}</a>
+                    <ul class="sub-submenu">
+                        {{#keyinRange tree.analnaya-stimulyaciya.childs 1 7}}
+                            <li><a href="{{path}}">{{title}}</a></li>
+                        {{/keyinRange}}
+                    </ul>
+                </li>
+
+                {{#keyin tree.dlya-nee.childs}}
+                    {{^isset childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="offer">
+                    <div class="col-1">
+                        <p class="p-style2"></p>
+                    </div>
+                    <div class="col-2 hide">
+                        <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                        <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li class="has-submenu"><a href="{{tree.dlya-nego.path}}">{{tree.dlya-nego.title}}<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+                {{#keyin tree.dlya-nego.childs}}
+                    {{#isset childs}}
+                        <li class="has-submenu">
+                            <a href="{{path}}">{{title}}</a>
+                            <ul class="sub-submenu">
+                                {{#keyin childs}}
+                                    <li><a href="{{path}}">{{title}}</a></li>
+                                {{/keyin}}
+                            </ul>
+                        </li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="has-submenu">
+                    <a href="{{tree.analnaya-stimulyaciya.path}}">{{tree.analnaya-stimulyaciya.title}}</a>
+                    <ul class="sub-submenu">
+                        {{#keyin tree.analnaya-stimulyaciya.childs}}
+                            <li><a href="{{path}}">{{title}}</a></li>
+                        {{/keyin}}
+                    </ul>
+                </li>
+
+                {{#keyin tree.dlya-nego.childs}}
+                    {{^isset childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="offer">
+                    <div class="col-1">
+                        <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div class="col-2 hide">
+                        <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                        <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li class="has-submenu"><a href="{{tree.dlya-dvoih.path}}">{{tree.dlya-dvoih.title}}<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+                {{#keyin tree.dlya-dvoih.childs}}
+                    {{#isset childs}}
+                        <li class="has-submenu">
+                            <a href="{{path}}">{{title}}</a>
+                            <ul class="sub-submenu">
+                                {{#keyin childs}}
+                                    <li><a href="{{path}}">{{title}}</a></li>
+                                {{/keyin}}
+                            </ul>
+                        </li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="has-submenu">
+                    <a href="{{tree.analnaya-stimulyaciya.path}}">{{tree.analnaya-stimulyaciya.title}}</a>
+                    <ul class="sub-submenu">
+                        {{#keyin tree.analnaya-stimulyaciya.childs}}
+                            <li><a href="{{path}}">{{title}}</a></li>
+                        {{/keyin}}
+                    </ul>
+                </li>
+
+                {{#keyin tree.dlya-dvoih.childs}}
+                    {{^isset childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="offer">
+                    <div class="col-1">
+                        <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div class="col-2 hide">
+                        <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                        <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li class="has-submenu"><a href="{{tree.eroticheskaya-odezhda-i-bele.path}}">Бельё и одежда<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+                {{#keyin tree.eroticheskaya-odezhda-i-bele.childs}}
+                    {{#isset childs}}
+                        <li class="has-submenu">
+                            <a href="{{path}}">{{title}}</a>
+                            <ul class="sub-submenu">
+                                {{#keyin childs}}
+                                    <li><a href="{{path}}">{{title}}</a></li>
+                                {{/keyin}}
+                            </ul>
+                        </li>
+                    {{/isset}}
+                {{/keyin}}
+
+                {{#keyin tree.eroticheskaya-odezhda-i-bele.childs}}
+                    {{^isset childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="offer">
+                    <div class="col-1">
+                        <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div class="col-2 hide">
+                        <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                        <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="has-submenu"><a href="{{tree.fetish-i-bdsm.path}}">BDSM<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+                {{#keyin tree.fetish-i-bdsm.childs}}
+                    {{#isset childs}}
+                        <li class="has-submenu">
+                            <a href="{{path}}">{{title}}</a>
+                            <ul class="sub-submenu">
+                                {{#keyin childs}}
+                                    <li><a href="{{path}}">{{title}}</a></li>
+                                {{/keyin}}
+                            </ul>
+                        </li>
+                    {{/isset}}
+                {{/keyin}}
+
+                {{#keyin tree.fetish-i-bdsm.childs}}
+                    {{^isset childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/isset}}
+                {{/keyin}}
+
+                <li class="offer">
+                    <div class="col-1">
+                        <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div class="col-2 hide">
+                        <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                        <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li class="has-submenu"><a href="{{tree.prezervativy-i-smazki.path}}">{{tree.prezervativy-i-smazki.title}}<i class="fa fa-chevron-down"></i></a>
+            <ul class="submenu">
+
+                {{#keyin tree.prezervativy-i-smazki.childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/keyin}}
+            </ul>
+        </li>
+
+
+        {{!
+        <li class="has-submenu"><a href="shop-filters-left-3cols.html">Для него</a>
             <ul class="submenu">
                 <li><a href="#">Nokia</a></li>
                 <li class="has-submenu"><a href="#">iPhone</a><!--Class "has-submenu" for adding carret and dropdown-->
@@ -84,14 +288,11 @@
                 </li>
             </ul>
         </li>
-        <li><a href="shop-filters-left-3cols.html">Для него</a></li>
         <li><a href="shop-filters-left-3cols.html">Для двоих</a></li>
         <li><a href="shop-filters-left-3cols.html">Бельё</a></li>
         <li><a href="shop-filters-left-3cols.html">BDSM</a></li>
         <li><a href="shop-filters-left-3cols.html">Презервативы и смазки</a></li>
         <li><a href="shop-filters-left-3cols.html">Анальная стимуляция</a></li>
-        {{!
-
         }}
     </ul>
 </nav>

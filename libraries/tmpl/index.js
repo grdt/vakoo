@@ -125,10 +125,26 @@ var TemplateLibrary = function(params){
 			return null;
 		});
 
-		Handlebars.registerHelper('keyin', function(context, options) {
+		Handlebars.registerHelper('sizeMore', function(context, limit, options) {
+			console.log();
+		});
+
+		Handlebars.registerHelper('keyinRange', function(context, skip, limit, options) {
+
+			if(typeof limit == "object"){
+				options = limit;
+				limit = skip - 1;
+				skip = 0;
+			}
+
 			var ret = "";
+			var i = 0;
+
 			for(var key in context){
-				ret = ret + options.fn(context[key]);
+				if(i <= limit && i >= skip){
+					ret = ret + options.fn(context[key]);
+				}
+				i++;
 			}
 			return ret;
 		});
@@ -141,15 +157,20 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
-		Handlebars.registerHelper('keys', function(context, options) {
+		Handlebars.registerHelper('keyin', function(context, options) {
 			var ret = "";
 			for(var key in context){
-				var content = {};
-				content['key'] = key;
-				content['val'] = context[key];
-				ret = ret + options.fn(content);
+				ret = ret + options.fn(context[key]);
 			}
 			return ret;
+		});
+
+		Handlebars.registerHelper('isset', function(context, options) {
+			if(typeof context != "undefined"){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
 		});
 
 		Handlebars.registerHelper('keys', function(context, options) {
@@ -162,6 +183,7 @@ var TemplateLibrary = function(params){
 			}
 			return ret;
 		});
+
 
 		Handlebars.registerHelper('include', function(templateName, data) {
 			var html = that.template(templateName);
