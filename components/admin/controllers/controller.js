@@ -4,7 +4,8 @@
  */
 var AdminController = function(){
 
-    var controller = this;
+    var controller = this,
+		that = this;
 
     this.index = function(){
         this.user(function(user){
@@ -15,6 +16,10 @@ var AdminController = function(){
                     controller.tmpl().display('main');
                 }
             }else{
+				if(that.isAjax()){
+					that.json({success:false});
+					return;
+				}
                 if(!controller.executor().isEqual(controller.router().executor()) && !controller.executor().isEqual(controller.loginExecutor())){
                     controller.session('redirect_after_login',controller.query.request.url);
 					if(controller.executor().isEqual({option:'admin',controller:'controller',method:'index'})){

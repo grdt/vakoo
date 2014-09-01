@@ -77,8 +77,14 @@ $(document).ready(function(){
 	});
 
 	$(".add-cart-btn").click(function(){
-		var $button = $(this);
-		$.post('/shop/cart/add',{id:$button.data('id'),value:($button.data('value') || $button.data('value') == '0') ? $button.data('value') : '+1'})
+		var $button = $(this),
+			value = '+1';
+
+		if($button.data('value-selector')){
+			value = '+' + $($button.data('value-selector')).val()*1;
+		}
+
+		$.post('/shop/cart/add',{id:$button.data('id'),value:value})
 			.success(function(cart){
 
 				updateCart(cart);

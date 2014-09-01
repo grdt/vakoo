@@ -1,33 +1,17 @@
-<div class="row text-center">
-    <div class="col-md-12">
-        <ul class="pagination pagination-lg">
+<ul class="pagination">
 
-            <li class="{{#unless prev.enable}}disabled{{/unless}}">
-                {{#if prev.enable}}
-                    <a href="{{prev.url}}">&laquo;</a>
-                {{else}}
-                    <span>&laquo;</span>
-                {{/if}}
-            </li>
+    <li class="prev-page {{#unless prev.enable}}disabled{{/unless}}">
+        <a class="icon-arrow-left" href="{{prev.url}}"></a>
+    </li>
 
-            {{#each pagesArr}}
-                <li class="{{#if active}}active{{/if}}">
-                    {{#if active}}
-                        <span>{{page}}</span>
-                    {{else}}
-                        <a href="{{url}}">{{page}}</a>
-                    {{/if}}
-                </li>
-            {{/each}}
+    {{#each pagesArr}}
+        <li class="{{#if active}}active{{/if}}">
+            <a href="{{url}}">{{page}}</a>
+        </li>
+    {{/each}}
 
-            <li class="{{#unless next.enable}}disabled{{/unless}}">
-                {{#if next.enable}}
-                    <a href="{{next.url}}">&raquo;</a>
-                {{else}}
-                    <span>&raquo;</span>
-                {{/if}}
-            </li>
-        </ul>
-    </div>
-</div>
+    <li class="next-page {{#unless next.enable}}disabled{{/unless}}">
+        <a class="icon-arrow-right" href="{{next.url}}"></a>
+    </li>
+</ul>
 

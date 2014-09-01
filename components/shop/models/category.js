@@ -53,30 +53,38 @@ var ShopCategoryModel = function(query){
 		return this;
 	}
 
-	this.url = function(){
+	this.url = function(sublink){
 		if(this.vakoo.ENVIRONMENT == 'development'){
-			return '/shop/categories/index?id=' + this._id;
+			var link = '/shop/categories/index?id=' + this._id;
+			if(sublink){
+				link += '&' + sublink;
+			}
+
+			return link;
 		}
 		var sep = '/';
 		var url = sep + ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
+		if(sublink){
+			url += '?' + sublink;
+		}
 		return url;
 	}
 
-	this.beforeSave = function(done){
-		if(this.parent){
-			this.setParent(done);
-		}else{
-			done();
-		}
-	}
-
-	this.beforeInsert = function(done){
-		if(this.parent){
-			this.setParent(done);
-		}else{
-			done();
-		}
-	}
+//	this.beforeSave = function(done){
+//		if(this.parent){
+//			this.setParent(done);
+//		}else{
+//			done();
+//		}
+//	}
+//
+//	this.beforeInsert = function(done){
+//		if(this.parent){
+//			this.setParent(done);
+//		}else{
+//			done();
+//		}
+//	}
 
 	this.afterFind = function(done){
 		if(!this.meta.title){

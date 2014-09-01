@@ -161,12 +161,12 @@ var ShopCategoriesAdminController = function(){
 	}
 
 	this.edit = function(){
-
 		this.createReturnUrl();
 
 		categoryModel({_id:this.get('id','')}).findOne(function(category){
 			if(that.post()){
 				category.setAttributes(that.post());
+
 				if(!that.get('id')){
 					if(!that.post('_id')){
 						category.createId();

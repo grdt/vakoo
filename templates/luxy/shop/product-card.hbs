@@ -1,12 +1,22 @@
 <div class="col-lg-3 col-md-4 col-sm-6">
     <div class="tile">
+        {{!
+        <div class="badges">
+            <span class="best-seller"></span>
+            <span class="out"></span>
+            <span class="sale"></span>
+        </div>
+        }}
         <div class="price-label">{{number-format price}} <span class="fa fa-rouble"></span></div>
+        {{!
+        <div class="price-label old-price">920,00 $</div>
+        }}
         <a href="{{url}}" class="image-container">
             <span class="image-verticalator"></span>
             <img src="{{image.path}}" alt="{{image.alt}}" title="{{image.alt}}"/>
         </a>
         <div class="footer">
-            <a href="{{url}}">{{trimString title 30}}</a>
+            <a href="{{url}}">{{title}}</a>
             <span>{{shortDesc}}</span>
             <div class="tools">
 

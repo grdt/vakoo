@@ -3,7 +3,8 @@ var Loader = require('./core/loader'),
     express = require('express'),
     fs = require('fs'),
     path = require('path'),
-	multipart = require('connect-multiparty');
+	multipart = require('connect-multiparty'),
+	bodyParser = require('body-parser');
 
 require('./core/global');
 
@@ -92,11 +93,11 @@ var Vakoo = function(fastPort){
 		var mustHave = [
 			{
 				name:'json',
-				handler:express.json()
+				handler:bodyParser.json()
 			},
 			{
 				name:'url',
-				handler:express.urlencoded()
+				handler:bodyParser.urlencoded({extended: true})
 			},
 			{
 				name:'cookie',
@@ -106,14 +107,6 @@ var Vakoo = function(fastPort){
 				name:'multipart',
 				handler:multipart({uploadDir:this.APP_PATH + '/tmp'})
 			},
-//			{
-//				name:'session',
-//				handler:express.session({
-//					secret:'vakoo secret key',
-//					key:'vakoo.sid',
-//					cookie  : { maxAge  : new Date(Date.now() + this.config().session_live) }
-//				})
-//			},
 			{
 				name:'public',
 				handler:express.static(this.PUBLIC_PATH)

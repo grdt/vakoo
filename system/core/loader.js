@@ -229,9 +229,14 @@ var Loader = function(vakoo){
             
             var compare = this.getCompare(this._options[option].VIEW_PATH,'admin');
 
-            var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
+//            var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + 'components' + this.SEPARATOR + option);
+            var tmpl_compare = this.getCompare(this.TEMPLATE_PATH + this.SEPARATOR + option);
 
-            compare.defaults(tmpl_compare);
+			if(!tmpl_compare.isEmpty()){
+				for(var tmpl_key in tmpl_compare){
+					compare[tmpl_key] = tmpl_compare[tmpl_key];
+				}
+			}
 
             if(!compare.isEmpty()){
                 this._templates[option] = {};

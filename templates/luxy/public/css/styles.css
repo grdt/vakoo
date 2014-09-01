@@ -12948,6 +12948,13 @@ header .search-form .close-search:hover {
 	height:40px;
 }
 
+
+.catalog-grid .tile .footer>a{
+	display:block;
+	max-height: 24px;
+	overflow:hidden;
+}
+
 /* end product-card */
 
 .catalog-single {

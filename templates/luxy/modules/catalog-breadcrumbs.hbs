@@ -1,0 +1,9 @@
+<!--Breadcrumbs-->
+<ol class="breadcrumb">
+    {{#range crumbs 0 -1}}
+        <li data-content="<a href=Vivamus> sagittis lacus </a><br>vel augue laoreet <br>rutrum faucibus."><a href="{{url}}">{{title}}</a></li>
+    {{/range}}
+    {{#last crumbs}}
+        <li>{{title}}</li>
+    {{/last}}
+</ol><!--Breadcrumbs Close-->

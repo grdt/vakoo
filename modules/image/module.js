@@ -3,14 +3,17 @@
  */
 var ImageModule = function(){
 
-	this.render = function(factory,data,options,anonce,name){
-		if(typeof anonce != "undefined"){
-			options.anonce = anonce;
-		}
+	this.render = function(factory,input){
 
-		options.fileName = name || 'image';
+		var args = _.rest(input,2);
 
-		return {view:'modules.image',data:{image:options}};
+		var image = args[0];
+
+		image.fileName = args[2] || 'image';
+		image.anonce = args[1] || 'Изображение';
+
+
+		return {view:'modules.image',data:{image:image}};
 	}
 }
 

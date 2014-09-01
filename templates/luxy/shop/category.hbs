@@ -1,0 +1,59 @@
+{{factory 'module' 'catalog:breadcrumbs'}}
+
+<section class="catalog-grid">
+    <div class="container">
+        <h1 class="with-sorting">{{category.title}}</h1>
+
+        <div class="sorting">
+            <a href="{{apply category 'url' sort.name.url}}" class="{{#if sort.name.active}}sorted{{/if}}">По имени</a>
+            <a href="{{apply category 'url' sort.price.url}}" class="{{#if sort.price.active}}sorted{{/if}}">По цене</a>
+        </div>
+
+        <div class="category-desc">
+            {{{category.description}}}
+        </div>
+
+        {{#if categories}}
+            <div class="subnav">
+                {{#keyin categories}}
+                    <a href="{{url}}">{{title}}</a>
+                {{/keyin}}
+            </div>
+        {{/if}}
+
+
+
+        <div class="row">
+
+            {{#each products}}
+                {{include 'shop.product-card' this}}
+            {{/each}}
+
+        </div>
+
+        {{#if pagination}}
+            {{factory 'module' 'pagination' pagination}}
+        {{/if}}
+
+    </div>
+
+</section><!--Catalog Grid Close-->
+
+
+{{!
+<!--Brands Carousel Widget-->
+<section class="brand-carousel">
+    <div class="container">
+        <h2>Brands in our shop</h2>
+        <div class="inner">
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+            <a class="item" href="#"><img src="img/brands/1.png" alt="1"/></a>
+        </div>
+    </div>
+</section><!--Brands Carousel Close-->
+}}

@@ -22,7 +22,7 @@ var Pagination = function(){
 			PAGE = '&p=';
 		}
 
-		var pagesMax = 10;
+		var pagesMax = 20;
 
 		if(pages > pagesMax){
 

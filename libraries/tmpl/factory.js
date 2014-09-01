@@ -52,6 +52,7 @@ var TemplateFactory = function(){
 	}
 
 	this.content = function(){
+		$f._data.root = $f.rootUrl();
 		var content = $f.compile($f.template($f._view),$f._data);
 		return new $f.hbs.SafeString(content);
 	}

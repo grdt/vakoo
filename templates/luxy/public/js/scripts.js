@@ -368,10 +368,10 @@ $(document).ready(function(e) {
 	
 	/*Catalog Sorting Toggles
 	*******************************************/
-	$sortToggle.click(function(e){
-		$(this).toggleClass('sorted');
-		e.preventDefault();
-	});
+//	$sortToggle.click(function(e){
+//		$(this).toggleClass('sorted');
+//		e.preventDefault();
+//	});
 	
 	/*Disabling link on active page
 	*******************************************/
@@ -481,22 +481,31 @@ $(document).ready(function(e) {
 		$button.parent().find("input").val(newVal);
 		e.preventDefault();
 	});
+
+	$("#quantity").blur(function(){
+		var value = $(this).val() * 1;
+		if(value <= 0 || isNaN(value)){
+			value = 1;
+		}
+
+		$(this).val(value);
+	});
 	
 	/*Added To Cart Message + Action (For Demo Purpose)
 	**************************************************/
 	$addToCartBtn.click(function(){
 		$addedToCartMessage.removeClass('visible');
 		var $itemName = $(this).parent().parent().find('h1').text();
-		var $itemPrice = $(this).parent().parent().find('.price').text();
-		var $itemQnty = $(this).parent().find('#quantity').val();
-		var $cartTotalItems = parseInt($('.cart-btn a span').text()) +1;
-		$addedToCartMessage.find('p').text('"' + $itemName + '"' + '  ' + 'was successfully added to your cart.');
-		$('.cart-dropdown table').append(
-			'<tr class="item"><td><div class="delete"></div><a href="#">' + $itemName + 
-			'<td><input type="text" value="' + $itemQnty +
-			'"></td><td class="price">' + $itemPrice + '</td>' 
-		);
-		$('.cart-btn a span').text($cartTotalItems);
+//		var $itemPrice = $(this).parent().parent().find('.price').text();
+//		var $itemQnty = $(this).parent().find('#quantity').val();
+//		var $cartTotalItems = parseInt($('.cart-btn a span').text()) +1;
+		$addedToCartMessage.find('p').text('"' + $itemName + '"' + '  ' + 'добавлен в вашу корзину.');
+//		$('.cart-dropdown table').append(
+//			'<tr class="item"><td><div class="delete"></div><a href="#">' + $itemName +
+//			'<td><input type="text" value="' + $itemQnty +
+//			'"></td><td class="price">' + $itemPrice + '</td>'
+//		);
+//		$('.cart-btn a span').text($cartTotalItems);
 		$addedToCartMessage.addClass('visible');
 	});
 	
