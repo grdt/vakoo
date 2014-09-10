@@ -34,6 +34,20 @@ var Vakoo = function(fastPort){
 
 	this._server = require('http').createServer(this._express);
 
+	this._global = {};
+
+	this.global = function(variable, value){
+		if(typeof value == "undefined"){
+			return this._global[variable] || null;
+		}else{
+			if(typeof value === null){
+				delete this._global[variable];
+			}else{
+				this._global[variable] = value;
+			}
+		}
+	}
+
     this.start = function(){
 
         this.load = new Loader(this);

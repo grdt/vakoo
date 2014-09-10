@@ -18,11 +18,19 @@ var OrderModel = function(){
 
 	this._id = '';
 
-	this.name = '';
+	this.name = {};
 
-	this.contact = '';
+	this.fullname = ''
 
-	this.address = '';
+	this.address = {};
+
+	this.fulladdress = '';
+
+	this.email = '';
+
+	this.phone = '';
+
+	this.skype = '';
 
 	this.products = [];
 

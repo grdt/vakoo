@@ -3,6 +3,9 @@ var Product = require('./product.js');
  * @constructor
  */
 var Cart = function($c){
+
+	var that = this;
+
 	this.products = {};
 	
 	this.total = 0;
@@ -12,10 +15,6 @@ var Cart = function($c){
 	this.lastModified = new Date();
 
 	this._lastMod = {};
-	
-	this.save = function(){
-		
-	}
 	
 	this.set = function(product,modification){
 		if(product instanceof Product){
@@ -33,9 +32,9 @@ var Cart = function($c){
 
 			if(this.modificate(item,modification)){
 				return this.calculate();
-			}else return false;
+			}else return this;
 		}else{
-			return false;
+			return this;
 		}
 	}
 
@@ -68,6 +67,18 @@ var Cart = function($c){
 		return true;
 	}
 
+	this.delivery = function(word){
+		if(this.total > 4000){
+			return (word) ? 'Бесплатно' : 0;
+		}else{
+			return 300;
+		}
+	}
+
+	this.orderTotal = function(){
+		return that.total + that.delivery();
+	}
+
 	this.calculate = function(){
 		this.total = 0;
 		this.count = 0;
@@ -75,7 +86,7 @@ var Cart = function($c){
 			this.count += this.products[key].count;
 			this.total += this.products[key].total;
 		}
-		return true;
+		return this;
 	}
 	
 	this.data = function(){
@@ -99,7 +110,9 @@ var Cart = function($c){
 		return {
 			total:this.total,
 			count:this.count,
-			products:products
+			products:products,
+			delivery:this.delivery(true),
+			orderTotal:this.orderTotal()
 		};
 	}
 
@@ -113,7 +126,7 @@ var Cart = function($c){
 		this.products = {};
 		this.count = 0;
 		this.total = 0;
-		this.save();
+		return this;
 	}
 
 	var cart;

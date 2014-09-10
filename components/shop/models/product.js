@@ -21,7 +21,6 @@ var ShopProductModel = function () {
 		path:''
 	};
 
-
 	this._id = '';
 
 	this.title = '';
@@ -71,7 +70,7 @@ var ShopProductModel = function () {
 	this.isNew = false;
 
 	this.url = function () {
-		if(this.vakoo.ENVIRONMENT == 'development'){
+		if(this.vakoo.ENVIRONMENT == 'development' || !this.ancestors.length){
 			return '/shop/products/index?id=' + this._id;
 		}
 		return '/' + this.ancestors.join('/') + '/' + this.alias;
@@ -147,21 +146,30 @@ var ShopProductModel = function () {
 		}
 
 		if(this.size && this.size.sizes){
+
+			this.size.current = this.size.current.replace('БЮСТГАЛЬТЕРА','бюстгальтера');
+
 			var sku = [];
 			for(var key in this.size.sizes){
 				sku.push(this.size.sizes[key].sku);
 			}
 
+			that.size.sizes = {};
+
 			this.clone().where({sku:{$in:sku}}).find(function(products){
+
 				products.forEach(function(product){
 
-					product.ancestors = that.ancestors;
+//					product.ancestors = that.ancestors;
 
 					that.size.sizes[product.size.current] = {
 						id:product._id,
-						size:product.size.current
+						size:product.size.current.replace('БЮСТГАЛЬТЕРА','бюстгальтера'),
+						link:product.url()
 					};
-				})
+				});
+
+
 
 				done();
 			})
@@ -180,6 +188,33 @@ var ShopProductModel = function () {
 			that.save();
 			done(result);
 		});
+	}
+
+	this.paramClass = function(param){
+
+		const paramsClasses = {
+			'Страна':'geolocalizator',
+			'Время работы':'watch',
+			'Водонепроницаемость':'happy-drop',
+			'Материал':'share',
+			'Состав':'share',
+			'Длина, см':'pencil-ruler',
+			'Диаметр, см':'globe',
+			'Диаметр для пениса, см':'globe',
+			'Общий диаметр, см':'globe',
+			'Ширина':'expand',
+			'Объем, мл':'wine',
+			'Цвет':'image',
+			'Тип батареек':'battery-4',
+			'Бренд':'ticket',
+			'Лубрикант':'compass',
+			'Форма':'life-buoy',
+			'Текстура':'list',
+			'Аромат':'coffee',
+			'Толщина':'pen-pencil-ruler',
+		};
+
+		return paramsClasses[param] || 'setting-1';
 	}
 
 	this._price = 0;

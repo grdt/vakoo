@@ -28,9 +28,9 @@ var ShopCategoriesController = function(){
 
 				if(that.get('sort')){
 					order = that.get('sort').split(',');
-					if(order[1] == 'asc'){
+					if(order[1] == 'desc'){
 						sort[order[0]].active = true;
-						sort[order[0]].url = 'sort=' + order[0] + ',desc';
+						sort[order[0]].url = 'sort=' + order[0] + ',asc';
 					}
 				}
 

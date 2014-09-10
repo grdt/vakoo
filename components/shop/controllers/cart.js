@@ -4,13 +4,15 @@ var Controller = function(){
 	var that = this;
 
 	this.index = function(){
-		if(!this.isAjax()){
-			this.exception(403,'Access Denied');
-			return;
-		}
 
 		var cart = this.model('cart',this);
-		this.tmpl().render('modals.cart',cart);
+		if(this.isAjax()){
+			this.tmpl().render('modals.cart',cart);
+		}else{
+			this.tmpl().display('cart',cart);
+		}
+
+
 	}
 
 	this.add = function(){
@@ -33,10 +35,12 @@ var Controller = function(){
 	}
 
 	this.checkout = function(){
-		if(this.isAjax() && this.post()){
 
-			var order = this.model('order'),
-				cart = this.model('cart',this);
+		var order = this.model('order'),
+			cart = this.model('cart',this);
+
+
+		if(this.isAjax() && this.post()){
 
 			order.setAttributes(this.post());
 
@@ -59,18 +63,58 @@ var Controller = function(){
 				order.productCount = cart.count;
 				order.total = cart.total;
 				order.save(function(){
-					cart.clean();
+					cart.clean().save();
 					that.json({success:true});
 				});
 
 			}
 		}else{
-			this.where();
+
+			if(this.post()){
+
+				if(!cart.count){
+					that.redirect('/cart');
+					return;
+				}
+
+				for(var key in cart.products){
+					order.products.push(cart.products[key]);
+				}
+
+				order.productCount = cart.count;
+				order.total = cart.total;
+				order.setAttributes(this.post());
+				order.save(function(){
+					cart.clean().save();
+					that.tmpl().display('thanks',{
+						title:'Спасибо за покупку!',
+						contact: order.skype ? 'skype' : (order.email ? 'email' : 'phone'),
+						order:order
+					});
+				});
+			}else{
+				if(this.get('product')){
+					var product = this.model('product').where({_id:this.get('product')}).findOne(function(product){
+						cart.clean().set(product,that.get('count',1));
+						if(!cart.count){
+							that.redirect('/cart');
+							return;
+						}
+						that.tmpl().display('checkout',cart);
+					});
+				}else{
+					if(!cart.count){
+						that.redirect('/cart');
+						return;
+					}
+					that.tmpl().display('checkout',cart);
+				}
+			}
 		}
 	}
 
 	this.clean = function(){
-		this.model('cart',this).clean();
+		this.model('cart',this).clean().save();
 		this.json({success:true});
 	}
 

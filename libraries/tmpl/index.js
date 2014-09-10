@@ -289,6 +289,11 @@ var TemplateLibrary = function(params){
 
 
 		Handlebars.registerHelper('number-format',function(number, decimals, dec_point, thousands_sep){
+
+				if(typeof number == "function"){
+					number = number();
+				}
+			
 				var i, j, kw, kd, km;
 				if( isNaN(decimals = Math.abs(decimals)) ){
 					decimals = 0;

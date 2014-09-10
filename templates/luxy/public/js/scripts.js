@@ -118,7 +118,7 @@ $(document).ready(function(e) {
 	
 	//update items
 	
-	$(document).on('change','.cart-dropdown input',function(){
+	$(document).on('change','.cart-dropdown input, .shopping-cart .items-list .item input',function(){
 		var $target = $(this),
 			value = $target.val()*1,
 			id = $target.data('id');
@@ -140,12 +140,13 @@ $(document).ready(function(e) {
 	$(document).on('click', '.shopping-cart .delete i', function(){
 		var $target = $(this).parent().parent();
 		var $positions = $('.shopping-cart .item');
-		$target.hide(300, function(){
-			$.when($target.remove()).then( function(){
-				if($positions.length === 1) {
-					$('.shopping-cart .items-list').remove();
-					$('.shopping-cart .title').text('Shopping cart is empty!');
-				}
+
+
+		$.post('/shop/cart/add',{id:$(this).data('id'),value:'0'}).success(function(cart){
+			$target.hide(300,function(){
+				$.when($target.remove()).then(function(){
+					updateCart(cart);
+				});
 			});
 		});
 	});
@@ -466,7 +467,8 @@ $(document).ready(function(e) {
 	
 	//Add(+/-) Button Number Incrementers
 	$(".incr-btn").on("click", function(e) {
-		var $button = $(this);
+		var $button = $(this),
+			id = $button.data('id');
 		var oldValue = $button.parent().find("input").val();
 		if ($button.text() == "+") {
 			var newVal = parseFloat(oldValue) + 1;
@@ -478,7 +480,24 @@ $(document).ready(function(e) {
 				newVal = 1;
 			}
 		}
-		$button.parent().find("input").val(newVal);
+
+		if(id){
+			$.post('/shop/cart/add',{id:id,value:newVal}).success(function(cart){
+				updateCart(cart);
+			});
+		}else{
+			$button.parent().find('input').val(newVal);
+			var $a = $button.parent().parent().find('.one-click');
+
+			if($a){
+				$a.attr('href','/checkout?product=' + $a.data('id') + '&count=' + newVal);
+			}
+		}
+
+
+
+
+
 		e.preventDefault();
 	});
 
@@ -512,6 +531,11 @@ $(document).ready(function(e) {
 	/*Promo Labels Popovers
 	*******************************************/
 	$promoLabels.popover({
+		placement: 'top',
+		trigger: 'hover'
+	});
+
+	$(".devider").popover({
 		placement: 'top',
 		trigger: 'hover'
 	});
