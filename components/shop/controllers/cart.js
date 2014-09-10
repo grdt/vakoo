@@ -72,6 +72,43 @@ var Controller = function(){
 
 			if(this.post()){
 
+				if(this.post('oneclick')){
+
+					var productId;
+
+					for(var id in this.post('oneclick')){
+						productId = id;
+					}
+
+					this.model('product').where({_id:productId}).findOne(function(product){
+						cart.clean().set(product, that.post('oneclick')[product._id]);
+
+						if(!cart.count){
+							that.redirect('/cart');
+							return;
+						}
+
+						for(var key in cart.products){
+							order.products.push(cart.products[key]);
+						}
+
+						order.productCount = cart.count;
+						order.total = cart.total;
+						order.setAttributes(that.post());
+						order.save(function(){
+							cart.clean().save();
+							that.cookie('last_order',order._id);
+							that.tmpl().display('thanks',{
+								title:'Спасибо за покупку!',
+								contact: order.skype ? 'skype' : (order.email ? 'email' : 'phone'),
+								order:order
+							});
+						});
+					});
+
+					return;
+				}
+
 				if(!cart.count){
 					that.redirect('/cart');
 					return;
@@ -86,6 +123,7 @@ var Controller = function(){
 				order.setAttributes(this.post());
 				order.save(function(){
 					cart.clean().save();
+					that.cookie('last_order',order._id);
 					that.tmpl().display('thanks',{
 						title:'Спасибо за покупку!',
 						contact: order.skype ? 'skype' : (order.email ? 'email' : 'phone'),
@@ -93,6 +131,7 @@ var Controller = function(){
 					});
 				});
 			}else{
+
 				if(this.get('product')){
 					var product = this.model('product').where({_id:this.get('product')}).findOne(function(product){
 						cart.clean().set(product,that.get('count',1));
@@ -100,14 +139,32 @@ var Controller = function(){
 							that.redirect('/cart');
 							return;
 						}
-						that.tmpl().display('checkout',cart);
+
+						cart.oneclick = true;
+
+						if(that.cookie('last_order')){
+							order.where({_id:that.cookie('last_order')}).findOne(function(order){
+								cart.lastOrder = order;
+								that.tmpl().display('checkout',cart);
+							});
+						}else{
+							that.tmpl().display('checkout',cart);
+						}
+
 					});
 				}else{
 					if(!cart.count){
 						that.redirect('/cart');
 						return;
 					}
-					that.tmpl().display('checkout',cart);
+					if(that.cookie('last_order')){
+						order.where({_id:that.cookie('last_order')}).findOne(function(order){
+							cart.lastOrder = order;
+							that.tmpl().display('checkout',cart);
+						});
+					}else{
+						that.tmpl().display('checkout',cart);
+					}
 				}
 			}
 		}

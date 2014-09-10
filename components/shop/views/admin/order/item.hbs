@@ -52,15 +52,34 @@
         <table class="table">
             <tr>
                 <th>Имя</th>
-                <td>{{order.name}}</td>
+                <td>{{order.name.surname}} {{order.name.name}} {{order.name.patronymic}}<br/><small>({{order.fullname}})</small></td>
             </tr>
             <tr>
                 <th>Контакт</th>
-                <td>{{order.contact}}</td>
+                <td>
+                    {{#if order.email}}
+                        <span class="glyphicon glyphicon-envelope">:&nbsp;</span><a href="mailto:{{order.email}}">{{order.email}}</a>
+                    {{/if}}
+                    {{#if order.phone}}
+                        <span class="glyphicon glyphicon-earphone">:&nbsp;</span>{{order.phone}}
+                    {{/if}}
+                    {{#if order.skype}}
+                        <span class="glyphicon glyphicon-phone-alt"> (skype):&nbsp;</span><a href="skype:{{order.skype}}?chat">{{order.skype}}</a>
+                    {{/if}}
+                    <br/><small>({{order.contact}})</small>
+                </td>
             </tr>
             <tr>
                 <th>Адрес</th>
-                <td>{{order.address}}</td>
+                <td>
+                    Индекс: {{order.address.code}}<br/>
+                    Регион: {{order.address.region}}<br/>
+                    Город: {{order.address.city}}<br/>
+                    Улица: {{order.address.street}}<br/>
+                    Дом: {{order.address.house}}<br/>
+                    Корпус: {{order.address.block}}<br/>
+                    Квартира: {{order.address.flat}}<br/>
+                    <br/><small>{{order.fulladdress}}</small></td>
             </tr>
             <tr>
                 <th>Комментарий</th>

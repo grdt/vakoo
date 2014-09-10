@@ -28,6 +28,19 @@ var CoreController = function(query){
 		this.session('flash',flashes);
 	}
 
+	this.cookie = function(variable, value){
+
+		if(typeof value == "undefined"){
+			return this.query.request.cookies[variable] || null;
+		}
+
+		this.query.response.cookie(variable,value,{
+			maxAge:new Date(Date.now() + this.vakoo.config().session_live),
+			httpOnly:true,
+			domain:this.vakoo.config().session_live.domain
+		});
+	}
+
     this.index = function(){
         this.echo("method 'index' not found");
     }

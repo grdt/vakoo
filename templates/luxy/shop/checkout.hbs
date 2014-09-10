@@ -71,7 +71,11 @@
         <!--Checkout Form-->
         <div class="row">
             <form id="checkout-form" method="post" action="/checkout">
-
+                {{#if oneclick}}
+                    {{#each products}}
+                        <input type="hidden" name="oneclick[{{_id}}]" value="{{count}}"/>
+                    {{/each}}
+                {{/if}}
                 <!--Left Column-->
                 <div class="col-lg-8 col-md-8 col-sm-8">
                     <h3>Оформление заказа</h3>
@@ -79,7 +83,7 @@
                     <div class="row">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6">
                             <label for="contact">Контактные данные</label>
-                            <input type="text" class="form-control" id="contact" name="contact" placeholder="Email, телефон или скайп" required autocomplete="off"/>
+                            <input type="text" class="form-control" id="contact" name="contact" value="{{lastOrder.contact}}" placeholder="Email, телефон или скайп" required autocomplete="off"/>
                         </div>
 
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 has-feedback has-success hide contact-group">
@@ -103,25 +107,25 @@
 
                     <div class="form-group">
                         <label for="fullname">Ф.И.О.</label>
-                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Получатель посылки" required/>
+                        <input type="text" class="form-control" id="fullname" name="fullname" value="{{lastOrder.fullname}}" placeholder="Получатель посылки" required/>
                     </div>
 
                     <div class="row fullname-group hide">
                         <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                             <label for="name">Имя</label>
-                            <input type="text" class="form-control" id="name" name="name[name]" placeholder="" readonly/>
+                            <input type="text" class="form-control" id="name" name="name[name]" value="{{lastOrder.name.name}}" placeholder="" readonly/>
                             <i class="fa fa-times form-control-feedback hide"></i>
                             <i class="fa fa-check form-control-feedback hide"></i>
                         </div>
                         <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                             <label for="name">Фамилия</label>
-                            <input type="text" class="form-control" id="surname" name="name[surname]" placeholder="" readonly/>
+                            <input type="text" class="form-control" id="surname" name="name[surname]" value="{{lastOrder.name.surname}}" placeholder="" readonly/>
                             <i class="fa fa-times form-control-feedback hide"></i>
                             <i class="fa fa-check form-control-feedback hide"></i>
                         </div>
                         <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                             <label for="name">Отчество</label>
-                            <input type="text" class="form-control" id="patronymic" name="name[patronymic]" placeholder="" readonly/>
+                            <input type="text" class="form-control" id="patronymic" name="name[patronymic]" value="{{lastOrder.name.patronymic}}" placeholder="" readonly/>
                             <i class="fa fa-times form-control-feedback hide"></i>
                             <i class="fa fa-check form-control-feedback hide"></i>
                         </div>
@@ -130,21 +134,21 @@
 
                     <div class="form-group">
                         <label for="fulladdress">Полный адрес доставки</label>
-                        <input type="text" class="form-control" id="fulladdress" name="fulladdress" placeholder="Адрес получателя" required>
+                        <input type="text" class="form-control" id="fulladdress" value="{{lastOrder.fulladdress}}" name="fulladdress" placeholder="Адрес получателя" required>
                     </div>
 
                     <div class="fulladdress-group hide">
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                                 <label for="postal_code">Индекс</label>
-                                <input type="text" class="form-control" id="postal_code" name="address[code]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="postal_code" name="address[code]" value="{{lastOrder.address.code}}" placeholder="" readonly/>
                                 <i class="fa fa-times form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
 
                             <div class="form-group col-lg-8 col-md-8 col-sm-8 has-feedback">
                                 <label for="region">Регион</label>
-                                <input type="text" class="form-control" id="region" name="address[region]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="region" name="address[region]" value="{{lastOrder.address.region}}" placeholder="" readonly/>
                                 <i class="fa fa-times form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
@@ -153,14 +157,14 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-md-6 col-sm-6 has-feedback">
                                 <label for="city">Город (нас. пункт)</label>
-                                <input type="text" class="form-control" id="city" name="address[city]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="city" name="address[city]" value="{{lastOrder.address.city}}" placeholder="" readonly/>
                                 <i class="fa fa-times form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
 
                             <div class="form-group col-lg-6 col-md-6 col-sm-6 has-feedback">
                                 <label for="street">Улица</label>
-                                <input type="text" class="form-control" id="street" name="address[street]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="street" name="address[street]" value="{{lastOrder.address.street}}" placeholder="" readonly/>
                                 <i class="fa fa-times form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
@@ -169,21 +173,21 @@
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                                 <label for="house">Дом/строение</label>
-                                <input type="text" class="form-control" id="house" name="address[house]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="house" name="address[house]" value="{{lastOrder.address.house}}" placeholder="" readonly/>
                                 <i class="fa fa-times form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
 
                             <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                                 <label for="block">Корпус</label>
-                                <input type="text" class="form-control" id="block" name="address[block]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="block" name="address[block]" value="{{lastOrder.address.block}}" placeholder="" readonly/>
                                 <i class="fa fa-exclamation-triangle form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
 
                             <div class="form-group col-lg-4 col-md-4 col-sm-4 has-feedback">
                                 <label for="flat">Квартира</label>
-                                <input type="text" class="form-control" id="flat" name="address[flat]" placeholder="" readonly/>
+                                <input type="text" class="form-control" id="flat" name="address[flat]" value="{{lastOrder.address.flat}}" placeholder="" readonly/>
                                 <i class="fa fa-exclamation-triangle form-control-feedback hide"></i>
                                 <i class="fa fa-check form-control-feedback hide"></i>
                             </div>
@@ -248,7 +252,6 @@
 
 <script type="text/javascript" src="https://dadata.ru/static/js/jquery.suggestions-4.6.min.js"></script>
 <script type="text/javascript">
-
     var toggleError = function($el,hasError){
         if(typeof hasError == "undefined"){
             hasError = false;
@@ -314,7 +317,7 @@
             }
         },
         onSelectNothing:function(value){
-            console.log('nothing',value);
+            $("#fulladdress").addClass('error').focus();
         }
     }).keydown(function(){
                 if($(".fulladdress-group").is(':hidden')){
@@ -459,6 +462,19 @@
                     });
                 }
             });
+
+
+    if($("#contact").val().length && $("#fullname").val().length && $("#fulladdress").val().length){
+        $("#contact").keyup();
+        $("#fullname").parent().hide();
+        $(".fullname-group").hide().removeClass('hide').show(300);
+        $("#fulladdress").parent().hide();
+        $(".fulladdress-group").hide().removeClass('hide').show(300);
+        $("#comment").focus();
+    }else{
+        $("#contact").focus();
+    }
+
 </script>
 
 {{!

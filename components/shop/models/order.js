@@ -26,6 +26,8 @@ var OrderModel = function(){
 
 	this.fulladdress = '';
 
+	this.contact = '';
+
 	this.email = '';
 
 	this.phone = '';
