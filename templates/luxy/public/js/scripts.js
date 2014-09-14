@@ -47,7 +47,7 @@ $(document).ready(function(e) {
 	var $promoLabels = $('.promo-labels div');
 	var $panelToggle = $('.panel-toggle');
 	var $accordionToggle = $('.accordion .panel-heading a');
-	
+
 	/*Search Form Toggle
 	*******************************************/
 	$searchBtn.click(function(){
@@ -167,12 +167,33 @@ $(document).ready(function(e) {
 	
 	/*Catalog 3-rd Level Submenu positioning
 	*******************************************/
+
+	$(document).on('mouseover','.menu .catalog li .submenu li',function(){
+		$(this).closest('.submenu').toggleClass('wide',$(this).hasClass('has-submenu'));
+	});
+
+	$(document).on('mouseout','.menu .catalog li .submenu li',function(){
+		$(this).closest('.submenu').toggleClass('wide',false);
+	});
+
 	$('.catalog .submenu .has-submenu').hover(function(){
-		var $offseTop = $(this).position().top;
+		var $offseTop = $(this).position().top,
+			$submenu = $(this).closest('.submenu'),
+			$subsubmenu = $(this).find('.sub-submenu');
+
 		$('.catalog .submenu .offer .col-1 p').hide();
-		$(this).find('.sub-submenu').css({top: -$offseTop +12 + "px"}).show();
+
+		$subsubmenu.css({height:'auto'});
+
+		$submenu.toggleClass('half-wide',($submenu.height()/2 >= $subsubmenu.height()));
+
+		$subsubmenu.css({top: -$offseTop +11 + "px",height:$submenu.height()}).show();
+
 	},function(){
-		$(this).find('.sub-submenu').hide();
+		var $subsubmenu = $(this).find('.sub-submenu');
+
+		$subsubmenu.hide();
+
 		$('.catalog .submenu .offer .col-1 p').show();
 	});
 	

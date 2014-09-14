@@ -1,8 +1,21 @@
 var updateCart = function(cart){
+	if(!cart.count){
+		return;
+	}
+
+	$(".cart-btn").removeClass('empty');
 	$(".cart-btn .btn span").html(cart.count);
 	$(".cart-dropdown .total .t").html(numberFormat(cart.total));
 	var $table = $(".cart-dropdown .body table").empty(),
 		$shoppingCart = $(".shopping-cart");
+
+	$table.append(
+		'<tr>' +
+			'<th>Наименование</th>' +
+			'<th>Кол-во</th>' +
+			'<th>Стоимость</th>' +
+		'</tr>'
+	);
 
 	$(cart.products).each(function(i,product){
 		var $tr = $('<tr></tr>',{
@@ -130,6 +143,16 @@ $(document).ready(function(){
 
 				updateCart(cart);
 
+				$button.popover({
+					content:'Товар добавлен в корзину',
+					placement: 'top',
+					container: 'body'
+				}).popover('show');
+
+				setTimeout(function(){
+					$button.popover('destroy');
+				},1000);
+
 			});
 		return false;
 	});
@@ -138,5 +161,6 @@ $(document).ready(function(){
 		setTimeout(function(){
 			console.log($('.promo-labels').html());
 		},300);
-	})
+	});
+
 });

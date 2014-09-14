@@ -10531,6 +10531,10 @@ header .search-form .close-search:hover {
 	display: block
 }
 
+.toolbar .cart-btn.empty:hover .cart-dropdown {
+	display: none;
+}
+
 @media only screen and (max-width: 991px) {
 	.toolbar .cart-btn:hover .cart-dropdown {
 		display: none
@@ -10570,6 +10574,12 @@ header .search-form .close-search:hover {
 	-webkit-border-radius: 5px 5px 0 0;
 	-moz-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0
+}
+
+.toolbar .cart-btn.empty:hover > .btn {
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 @media only screen and (max-width: 991px) {
@@ -11988,11 +11998,23 @@ header .search-form .close-search:hover {
 	background: #2ba8db
 }
 
+
+/*.menu .main .submenu li:hover, .menu .catalog .submenu li:hover .submenu .offer{*/
+	/*display:none;*/
+/*}*/
+
+
+/*.menu .main .submenu li:hover, .menu .catalog .submenu li.has-submenu:hover .submenu .offer{*/
+	/*display:block;*/
+/*}*/
+
+
 .menu .main .submenu li a, .menu .catalog .submenu li a {
 	display: block;
 	color: #fff;
 	padding: 8px 0 12px 6px
 }
+
 
 .menu .catalog {
 	border-bottom: none;
@@ -12055,7 +12077,6 @@ header .search-form .close-search:hover {
 .menu .catalog li .submenu {
 	position: absolute;
 	top: 56px;
-	width: 740px;
 	z-index: 10;
 	background: #2f343b;
 	padding: 12px 6px 12px 6px;
@@ -12063,11 +12084,20 @@ header .search-form .close-search:hover {
 	border-top: none;
 	-webkit-border-radius: 0 0 5px 5px;
 	-moz-border-radius: 0 0 5px 5px;
-	border-radius: 0 0 5px 5px
+	border-radius: 0 0 5px 5px;
+	overflow:hidden;
+}
+
+.menu .catalog li .submenu.wide {
+	width:840px;
+}
+
+.menu .catalog li .submenu.wide.half-wide {
+	width:570px;
 }
 
 .menu .catalog li .submenu li {
-	width: 212px;
+	width: 255px;
 	border-top: 1px solid #a3c756
 }
 
@@ -12097,23 +12127,34 @@ header .search-form .close-search:hover {
 	padding-left: 20px;
 	z-index: 5;
 	top: 0;
-	right: -270px
+	right: -570px;
+	width:570px;
+	/*background:#fff;*/
+}
+
+.menu .catalog li .submenu.wide.half-wide .sub-submenu {
+	right:-300px;
+	width:300px;
 }
 
 .menu .catalog li .submenu .sub-submenu li {
-	width: 256px;
-	border-top: 1px solid #2ba8db;
+	width: 267px;
+	overflow:hidden;
+	height:46px;
+	line-height:30px;
+	float:left;
+	margin:0 5px 0 0px;
+	display:inline-block;
+	border-bottom: 1px solid #2ba8db!important;
+	border-top:none;
 	-webkit-transition: all .2s ease;
 	-moz-transition: all .2s ease;
-	transition: all .2s ease
-}
-
-.menu .catalog li .submenu .sub-submenu li:first-child {
-	border-top: none
+	transition: all .2s ease;
 }
 
 .menu .catalog li .submenu .sub-submenu li a {
-	color: #2f343b;
+	/*color: #2f343b;*/
+	color: #fff;
 	-webkit-transition: all .2s ease;
 	-moz-transition: all .2s ease;
 	transition: all .2s ease
