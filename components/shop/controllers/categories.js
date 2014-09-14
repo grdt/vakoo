@@ -48,6 +48,10 @@ var ShopCategoriesController = function(){
 					where = {$or:[where,{parent:category.parent}]};
 				}
 
+				if(category._id == 'dlya-nee' || category._id == 'dlya-nego'){
+					where = {$or:[where,{_id:'analnaya-stimulyaciya'}]};
+				}
+
 				$c.model('category').where(where).find(function(subcategories){
 
 					if(subcategories && subcategories.length){
@@ -55,6 +59,10 @@ var ShopCategoriesController = function(){
 						subcategories.forEach(function(subcat){
 							if(subcat._id == category._id){
 								subcat.active = true;
+							}
+
+							if((category._id == 'dlya-nee' || category._id == 'dlya-nego') && subcat._id == 'analnaya-stimulyaciya'){
+								subsubs.push(subcat);
 							}
 
 							if(subcat.parent != category._id){
@@ -65,7 +73,6 @@ var ShopCategoriesController = function(){
 						});
 					}
 
-//					data.categories = (subsubs.length) ? subsubs : subs;
 					data.categories = subsubs;
 
 					$c.model('product').where({ancestors:category._id}).count(function(count){
