@@ -129,6 +129,18 @@ var TemplateLibrary = function(params){
 			console.log();
 		});
 
+		Handlebars.registerHelper('second', function(context, options) {
+
+			var i = 0;
+
+			for(var key in context){
+				if(i == 1){
+					return options.fn(context[key]);
+				}
+				i++;
+			}
+		});
+
 		Handlebars.registerHelper('keyinRange', function(context, skip, limit, options) {
 
 			if(typeof limit == "object"){

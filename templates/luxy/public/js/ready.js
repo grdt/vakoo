@@ -163,4 +163,11 @@ $(document).ready(function(){
 		},300);
 	});
 
+	if($(".category-desc").size()){
+		$("h1").css({cursor:'help'}).hover(function(){
+			$(".category-desc").hide().removeClass('hide').show('fast');
+		},function(){
+			$(".category-desc").hide('fast');
+		});
+	}
 });

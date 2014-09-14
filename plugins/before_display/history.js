@@ -12,10 +12,10 @@ var Plugin = function(){
 			$l.from.session('history',{});
 		}else{
 			var history = $l.from.session('history');
-			var title = $l.factory().title().replace($l.factory().TITLE_SEPARATOR,'').replace($l.factory().config().title,'');
+			var title = $l.factory().title(true);
 			var url = Url.parse($l.from.query.request.url).pathname;
-			if(title == ''){
-				title = $l.factory().config().title;
+			if(this.vakoo.ENVIRONMENT == 'development'){
+				url = $l.from.query.request.url;
 			}
 			$l._data.history = history;
 
@@ -38,6 +38,9 @@ var Plugin = function(){
 			});
 
 			$l.from.session('history',history);
+//			if(_.size(history) > 1){
+//				delete history[_.first(_.keys(history))];
+//			}
 			$l._data.history = history;
 		}
 

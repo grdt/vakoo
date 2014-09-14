@@ -13,9 +13,11 @@ var Breadcrumbs = function(){
 			}
 		];
 
+		var item;
+
 		if(factory.from.query.executor.option == 'shop'){
 
-			var item;
+
 
 			if(factory.from.query.executor.controller == 'categories'){
 				item = 'category';
@@ -25,7 +27,7 @@ var Breadcrumbs = function(){
 				item = 'product';
 			}
 
-			if(factory.from.query.executor.method == 'index'){
+			if(item && factory.from.query.executor.method == 'index'){
 				var ancestors = factory._data[item].ancestors;
 				var categories = data.categories;
 
@@ -48,7 +50,11 @@ var Breadcrumbs = function(){
 			}
 		}
 
-		return {view:'modules.catalog-breadcrumbs',data:{crumbs:crumbs,backs:data.history}};
+		if(!item){
+			crumbs.push({url:'.',title:factory.title(true)});
+		}
+
+		return {view:'modules.catalog-breadcrumbs',data:{crumbs:crumbs,history:factory._data.history}};
 	}
 }
 

@@ -33,11 +33,15 @@ var TemplateFactory = function(){
 		return that.from.get(param);
 	}
 	
-	this.title = function(){
+	this.title = function(titleOnly){
+
+		if(typeof titleOnly == "undefined"){
+			titleOnly = false;
+		}
 
 		var postfix = '';
 
-		if($f.from.query.city){
+		if($f.from.query.city && !titleOnly){
 			postfix = ' в ' + $f.from.query.city.titles.in;
 		}
 
@@ -47,6 +51,9 @@ var TemplateFactory = function(){
 		if(typeof $f._data.title == "undefined"){
 			return $f.config().title + postfix;
 		}else{
+			if(titleOnly){
+				return $f._data.title;
+			}
 			return $f._data.title + $f.TITLE_SEPARATOR + $f.config().title + postfix;
 		}
 	}

@@ -9,6 +9,7 @@ var Controller = function(){
 		if(this.isAjax()){
 			this.tmpl().render('modals.cart',cart);
 		}else{
+			cart.title = 'Корзина';
 			this.tmpl().display('cart',cart);
 		}
 
@@ -132,6 +133,8 @@ var Controller = function(){
 				});
 			}else{
 
+				cart.title = 'Оформление заказа';
+
 				if(this.get('product')){
 					var product = this.model('product').where({_id:this.get('product')}).findOne(function(product){
 						cart.clean().set(product,that.get('count',1));
@@ -140,6 +143,7 @@ var Controller = function(){
 							return;
 						}
 
+						cart.title = 'Покупка "'+product.title+'"';
 						cart.oneclick = true;
 
 						if(that.cookie('last_order')){

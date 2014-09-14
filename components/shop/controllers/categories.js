@@ -17,9 +17,9 @@ var ShopCategoriesController = function(){
 						active:false,
 						url:'sort=price,desc'
 					},
-					name:{
+					title:{
 						active:false,
-						url:'sort=name,desc'
+						url:'sort=title,desc'
 					}
 				};
 

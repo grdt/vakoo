@@ -16126,3 +16126,68 @@ header .search-form .close-search:hover {
 
 
 /* end of dadata.ru suggestions */
+
+
+
+
+.subnav .more{
+	border-bottom: 1px dashed;
+}
+
+.subnav .more:hover{
+	text-decoration:none;
+}
+
+
+.history:hover .history-dropdown{
+	display:block;
+}
+
+.history{
+	padding-left:10px;
+}
+
+.history-dropdown{
+	display:none;
+	position:absolute;
+	list-style: none;
+	margin-left:-305px;
+	width:300px;
+	margin-top:-40px;
+	background: #2f343b;
+	z-index:10;
+	padding:10px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.history-dropdown li{
+	margin-bottom:0px;
+	padding:8px 8px 8px 0;
+	border-bottom: 1px solid #a3c756;
+	-webkit-transition: background .2s ease;
+	-moz-transition: background .2s ease;
+	transition: background .2s ease
+}
+
+.history-dropdown li:hover{
+	background: #a3c756;
+}
+
+.history-dropdown li a{
+	width:100%;
+	height:100%;
+	display:block;
+	color:#fff;
+	text-decoration:none;
+}
+
+
+.history-dropdown li a:hover{
+	text-decoration:none;
+}
+
+.breadcrumb .history::before{
+	content:none;
+}

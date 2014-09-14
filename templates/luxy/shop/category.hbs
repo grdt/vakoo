@@ -5,19 +5,26 @@
         <h1 class="with-sorting">{{category.title}}</h1>
 
         <div class="sorting">
-            <a href="{{apply category 'url' sort.name.url}}" class="{{#if sort.name.active}}sorted{{/if}}">По имени</a>
+            <a href="{{apply category 'url' sort.title.url}}" class="{{#if sort.title.active}}sorted{{/if}}">По имени</a>
             <a href="{{apply category 'url' sort.price.url}}" class="{{#if sort.price.active}}sorted{{/if}}">По цене</a>
         </div>
-
-        <div class="category-desc">
-            {{{category.description}}}
-        </div>
+        {{#if category.description}}
+            <div class="category-desc hide">
+                {{{partial category.description factory.from.query}}}
+            </div>
+        {{/if}}
 
         {{#if categories}}
             <div class="subnav">
-                {{#keyin categories}}
+                {{#keyinRange categories 4}}
                     <a href="{{url}}">{{title}}</a>
-                {{/keyin}}
+                {{/keyinRange}}
+
+                <a href="javascript:void(0)" class="more" onclick="$('.subnav .hide').removeClass('hide');$(this).hide();">Еще</a>
+
+                {{#keyinRange categories 4 100}}
+                    <a href="{{url}}" class="hide">{{title}}</a>
+                {{/keyinRange}}
             </div>
         {{/if}}
 
