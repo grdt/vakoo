@@ -52,6 +52,7 @@ $(document).ready(function(e) {
 	*******************************************/
 	$searchBtn.click(function(){
 		$searchForm.removeClass('closed').addClass('open');
+		$searchForm.find('input[type=text]').focus();
 	});
 	$closeSearch.click(function(){
 		$searchForm.removeClass('open').addClass('closed');

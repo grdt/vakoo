@@ -170,4 +170,21 @@ $(document).ready(function(){
 			$(".category-desc").hide('fast');
 		});
 	}
+
+	var ysInterval = setInterval(function(){
+		if(!$(".ya-site-form__input-text").size()){
+			return;
+		}
+		clearInterval(ysInterval);
+
+		$(".ya-site-form__input").css({marginTop:50});
+
+		var $btn = $('<button type="submit" style="color:#fff;font-size: 27px!important;"></button>').append('<i class="icon-magnifier" style="font-size: 27px!important;"></i>');
+
+		$btn.click(function(){
+			$(".ya-site-form__submit").click();
+			return false;
+		});
+		$(".ya-site-form__search-input-layout-r").css({marginTop:50,position:'absolute'}).append($btn);
+	},300);
 });

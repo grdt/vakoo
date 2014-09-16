@@ -40,6 +40,12 @@ var Controller = function(){
 		}
 	}
 
+	this.search = function(){
+		this.tmpl().display('search',{
+			title: 'Поиск "' + this.get('text') + '"'
+		});
+	}
+
 	this.checkSkype = function(){
 
 //		var loginCache = this.vakoo.global('loginCache') || {};
