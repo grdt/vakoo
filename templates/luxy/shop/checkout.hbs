@@ -299,6 +299,12 @@
                         prefix = (prefixes[naturalField]) ? (data[prefixes[naturalField]] + '. ') : '',
                         postfix = (postfixes[naturalField]) ? (' ' + data[postfixes[naturalField]]) : '';
 
+                if(!value && field == 'city' && data.region){
+                    value =  data.region;
+                    prefix = data.region_type + '. ';
+                    postfix = '';
+                }
+
                 if(value){
                     $('#' + field).val(prefix + value + postfix);
                     toggleError($('#' + field),false);
