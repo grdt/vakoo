@@ -113,3 +113,52 @@ var Storage = function (namespace) {
 	this.enabled = this.isLocalStorageAvailable();
 
 };
+
+var Page = new (function(){
+
+
+	this.getHost = function(domain){
+		if(typeof domain != "undefined" && domain == true){
+			var host = window.location.hostname,
+				splitted = host.split('.');
+
+			var result = splitted.splice(splitted.length - 2,splitted.length).join('.');
+			return result;
+		}
+		return window.location.hostname;
+	}
+
+	this.getSubdomain = function(){
+		var host = window.location.hostname,
+			splitted = host.split('.');
+
+		if(splitted.length == 2){
+			return false;
+		}else if(splitted.length == 3){
+			return splitted[0];
+		}else{
+			return splitted.splice(0,splitted.length - 2).join('.');
+		}
+	}
+
+	$.cookie.defaults = {
+		domain: '.' + this.getHost(true),
+		expires:365,
+		path:'/'
+	};
+
+	this.cookie = function(variable, value){
+		if(typeof value == "undefined"){
+			return $.cookie(variable);
+		}
+
+		if(value === null){
+			$.removeCookie(variable);
+			return this;
+		}
+
+		$.cookie(variable, value);
+		return this;
+	}
+
+})();

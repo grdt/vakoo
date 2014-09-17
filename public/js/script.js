@@ -385,72 +385,9 @@ cart.update();
 
 var storage = new Storage('vakoo');
 
-// возвращает cookie с именем name, если есть, если нет, то undefined
-function getCookie(name) {
-	console.log('get cookie',document.cookie);
-	var matches = document.cookie.match(new RegExp(
-		"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-	));
-	return matches ? decodeURIComponent(matches[1]) : undefined;
-}
 
-function setCookie(name, value, options) {
-	options = options || {domain:getHost(true),expires:25920000,path:'/'};
-	
-	console.log('options',options);
 
-	var expires = options.expires;
 
-	if (typeof expires == "number" && expires) {
-		var d = new Date();
-		d.setTime(d.getTime() + expires*1000);
-		expires = options.expires = d;
-	}
-	if (expires && expires.toUTCString) {
-		options.expires = expires.toUTCString();
-	}
-
-	value = encodeURIComponent(value);
-
-	var updatedCookie = name + "=" + value;
-
-	for(var propName in options) {
-		updatedCookie += "; " + propName;
-		var propValue = options[propName];
-		if (propValue !== true) {
-			updatedCookie += "=" + propValue;
-		}
-	}
-
-	console.log('new cookie',updatedCookie);
-
-	document.cookie = updatedCookie;
-}
-
-var getHost = function(domain){
-	if(typeof domain != "undefined" && domain == true){
-		var host = window.location.hostname,
-			splitted = host.split('.');
-
-		var result = splitted.splice(splitted.length - 2,splitted.length).join('.');
-		console.log('gethost true',result);
-		return result;
-	}
-	return window.location.hostname;
-}
-
-var getSubdomain = function(){
-	var host = window.location.hostname,
-		splitted = host.split('.');
-
-	if(splitted.length == 2){
-		return false;
-	}else if(splitted.length == 3){
-		return splitted[0];
-	}else{
-		return splitted.splice(0,splitted.length - 2).join('.');
-	}
-}
 
 var setCity = function(alias){
 	$("#modal-city").modal('hide');
@@ -545,32 +482,5 @@ var chooseCity = function(data){
 	});
 
 }
-
-$(document).ready(function(){
-	if(!getCookie('city')){
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(pos){
-				var lat = pos.coords.latitude;
-				var lng = pos.coords.longitude;
-
-				$.get('/?option=shop&task=cities.getPosition',{lat:lat,lng:lng},function(response){
-					chooseCity(response);
-				});
-
-			}, function(err){
-				$.get('/?option=shop&task=cities.getPosition',function(response){
-					chooseCity(response);
-				});
-			});
-		} else {
-			$.get('/?option=shop&task=cities.getPosition',function(response){
-				chooseCity(response);
-			});
-		}
-	}else{
-		setCity(getCookie('city'));
-	}
-
-})
 
 

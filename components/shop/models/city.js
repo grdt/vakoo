@@ -1,3 +1,8 @@
+/**
+ * @returns {CityModel}
+ * @extends CoreModel
+ * @constructor
+ */
 var City = function(){
 
 	this.COLLECTION_NAME = 'cities';

@@ -16278,3 +16278,16 @@ header .search-form .close-search:hover {
 }
 
 /*endof yasearch*/
+
+
+
+#cityModal .login-form a{
+	font-weight:normal;
+	text-decoration:none;
+	border-bottom: 1px dashed;
+}
+
+#cityModal .login-form a:hover{
+	text-decoration:none;
+	border-bottom: none;
+}

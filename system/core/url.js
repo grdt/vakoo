@@ -76,6 +76,19 @@ var Query = function(request,response){
 			objQueryFrom = querystring.parse(queryFrom);
 		return pathFrom + '?' + querystring.stringify(objQueryFrom.defaults(needle));
 	}
+
+	this.cookie = function(variable, value){
+
+		if(typeof value == "undefined"){
+			return this.request.cookies[variable] || null;
+		}
+
+		this.response.cookie(variable,value,{
+			maxAge:new Date(Date.now() + this.vakoo.config().session_live),
+//			httpOnly:true,
+			domain:this.vakoo.config().domain
+		});
+	}
 }
 
 

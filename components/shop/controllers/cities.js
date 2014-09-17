@@ -32,17 +32,67 @@ var Controller = function(){
 	
 	this.choose = function(){
 		this.model('city').where({alias:{$in:this.get('aliases')},status:'active'}).find(function(finded){
-			var data = {cities:[]};
 
-			finded.forEach(function(city){
-				data.cities.push(city.short());
-			})
+			var data = {cities:{}};
 
-			if(data.cities.length == 1){
-				data.city = data.cities[0];
+			if(finded.length){
+				finded.forEach(function(city){
+					data.cities[city.alias] = city.short();
+				})
 			}
 
-			that.tmpl().render('modals.city',data);
+			that.model('city').byIP(that.query.request.headers['x-forwarded-for'] || that.query.request.connection.remoteAddress).findOne(function(findedByIp){
+				if(that.get('lat') && that.get('lng')){
+					that.model('city').byCoords({lat:that.get('lat'),lng:that.get('lng')}).limit(3).find(function(findedByCoords){
+
+						if(findedByCoords.length){
+							findedByCoords.forEach(function(city){
+								data.cities[city.alias] = city.short();
+							})
+						}
+
+						if(findedByIp.length){
+							findedByIp.forEach(function(city){
+								data.cities[city.alias] = city.short();
+							})
+						}
+
+						var citiesLength = 0;
+						for(var key in data.cities){
+							if(citiesLength === 0){
+								data.city = data.cities[key];
+							}
+							citiesLength++;
+						}
+						if(citiesLength == 1){
+							data.cities = null;
+						}else{
+							delete data.cities[data.city.alias];
+						}
+						that.json(data);
+					});
+				}else{
+					if(findedByIp.length){
+						findedByIp.forEach(function(city){
+							data.cities[city.alias] = city.short();
+						});
+					}
+					var citiesLength = 0;
+					for(var key in data.cities){
+						if(citiesLength === 0){
+							data.city = data.cities[key];
+						}
+						citiesLength++;
+					}
+					if(citiesLength == 1){
+						data.cities = null;
+					}else{
+						delete data.cities[data.city.alias];
+					}
+					that.json(data);
+				}
+			});
+
 		});
 	}
 
