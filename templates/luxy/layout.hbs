@@ -9,26 +9,18 @@
     <meta name="keywords" content="{{factory.meta.keywords}}"/>
 
 
-    <script src="/js/libs/jquery-1.11.1.min.js"></script>
-    <!--Mobile Specific Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <!--Favicon-->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <!--Master Slider Styles-->
-    <link href="/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
-    <!--Styles-->
-    <link href="/css/styles.css" rel="stylesheet" media="screen">
-    <!--Modernizr-->
-    <script src="/js/libs/modernizr.custom.js"></script>
-    <!--Adding Media Queries Support for IE8-->
+
+
     <!--[if lt IE 9]>
     <script src="/js/plugins/respond.js"></script>
     <![endif]-->
 
-
     {{#equal factory.vakoo.ENVIRONMENT 'production'}}
-    <!-- Yandex.Metrika counter -->
+    <script src="/js/app.js" onload="require('initialize');"></script>
+    <link href="/css/all.css" rel="stylesheet" media="screen">
     <script type="text/javascript">
         (function (d, w, c) {
             (w[c] = w[c] || []).push(function() {
@@ -54,7 +46,11 @@
         })(document, window, "yandex_metrika_callbacks");
     </script>
     <noscript><div><img src="//mc.yandex.ru/watch/26169195" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
+    {{else}}
+        <script src="/js/libs/jquery-1.11.1.min.js"></script>
+        <script src="/js/libs/modernizr.custom.js"></script>
+        <link href="/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
+        <link href="/css/styles.css" rel="stylesheet" media="screen">
     {{/equal}}
 </head>
 
@@ -131,7 +127,7 @@
 
 
 <!--Javascript (jQuery) Libraries and Plugins-->
-
+{{^equal factory.vakoo.ENVIRONMENT 'production'}}
 <script src="/js/libs/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="/js/libs/jquery.easing.min.js"></script>
 <script src="/js/plugins/bootstrap.min.js"></script>
@@ -147,9 +143,10 @@
 <script src="/js/plugins/masterslider.min.js"></script>
 <script src="/js/jquery.cookie.js"></script>
 <script src="/js/scripts.js"></script>
-<script src="/js/moment.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/ready.js"></script>
+{{else}}
 
+{{/equal}}
 </body><!--Body Close-->
 </html>

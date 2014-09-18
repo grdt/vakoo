@@ -17,5 +17,10 @@
 		"option":"file",
 		"controller":"controller",
 		"method":"yaVerify"
+	},
+	"js/public/<path>/<file>":{
+		"option":"file",
+		"controller":"controller",
+		"method":"fileRedirect"
 	}
 }

@@ -19,7 +19,11 @@
     "mailcomposer": "~0.2.12",
     "xml2js": "^0.4.4",
     "body-parser": "~1.6.7",
-    "iconv-lite": "~0.4.4"
+    "iconv-lite": "~0.4.4",
+    "javascript-brunch": "~1.7.1",
+    "uglify-js-brunch": "~1.7.7",
+    "css-brunch": "~1.7.0",
+    "clean-css-brunch": "~1.7.1"
   },
   "scripts": {
     "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",

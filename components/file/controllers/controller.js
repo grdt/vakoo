@@ -6,6 +6,10 @@ var FileIndexController = function(){
 
 	var that = this;
 
+	this.fileRedirect = function(){
+		this.redirect('/' + this.get('path') + '/' + this.get('file'));
+	}
+
 	this.robots = function(){
 
 

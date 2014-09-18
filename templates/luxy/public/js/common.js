@@ -6,6 +6,7 @@ $(document).ready(function(){
 var dateFormating = function(){
 	var moment = moment || false;
 	if(!moment)return;
+	moment.lang('ru');
 	const JUST_NOW_TIMEOUT = 5 * 60 * 1000;
 	$(".date").each(function(){
 		var date = new Date($(this).html());
