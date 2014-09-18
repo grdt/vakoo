@@ -51,10 +51,8 @@ var Controller = function(){
 							})
 						}
 
-						if(findedByIp.length){
-							findedByIp.forEach(function(city){
-								data.cities[city.alias] = city.short();
-							})
+						if(findedByIp._id){
+							data.cities[findedByIp.alias] = findedByIp.short();
 						}
 
 						var citiesLength = 0;
@@ -72,10 +70,8 @@ var Controller = function(){
 						that.json(data);
 					});
 				}else{
-					if(findedByIp.length){
-						findedByIp.forEach(function(city){
-							data.cities[city.alias] = city.short();
-						});
+					if(findedByIp._id){
+						data.cities[findedByIp.alias] = findedByIp.short();
 					}
 					var citiesLength = 0;
 					for(var key in data.cities){
