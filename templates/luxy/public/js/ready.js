@@ -310,6 +310,8 @@ var chooseCity = function(data){
 
 				cb(link);
 
+			},function(){
+				cb(link);
 			});
 		}else{
 			cb(link);
