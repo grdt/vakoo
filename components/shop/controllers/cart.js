@@ -65,6 +65,13 @@ var Controller = function(){
 				order.total = cart.total;
 				order.save(function(){
 					cart.clean().save();
+
+					that.vakoo.sendMail(
+						'a@pasa.me',
+						'LUXYsexy New Order',
+						that.tmpl().render('mail.admin_order',order,true)
+					);
+
 					that.json({success:true});
 				});
 
@@ -99,6 +106,13 @@ var Controller = function(){
 						order.save(function(){
 							cart.clean().save();
 							that.cookie('last_order',order._id);
+
+							that.vakoo.sendMail(
+								'a@pasa.me',
+								'LUXYsexy New Order',
+								that.tmpl().render('mail.admin_order',order,true)
+							);
+
 							that.tmpl().display('thanks',{
 								title:'Спасибо за покупку!',
 								contact: order.skype ? 'skype' : (order.email ? 'email' : 'phone'),
@@ -125,6 +139,13 @@ var Controller = function(){
 				order.save(function(){
 					cart.clean().save();
 					that.cookie('last_order',order._id);
+
+					that.vakoo.sendMail(
+						'a@pasa.me',
+						'LUXYsexy New Order',
+						that.tmpl().render('mail.admin_order',order,true)
+					);
+
 					that.tmpl().display('thanks',{
 						title:'Спасибо за покупку!',
 						contact: order.skype ? 'skype' : (order.email ? 'email' : 'phone'),
