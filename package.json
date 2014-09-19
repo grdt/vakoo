@@ -19,12 +19,22 @@
     "mailcomposer": "~0.2.12",
     "xml2js": "^0.4.4",
     "body-parser": "~1.6.7",
-    "iconv-lite": "~0.4.4"
+    "iconv-lite": "~0.4.4",
+    "after-brunch": "0.0.4"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": ">= 1.0 < 1.8",
+    "clean-css-brunch": ">= 1.0 < 1.8",
+    "css-brunch": ">= 1.0 < 1.8",
+    "javascript-brunch": ">= 1.0 < 1.8",
+    "less-brunch": "^1.7.2",
+    "uglify-js-brunch": ">= 1.0 < 1.8"
   },
   "scripts": {
-    "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",
+    "dev": "NODE_ENV=development supervisor -e js,json,hbs,css -i static app.js",
     "prod": "NODE_ENV=production supervisor -e js,json,hbs,css app.js",
     "start": "NODE_ENV=production forever start -l log.log -o out.log -e error.log -p ./logs/ -a app.js",
-    "stop": "forever stop app.js"
+    "stop": "forever stop app.js",
+    "brdev": "NODE_ENV=development brunch watch"
   }
 }
