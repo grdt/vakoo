@@ -85,7 +85,7 @@ var Plugin = function(){
 								}
 							});
 						}else{
-							query.cookie('city',CHOOSE_CITY);
+							query.cookie('city',DEFAULT_CITY);
 							cb();
 						}
 					}
