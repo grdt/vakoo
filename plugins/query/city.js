@@ -60,7 +60,7 @@ var Plugin = function(){
 							query.response.redirect('http://' + city.alias + '.' + query.getHost(true) + query.requestUrl());
 						}
 					}else{
-						query.cookie('city',CHOOSE_CITY);
+						query.cookie('city',DEFAULT_CITY);
 						query.response.redirect('http://' + DEFAULT_CITY + '.' + query.getHost(true) + query.requestUrl());
 					}
 				});
@@ -85,7 +85,7 @@ var Plugin = function(){
 								}
 							});
 						}else{
-							query.cookie('city',DEFAULT_CITY);
+							query.cookie('city',CHOOSE_CITY);
 							cb();
 						}
 					}
