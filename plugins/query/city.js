@@ -61,7 +61,11 @@ var Plugin = function(){
 						}
 					}else{
 						query.cookie('city',DEFAULT_CITY);
-						query.response.redirect('http://' + DEFAULT_CITY + '.' + query.getHost(true) + query.requestUrl());
+						if(subdomain != DEFAULT_CITY){
+							query.response.redirect('http://' + DEFAULT_CITY + '.' + query.getHost(true) + query.requestUrl());
+						}else{
+							cb();
+						}
 					}
 				});
 			}else{
