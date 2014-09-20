@@ -17,5 +17,8 @@ exports.config = {
 		'public':'public',
 		watched:['templates/luxy/public']
 	},
-//	optimize:true
+//	optimize:true,
+	modules:{
+		wrapper:false
+	}
 };

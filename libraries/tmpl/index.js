@@ -177,6 +177,16 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
+
+		Handlebars.registerHelper('production', function(options) {
+			return options.fn(this);
+			if(typeof that.vakoo.ENVIRONMENT == "production"){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
+		});
+
 		Handlebars.registerHelper('isset', function(context, options) {
 			if(typeof context != "undefined"){
 				return options.fn(this);

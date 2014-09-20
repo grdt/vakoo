@@ -18,7 +18,7 @@
     <script src="/js/plugins/respond.js"></script>
     <![endif]-->
 
-    {{#equal factory.vakoo.ENVIRONMENT 'production'}}
+    {{#production}}
     <script src="/js/app.js" onload="require('initialize');"></script>
     <link href="/css/all.css" rel="stylesheet" media="screen">
     <script type="text/javascript">
@@ -51,7 +51,7 @@
         <script src="/js/libs/modernizr.custom.js"></script>
         <link href="/masterslider/style/masterslider.css" rel="stylesheet" media="screen">
         <link href="/css/styles.css" rel="stylesheet" media="screen">
-    {{/equal}}
+    {{/production}}
 </head>
 
 <!--Body-->
@@ -127,7 +127,7 @@
 
 
 <!--Javascript (jQuery) Libraries and Plugins-->
-{{^equal factory.vakoo.ENVIRONMENT 'production'}}
+{{^production}}
 <script src="/js/libs/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="/js/libs/jquery.easing.min.js"></script>
 <script src="/js/plugins/bootstrap.min.js"></script>
@@ -140,13 +140,13 @@
 <script src="/js/plugins/jquery.shuffle.min.js"></script>
 <script src="/js/plugins/lightGallery.min.js"></script>
 <script src="/js/plugins/owl.carousel.min.js"></script>
-<script src="/js/plugins/masterslider.min.js"></script>
+<script src="/js/plugins/masterslider.js"></script>
 <script src="/js/jquery.cookie.js"></script>
 <script src="/js/scripts.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/ready.js"></script>
 {{else}}
 
-{{/equal}}
+{{/production}}
 </body><!--Body Close-->
 </html>
