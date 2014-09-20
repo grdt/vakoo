@@ -16,7 +16,7 @@ var ContentController = function(){
 		this.model('page').where({_id:this.get('id')}).findOne(function(page){
 			that.model('page').where({_id:{$ne:that.model('page').ObjectID(that.get('id'))},alias:{$nin:['main','contacts']}}).find(function(pages){
 				that.tmpl().display('page',{
-					title:page.title,
+					title:page.meta.title,
 					page:page,
 					meta:page.meta,
 					partial:{city:that.query.city},
