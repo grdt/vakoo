@@ -36,6 +36,8 @@ var Vakoo = function(fastPort){
 
 	this._global = {};
 
+	this._isRunning = false;
+
 	this.global = function(variable, value){
 		if(typeof value == "undefined"){
 			return this._global[variable] || null;
@@ -49,15 +51,17 @@ var Vakoo = function(fastPort){
 	}
 
     this.start = function(){
-
-        this.load = new Loader(this);
-
 		this.middlewareInit();
 
 	    this.executeInit();
 
         this.serverStart();
     };
+
+
+	this.initLoader = function(){
+		this.load = new Loader(this);
+	}
 
 	this.serverStop = function(){
 		this._server.close();
@@ -68,6 +72,7 @@ var Vakoo = function(fastPort){
 		var port = this.fastPort || this.config().port;
 		this._server.listen(port);
 		this.enableSmtp();
+		this._isRunning = true;
 		console.log('Vakoo start at port ',port);
 	}
 
@@ -227,6 +232,7 @@ var Vakoo = function(fastPort){
 	}
 
 
+	this.initLoader();
 
     return this;
 };

@@ -5,6 +5,9 @@ var Plugin = function(){
 
 	this.init = function(){
 
+		if(!this.vakoo._isRunning)
+			return;
+
 		this.vakoo.serverStop();
 
 		this.vakoo.expressInit();

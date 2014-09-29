@@ -97,7 +97,7 @@ var FileModel = function(){
 				that.path = path.replace(that.APP_PATH,'').replace('/public','');
 				that.size = fs.statSync(path).size;
 				that.type = "image/jpeg";
-				callback();
+				callback(that);
 			});
 			response.on('error',function(error){
 				console.log(error);
