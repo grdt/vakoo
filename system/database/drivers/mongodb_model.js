@@ -258,6 +258,15 @@ var CoreModel = function(){
 
     }
 
+	this.remove = function(callback){
+		var _this = this;
+		this.collection().remove({_id:this._id},function(err){
+			if(typeof callback == "function"){
+				callback();
+			}
+		});
+	}
+
     this.clean = function(without){
 
 	    var object;

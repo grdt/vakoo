@@ -105,6 +105,15 @@ var FileModel = function(){
 		});
 	}
 
+	this.short = function(alt){
+		return {
+			id:this._id,
+			name:this.name,
+			alt:alt,
+			path:this.path
+		}
+	}
+
 }
 
 module.exports = FileModel;

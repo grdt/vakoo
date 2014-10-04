@@ -12,7 +12,6 @@ var ShopUpdateController = function(){
 	const filePath = './update.csv';
 	
 	this.priceUpdate = function(){
-
 		var file = fs.createWriteStream(filePath);
 
 		http.get(csvLink, function(response) {
@@ -35,10 +34,17 @@ var ShopUpdateController = function(){
 			iconv = new Iconv('UTF-8', 'CP1251'),
 			mnogo = iconv.convert('Много');
 
+		that.model('product').collection().update({},{$set:{available:false}},{multi:true}, function(err,result){
+			console.log(err, result);
+		});
 
 		lr.on('error', function (err) {
 			console.log('err',err);
 		});
+		
+		var updated = 0;
+		var availabled = 0;
+		var inserted = 0;
 
 		lr.on('line', function (line) {
 			lr.pause();
@@ -53,6 +59,10 @@ var ShopUpdateController = function(){
 				lr.resume();
 				return;
 			}
+			
+			if(p.available){
+				availabled++;
+			}
 
 			that.model('product').where({sku: p.sku}).findOne(function(product){
 				if(product._id){
@@ -61,10 +71,12 @@ var ShopUpdateController = function(){
 					product.available = p.available;
 					product.lastUpdate = new Date();
 					product.save(function(){
+						updated++;
 						lr.resume();
 					});
 				}else{
 					that.controller('import').getProduct(p.sku,function(product){
+						inserted++;
 						
 						var mainUpload = false,
 							allUpload = false;
@@ -80,72 +92,103 @@ var ShopUpdateController = function(){
 								product.alias = translit(product.sku + ' ' + product.title + ' ' + product.shortDesc);
 							}
 
-							if(!product.image && !product.images.length){
+
+							if(!product.image){
 								product.save(function(){
 									lr.resume();
 								});
-								return;
-							}
+							}else{
 
-							if(product.image){
-								var file = that.option('file').model('file');
-								file.loadFromSource(product.image,product.alias,function(file){
-									file.save(function(){
-										product.image = {
-											id:file._id,
-											name:file.name,
-											alt:product.title,
-											path:file.path
+								var async = require('async');
+
+								var file = function(){
+									return that.option('file').model('file');
+								}
+
+								var generatePath = function(){
+									var	date = new Date(),
+										monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+										loader = that.vakoo.load,
+										UPLOAD_PATH = '/public/files/',
+										day = date.getDate(),
+										month = monthes[date.getMonth()],
+										path = that.APP_PATH + UPLOAD_PATH + date.getFullYear();
+
+									path = path + month + '/' + day;
+
+									var pathParts = path.split('/'),
+										path = '/';
+
+									for(var key in pathParts){
+										var part = pathParts[key];
+										if(part){
+											if(!loader.isDir(path + part)){
+												fs.mkdirSync(path + part);
+											}
+											path = path + part + '/';
 										}
+									}
 
-										if(!product.images.length){
-											product.save(function(){
-												lr.resume();
-											});
-										}else{
-											if(allUpload){
-												product.save(function(){
-													lr.resume();
+									return path;
+								}
+
+								var downloadFile = function(link, alias, callback){
+									var newFile = file(),
+										path = generatePath(),
+										ext = link.split('.')[link.split('.').length - 1],
+										stream = fs.createWriteStream(path + alias + '.' + ext),
+										http = require('http'),
+										request = http.get(link, function(response) {
+											response.pipe(stream);
+											response.on('end',function(){
+												newFile.name = alias + '.' + ext;
+												newFile.originalName = link.split('/')[link.split('/').length - 1];
+												newFile.path = (path + alias + '.' + ext).replace(that.APP_PATH,'').replace('/public','');
+												newFile.size = fs.statSync(path + alias + '.' + ext).size;
+												newFile.type = "image/jpeg";
+												newFile.save(function(){
+													callback(newFile)
 												});
-											}else{
-												mainUpload = true;
-											}
+											});
+										}).end();
+								}
+
+
+								async.waterfall([
+									function(cb){
+										downloadFile(product.image, product.alias, function(newFile){
+											product.image = newFile.short(product.title + ' ' + product.shortDesc)
+											cb()
+										})
+									},
+									function(cb){
+										if(!product.images.length){
+											cb()
+										}else{
+											var images = product.images;
+											product.images = [];
+
+											var i = 1;
+
+											images.asyncEach(function(img,nextImg){
+												downloadFile(img, i + '-' + product.alias, function(newFile){
+													product.images.push(newFile.short(product.title + ' ' + product.shortDesc + ' ' + i));
+													i++;
+													nextImg();
+												});
+
+											},function(){
+												cb()
+											});
 										}
+									}
+								],function(){
+									product.save(function(){
+										lr.resume();
+									})
+								})
 
-									});
-								});
-							}else{
-								mainUpload = true;
 							}
-
-							if(product.images.length){
-								product.images.forEach(function(image,i){
-									var file = that.option('file').model('file');
-									file.loadFromSource(product.image + '-' + i,product.alias,function(file){
-										file.save(function(){
-											product.images[i] = {
-												id:file._id,
-												name:file.name,
-												alt:product.title,
-												path:file.path
-											}
-
-											if(i == (product.images.length - 1)){
-												if(mainUpload){
-													product.save(function(){
-														lr.resume();
-													});
-												}else{
-													allUpload = true;
-												}
-											}
-										});
-									});
-								});
-							}else{
-								allUpload = true;
-							}
-
 						});
 
 						
@@ -158,7 +201,276 @@ var ShopUpdateController = function(){
 
 		lr.on('end', function () {
 			fs.unlink(filePath);
+			console.log('inserted',inserted,'updated',updated,'available',availabled);
+			process.exit(0);
 		});
+	}
+
+	this.updateImages = function(all){
+		if(typeof all == "undefined"){
+			all = false;
+		}
+
+		var async = require('async');
+
+		if(all){
+			
+			this.model('product').count(function(count){
+				var updated = 0;
+				var skip = 0;
+				async.whilst(
+					function(){return updated < count},
+					function(whileCb){
+						console.log('skip:',skip);
+						that.model('product').limit(skip, 3000).find(function(products){
+
+							products.asyncEach(function(product,nextProduct){
+								process.stdout.write('start for product sku: ' + product.sku + ' and ID: ' + product._id + ' ');
+								that.controller('import').getProduct(product.sku,function(p){
+									if(!p.image){
+										console.log('product without image',product._id,product.sku);
+										nextProduct();
+										return;
+									}
+
+									var file = function(){
+										return that.option('file').model('file');
+									}
+
+									var generatePath = function(){
+										var rnd = true,
+											date = new Date(),
+											monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+											loader = that.vakoo.load,
+											UPLOAD_PATH = '/public/files/',
+											day = date.getDate(),
+											month = monthes[date.getMonth()],
+											path = that.APP_PATH + UPLOAD_PATH + date.getFullYear();
+										if(rnd){
+											month = monthes[(Math.floor(Math.random() * 11))];
+											day =Math.floor(Math.random() * 28) + 1;
+										}
+
+										path  = path + month + '/' + day;
+
+										var pathParts = path.split('/'),
+											path = '/';
+
+										for(var key in pathParts){
+											var part = pathParts[key];
+											if(part){
+												if(!loader.isDir(path + part)){
+													fs.mkdirSync(path + part);
+												}
+												path = path + part + '/';
+											}
+										}
+
+										return path;
+									}
+
+									var downloadFile = function(link, alias, callback){
+										var newFile = file(),
+											path = generatePath(),
+											ext = link.split('.')[link.split('.').length - 1],
+											stream = fs.createWriteStream(path + alias + '.' + ext),
+											http = require('http'),
+											request = http.get(link, function(response) {
+												response.pipe(stream);
+												response.on('end',function(){
+													newFile.name = alias + '.' + ext;
+													newFile.originalName = link.split('/')[link.split('/').length - 1];
+													newFile.path = (path + alias + '.' + ext).replace(that.APP_PATH,'').replace('/public','');
+													newFile.size = fs.statSync(path + alias + '.' + ext).size;
+													newFile.type = "image/jpeg";
+													newFile.save(function(){
+														callback(newFile)
+													});
+												});
+											}).end();
+									}
+
+									async.waterfall([
+										function(cb){
+											process.stdout.write('.');
+											if(_.isObject(product.image)){
+												file().where({_id:product.image.id}).findOne(function(imageFile){
+													if(!imageFile._id){
+														product.image = false;
+														cb();
+														return;
+													}
+													var filePath = that.APP_PATH + '/public' + imageFile.path;
+													if(fs.existsSync(filePath)){
+														fs.unlinkSync(filePath)
+														imageFile.remove(function(){
+															product.image = false;
+															cb();
+														});
+													}else{
+														imageFile.remove(function(){
+															product.image = false;
+															cb();
+														});
+													}
+												});
+											}else{
+												cb();
+											}
+										},
+										function(cb){
+											process.stdout.write('.');
+											if(product.images.length){
+												product.images.asyncEach(function(img,nextImg){
+													process.stdout.write('.');
+													if(_.isObject(img)){
+														file().where({_id:img.id}).findOne(function(imageFile){
+															if(!imageFile._id){
+																nextImg();
+																return;
+															}
+															var filePath = that.APP_PATH + '/public' + imageFile.path;
+															if(fs.existsSync(filePath)){
+																fs.unlinkSync(filePath)
+																imageFile.remove(function(){
+																	nextImg()
+																});
+															}else{
+																imageFile.remove(function(){
+																	nextImg()
+																});
+															}
+														});
+													}else{
+														nextImg();
+													}
+												},function(){
+													product.images = [];
+													cb();
+												})
+											}else{
+												cb();
+											}
+										},
+										function(cb){
+											process.stdout.write('.');
+											downloadFile(p.image, product.alias, function(newFile){
+												product.image = newFile.short(product.title + ' ' + product.shortDesc)
+												cb()
+											})
+
+										},
+										function(cb){
+											process.stdout.write('.');
+											if(!p.images.length){
+												cb();
+												return;
+											}
+											var i = 1;
+
+											p.images.asyncEach(function(img,nextImg){
+												process.stdout.write('.');
+												downloadFile(img, i + '-' + product.alias, function(newFile){
+													product.images.push(newFile.short(product.title + ' ' + product.shortDesc + ' ' + i));
+													i++;
+													nextImg();
+												});
+
+											},function(){
+												cb()
+											});
+										},
+										function(cb){
+											product.save(function(){
+												cb();
+											});
+										}
+									],function(err){
+										console.log('all images stored',product.sku,product._id);
+										updated++;
+										nextProduct();
+									});
+								});
+							},function(err){
+								skip = skip + 3000;
+								console.log('next loop');
+
+
+								whileCb();
+							});
+						});
+					},
+					function(err){
+						if(!err){
+							console.log('updated all images');
+							process.exit(0);
+						}
+					}
+				);
+			});
+		}else{
+			console.log('TODO script to parse not all images');	
+		}
+	}
+
+
+	this.updateSizes = function(){
+		//{size:{$ne:false}}
+		var product = function(data){
+			var model = that.model('product');
+			if(data){
+				for(var key in data){
+					if(model.hasOwnProperty(key)){
+						model[key] = data[key];
+					}
+				}
+			}
+			return model;
+		};
+		var cursor = this.model('product').collection().find({size:{$ne:false}});
+		var update = function(err, item){
+			if(item){
+
+				var p = product(item);
+
+				if(p.size.sizes === false){
+					cursor.nextObject(update);
+				}else if(_.isEqual(p.size.sizes,{})){
+					p.size.sizes = false;
+					p.save(function(){
+						cursor.nextObject(update);
+					});
+				}else{
+					var products = [];
+					var skus = [];
+
+					for(var key in p.size.sizes){
+						skus.push(p.size.sizes[key].sku);
+					}
+
+					skus.asyncEach(function(sku,nextSize){
+						product().where({sku:sku}).findOne(function(product){
+							if(product._id){
+								products.push(product);
+								nextSize();
+							}else{
+								that.controller('import').getProduct(sku,function(product){
+									console.log(product.clean());
+								});
+							}	
+						});	
+					},function(){
+						
+					});
+					
+				}
+				
+			}else{
+				console.log('all products updated');
+				process.exit(0);
+			}
+		}
+		cursor.nextObject(update);
 	}
 	
 }

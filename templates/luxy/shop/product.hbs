@@ -64,6 +64,8 @@ font-weight: 200;">Y</span></span></h1>
                     </div>
                 {{/if}}
 
+                {{#if product.available}}
+
                 <div class="buttons group">
                     <div class="qnt-count">
                         <a class="incr-btn" href="#">-</a>
@@ -74,6 +76,12 @@ font-weight: 200;">Y</span></span></h1>
                     <a class="btn btn-primary btn-sm add-cart-btn" data-id="{{product._id}}" data-value-selector="#quantity" id="addItemToCart" href="#"><i class="icon-shopping-cart"></i>В корзину</a>
                     <a class="btn btn-success btn-sm one-click" href="/checkout?product={{product._id}}" data-id="{{product._id}}"><i class="fa fa-send-o"></i>Купить в 1 клик</a>
                 </div>
+
+                {{else}}
+                    <div class="buttons group">
+                        <strong>К сожалению товара нет в наличии.</strong>
+                    </div>
+                {{/if}}
                 <p class="p-style2">
                     {{{trimString product.desc 150 '...<br/><a href="javascript:goToDescr()" class="btn btn-success btn-sm"><i class="fa fa-exclamation-triangle"></i> Подробнее о товаре</a>'}}}
                 </p>

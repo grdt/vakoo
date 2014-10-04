@@ -45,7 +45,6 @@ var Import = function(){
 	}
 
 	this.getProduct = function(sku,done){
-
 		var http = require('http');
 		var options = {
 			host: 'www.condom-shop.ru',
@@ -90,7 +89,8 @@ var Import = function(){
 			socket.setTimeout(5000);
 			socket.on('timeout', function() {
 				req.end();
-				console.log('product',sku,'timeout');
+				console.log('product',sku,'timeout, again .... ');
+				that.getProduct(sku,done);
 				return;
 				if(typeof that.timedOut[sku] == "undefined"){
 					that.timedOut[sku] = true;

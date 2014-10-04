@@ -19,7 +19,10 @@
     "mailcomposer": "~0.2.12",
     "xml2js": "^0.4.4",
     "body-parser": "~1.6.7",
-    "iconv-lite": "~0.4.4"
+    "iconv-lite": "~0.4.4",
+    "async": "~0.9.0",
+    "commander": "~2.3.0",
+    "cron": "~1.0.5"
   },
   "scripts": {
     "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",

@@ -162,6 +162,8 @@ var ShopProductModel = function () {
 
 //					product.ancestors = that.ancestors;
 
+
+
 					that.size.sizes[product.size.current] = {
 						id:product._id,
 						size:product.size.current.replace('БЮСТГАЛЬТЕРА','бюстгальтера'),

@@ -75,12 +75,12 @@ var ShopCategoriesController = function(){
 
 					data.categories = subsubs;
 
-					$c.model('product').where({ancestors:category._id}).count(function(count){
+					$c.model('product').where({ancestors:category._id, available:true}).count(function(count){
 
 						data.productCount = count;
 
 						var model = $c.model('product')
-									.where({ancestors:category._id});
+									.where({ancestors:category._id, available:true});
 
 						if(order){
 							var o = {};
