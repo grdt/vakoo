@@ -215,21 +215,34 @@ var ShopUpdateController = function(){
 
 		if(all){
 			
-			this.model('product').count(function(count){
+			this.model('product').where({lastUpdate:false}).count(function(count){
 				var updated = 0;
 				var skip = 0;
 				async.whilst(
 					function(){return updated < count},
 					function(whileCb){
 						console.log('skip:',skip);
-						that.model('product').limit(skip, 3000).find(function(products){
+						that.model('product').where({lastUpdate:false}).limit(skip, 3000).find(function(products){
 
 							products.asyncEach(function(product,nextProduct){
+								product.lastUpdate = new Date();
 								process.stdout.write('start for product sku: ' + product.sku + ' and ID: ' + product._id + ' ');
 								that.controller('import').getProduct(product.sku,function(p){
+
+
+									if(!p){
+										console.log('product not found, remove',product._id,product.sku);
+										product.remove(function(){
+											nextProduct();
+										})
+										return;
+									}
+
 									if(!p.image){
 										console.log('product without image',product._id,product.sku);
-										nextProduct();
+										product.save(function(){
+											nextProduct();
+										})
 										return;
 									}
 
@@ -293,7 +306,7 @@ var ShopUpdateController = function(){
 									async.waterfall([
 										function(cb){
 											process.stdout.write('.');
-											if(_.isObject(product.image)){
+											if(_.isObject(product.image) && product.image.id){
 												file().where({_id:product.image.id}).findOne(function(imageFile){
 													if(!imageFile._id){
 														product.image = false;
@@ -415,7 +428,62 @@ var ShopUpdateController = function(){
 
 
 	this.updateSizes = function(){
+
+
+		var file = function(){
+			return that.option('file').model('file');
+		}
+
+		var generatePath = function(){
+			var	date = new Date(),
+				monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				loader = that.vakoo.load,
+				UPLOAD_PATH = '/public/files/',
+				day = date.getDate(),
+				month = monthes[date.getMonth()],
+				path = that.APP_PATH + UPLOAD_PATH + date.getFullYear();
+
+			path = path + month + '/' + day;
+
+			var pathParts = path.split('/'),
+				path = '/';
+
+			for(var key in pathParts){
+				var part = pathParts[key];
+				if(part){
+					if(!loader.isDir(path + part)){
+						fs.mkdirSync(path + part);
+					}
+					path = path + part + '/';
+				}
+			}
+
+			return path;
+		}
+
+		var downloadFile = function(link, alias, callback){
+			var newFile = file(),
+				path = generatePath(),
+				ext = link.split('.')[link.split('.').length - 1],
+				stream = fs.createWriteStream(path + alias + '.' + ext),
+				http = require('http'),
+				request = http.get(link, function(response) {
+					response.pipe(stream);
+					response.on('end',function(){
+						newFile.name = alias + '.' + ext;
+						newFile.originalName = link.split('/')[link.split('/').length - 1];
+						newFile.path = (path + alias + '.' + ext).replace(that.APP_PATH,'').replace('/public','');
+						newFile.size = fs.statSync(path + alias + '.' + ext).size;
+						newFile.type = "image/jpeg";
+						newFile.save(function(){
+							callback(newFile)
+						});
+					});
+				}).end();
+		}
+
 		//{size:{$ne:false}}
+		var async = require('async');
 		var product = function(data){
 			var model = that.model('product');
 			if(data){
@@ -441,10 +509,17 @@ var ShopUpdateController = function(){
 						cursor.nextObject(update);
 					});
 				}else{
-					var products = [];
+					var products = [p];
 					var skus = [];
+					
+					console.log(p._id,p.size);
 
 					for(var key in p.size.sizes){
+						if(!p.size.sizes[key].sku){
+							console.log('sizes destructed', p._id);
+							cursor.nextObject(update);
+							return;
+						}
 						skus.push(p.size.sizes[key].sku);
 					}
 
@@ -455,11 +530,81 @@ var ShopUpdateController = function(){
 								nextSize();
 							}else{
 								that.controller('import').getProduct(sku,function(product){
-									console.log(product.clean());
+									product.available = (product.available == 'Есть в наличии');
+									product.alias = translit(product.sku + ' ' + product.title + ' ' + product.shortDesc);
+
+									async.waterfall([
+										function(cb){
+											downloadFile(product.image, product.alias, function(newFile){
+												product.image = newFile.short(product.title + ' ' + product.shortDesc)
+												cb()
+											})
+										},
+										function(cb){
+											if(!product.images.length){
+												cb()
+											}else{
+												var images = product.images;
+												product.images = [];
+
+												var i = 1;
+
+												images.asyncEach(function(img,nextImg){
+													downloadFile(img, i + '-' + product.alias, function(newFile){
+														product.images.push(newFile.short(product.title + ' ' + product.shortDesc + ' ' + i));
+														i++;
+														nextImg();
+													});
+
+												},function(){
+													cb()
+												});
+											}
+										}
+									],function(){
+										products.push(product);
+										nextSize();
+									})
 								});
 							}	
 						});	
 					},function(){
+						var ancestors = [];
+						var sizes = {};
+						products.forEach(function(product){
+							if(product.ancestors.length){
+								ancestors = product.ancestors;
+							}
+							product.size.current = product.size.current.replace('Размер ','');
+							sizes[product.size.current] = product.sku;
+						});
+						products.forEach(function(product){
+							product.ancestors = ancestors;
+							product.size.sizes = {};
+							for(var key in sizes){
+								if(key != product.size.current){
+									product.size.sizes[key] = {sku:sizes[key]}	
+								}
+							}
+						});
+
+						var hasActive = false;
+
+						products.asyncEach(function(product,nextProduct){
+							if(product.available && !hasActive){
+								product.status = 'active';
+								product.alias = translit(product.title + ' ' + product.shortDesc);
+							}else{
+								product.status = 'hidden';
+								product.alias = translit(product.sku + '-' + product.title + ' ' + product.shortDesc);
+							}
+
+							product.save(function(){
+								nextProduct();
+							})
+						},function(){
+							cursor.nextObject(update);
+						});
 						
 					});
 					

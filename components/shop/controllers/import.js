@@ -107,11 +107,17 @@ var Import = function(){
 
 	this.storeProduct = function($, done){
 
+
+		var product = that.model('product');
+
 		if($(".message.error").length){
+			if(typeof done == "function"){
+				done(false);
+			}
 			return;
 		}
 
-		var product = that.model('product');
+
 		product.sku = parseInt($("#article").html().replace('Артикул: ',''));
 		product.tradePrice = parseInt($(".regular-price").html());
 		product.price = parseInt($(".price-wholesale").html().replace('РРЦ: ',''));

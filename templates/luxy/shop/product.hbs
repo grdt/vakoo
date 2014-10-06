@@ -55,7 +55,9 @@ font-weight: 200;">Y</span></span></h1>
                 <div class="old-price">815,00 $</div>
                 }}
 
-                <div class="price">{{number-format product.price}} <span class="fa fa-rouble"></span></div>
+                {{#if product.available}}
+                    <div class="price">{{number-format product.price}} <span class="fa fa-rouble"></span></div>
+                {{/if}}
 
 
                 {{#if product.size}}
