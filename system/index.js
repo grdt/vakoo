@@ -232,6 +232,21 @@ var Vakoo = function(fastPort){
 	}
 
 
+	var _memory = {};
+	this.memory = function(name,value){
+		if(typeof value == "undefined"){
+			if(typeof _memory[name] == "undefined"){
+				return null;
+			}else{
+				return _memory[name];
+			}
+		}else{
+			_memory[name] = value;
+			return true;
+		}
+
+	}
+
 	this.initLoader();
 
     return this;

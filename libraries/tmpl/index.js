@@ -31,11 +31,17 @@ var TemplateLibrary = function(params){
 		$l._data = data || {};
 		$l._view = view;
 
+
+//		this.from.query.logTime('startDisplay');
+//		console.time('display')
+
 		this.initPlugin('before_display',$l,function(){
 			var html = $l.layout()({
 				factory:$l.factory(),
 				root:$l.rootUrl()
 			});
+
+//			console.timeEnd('display')
 			that.from.echo(html);
 		});
 	}
@@ -61,9 +67,12 @@ var TemplateLibrary = function(params){
 			console.log('html of template is not defined');
 			return '';
 		}
+
         var template = Handlebars.compile(html);
+
 		data.factory = $l.factory();
-        return template(data);
+        var compiled = template(data);
+		return compiled;
     }
     
     this.template = function(name){
@@ -127,6 +136,14 @@ var TemplateLibrary = function(params){
 
 		Handlebars.registerHelper('sizeMore', function(context, limit, options) {
 			console.log();
+		});
+
+		Handlebars.registerHelper('timer', function(name) {
+			console.time(name)
+		});
+
+		Handlebars.registerHelper('timerEnd', function(name) {
+			console.timeEnd(name)
 		});
 
 		Handlebars.registerHelper('second', function(context, options) {
@@ -204,7 +221,9 @@ var TemplateLibrary = function(params){
 				var template = Handlebars.compile(html);
 				data.factory = $l.factory();
 				data.root = that.rootUrl();
-				return new that.hbs.SafeString(template(data));
+
+				var result = new that.hbs.SafeString(template(data));
+				return result;
 			}else{
 				return false;
 			}

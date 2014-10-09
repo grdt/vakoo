@@ -6,7 +6,7 @@ var url = require('url'),
  * @extends Loader
  */
 var Query = function(request,response){
-	
+
 	var that = this;
 
     this.request = request;
@@ -19,15 +19,13 @@ var Query = function(request,response){
 
 	this.city = false;
 
-    if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
-        var params = this.router().fetchUrl(this.request.url);
-        if(!params.params && !params.executor){
-            this.executor = this.router().executor(404);
-        }else{
-            this.executor = params.executor.defaults(this.vakoo.config().default_executor);
-            this.request.params = params.params;
-        }
-    }
+	this.initTime = (new Date()).getTime();
+
+	this.logTime = function(name){
+		var time = (new Date()).getTime();
+		console.log(name+':',(time - this.initTime),'ms');
+		this.initTime = time;
+	}
 
 	this.requestUrl = function(){
 		return this.request.url;
@@ -88,6 +86,18 @@ var Query = function(request,response){
 //			httpOnly:true,
 			domain:this.vakoo.config().domain
 		});
+	}
+
+//	this.logTime('startQuery')
+
+	if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
+		var params = this.router().fetchUrl(this.request.url);
+		if(!params.params && !params.executor){
+			this.executor = this.router().executor(404);
+		}else{
+			this.executor = params.executor.defaults(this.vakoo.config().default_executor);
+			this.request.params = params.params;
+		}
 	}
 }
 

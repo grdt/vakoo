@@ -9,28 +9,28 @@ var Plugin = function(){
 
 	const CHOOSE_CITY = 'choose';
 
-	this.init = function(query,callback,next){
+	this.init = function(){
+
+		var query = arguments[0][0],
+			callback = arguments[1],
+			loader = this.load;
 
 //		console.log(process.memoryUsage().heapUsed / 1024 / 1024);
+		
+		
 
 		var cb = function(){
 			if(typeof callback == "function"){
-				callback(query,next);
+				callback(null, query);
 			}else{
 				if(that.callback && typeof that.callback == "function"){
-					that.callback(query);
+					that.callback(null, query);
 				}
 			}
 		}
 
 		if(query.executor.option == 'admin' || query.request.xhr){
-			if(typeof callback == "function"){
-				callback(query,next);
-			}else{
-				if(that.callback && typeof that.callback == "function"){
-					that.callback(query);
-				}
-			}
+			cb();
 			return;
 		}
 
@@ -38,7 +38,7 @@ var Plugin = function(){
 
 		if(!query.getSubdomain() && !query.cookie('city')){
 
-			this.option('shop').model('city').byIP(ip).findOne(function(city){
+			loader.option('shop').model('city').byIP(ip).findOne(function(city){
 				if(city._id){
 					query.response.redirect('http://' + city.alias + '.' + query.getHost(true) + query.requestUrl());
 				}else{
@@ -51,7 +51,7 @@ var Plugin = function(){
 				cookieCity = query.cookie('city');
 
 			if(cookieCity && cookieCity != CHOOSE_CITY){
-				this.option('shop').model('city').where({status:'active',alias:cookieCity}).findOne(function(city){
+				loader.option('shop').model('city').where({status:'active',alias:cookieCity}).findOne(function(city){
 					if(city._id){
 						if(subdomain == cookieCity){
 							query.city = city.short();
@@ -69,7 +69,7 @@ var Plugin = function(){
 					}
 				});
 			}else{
-				this.option('shop').model('city').where({status:'active',alias:subdomain}).findOne(function(city){
+				loader.option('shop').model('city').where({status:'active',alias:subdomain}).findOne(function(city){
 					if(city._id){
 
 						query.city = city.short();
@@ -79,7 +79,7 @@ var Plugin = function(){
 						cb();
 					}else{
 						if(subdomain != DEFAULT_CITY){
-							that.option('shop').model('city').byIP(ip).findOne(function(city){
+							loader.option('shop').model('city').byIP(ip).findOne(function(city){
 								if(city._id){
 									query.cookie('city',city.alias);
 									query.response.redirect('http://' + city.alias + '.' + query.getHost(true) + query.requestUrl());

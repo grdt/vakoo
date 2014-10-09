@@ -5,7 +5,11 @@ var Plugin = function(){
 
 	this.callback = false;
 
-	this.init = function($l,next){
+	this.init = function(){
+
+		var $l = arguments[0][0];
+		var loader = this.load;
+		var next = arguments[1];
 
 		if(!$l.from.session('history')){
 			$l._data.history = {};
@@ -14,7 +18,7 @@ var Plugin = function(){
 			var history = $l.from.session('history');
 			var title = $l.factory().title(true);
 			var url = Url.parse($l.from.query.request.url).pathname;
-			if(this.vakoo.ENVIRONMENT == 'development'){
+			if(this.ENVIRONMENT == 'development'){
 				url = $l.from.query.request.url;
 			}
 			$l._data.history = history;
@@ -38,14 +42,12 @@ var Plugin = function(){
 			});
 
 			$l.from.session('history',history);
-//			if(_.size(history) > 1){
-//				delete history[_.first(_.keys(history))];
-//			}
+
 			$l._data.history = history;
 		}
 
 		if(typeof next == "function"){
-			next($l);
+			next();
 		}
 
 	}

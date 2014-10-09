@@ -108,15 +108,17 @@ var Loader = function(vakoo){
 
 	this.initPlugin = function(event){
 		var args = _.rest(Array.prototype.slice.call(arguments));
+		var async = require('async');
 		if(!!this._plugins[event]){
 			if(this._plugins[event].length == 1){
 				if(typeof this._plugins[event][0].init == "function"){
 					this._plugins[event][0].init.apply(this, args);
 				}
 			}else{
-				
+
 				var callable = [];
 				var callback = function(){};
+				var runs = [];
 
 				if(typeof _.last(args) == "function"){
 					callback = _.last(args);
@@ -128,21 +130,21 @@ var Loader = function(vakoo){
 					if(typeof this._plugins[event][key].callback != "undefined"){
 						this._plugins[event][key].callback = callback;
 						callable.push({handler:this._plugins[event][key].init,args:args});
+						var handler = this._plugins[event][key].init;
+						runs.push(
+							handler.bind(null,args)
+						);
 					}else{
 						if(typeof this._plugins[event][key].init == "function"){
 							this._plugins[event][key].init.apply(this, args);
 						}
 					}
 				}
-				
-				
-				callable.asyncEach(function(item,done){
-					item.args.push(done);
-					item.handler.apply(loader,item.args);
-				},function(){
-					callback.apply(loader,args);
+
+				async.parallel(runs,function(err,result){
+					callback.apply(loader, args);
 				});
-				
+
 			}
 		}
 	}
