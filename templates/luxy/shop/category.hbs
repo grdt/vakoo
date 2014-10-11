@@ -1,5 +1,6 @@
 {{factory 'module' 'catalog:breadcrumbs'}}
 
+{{timer "category-html"}}
 <section class="catalog-grid">
     <div class="container">
         <h1 class="with-sorting">{{category.title}}</h1>
@@ -31,9 +32,11 @@
 
 
         <div class="row">
+            {{timer "category-products"}}
             {{#each products}}
                 {{include 'shop.product-card' this}}
             {{/each}}
+            {{timerEnd "category-products"}}
         </div>
 
         {{#if pagination}}
@@ -43,7 +46,7 @@
     </div>
 
 </section><!--Catalog Grid Close-->
-
+{{timerEnd "category-html"}}
 
 {{!
 <!--Brands Carousel Widget-->

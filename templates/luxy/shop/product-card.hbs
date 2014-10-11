@@ -11,6 +11,12 @@
         {{!
         <div class="price-label old-price">920,00 $</div>
         }}
+
+        {{^available}}
+            <div class="badges">
+                <span class="out">Отсутствует</span>
+            </div>
+        {{/available}}
         <a href="{{url}}" class="image-container">
             <span class="image-verticalator"></span>
             <img src="{{image.path}}" alt="{{image.alt}}" title="{{image.alt}}"/>

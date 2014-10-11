@@ -12731,21 +12731,32 @@ header .search-form .close-search:hover {
 	display: block;
 	float: left;
 	margin-right: 2px;
-	width: 55px;
+	color:#fff;
+	/*width: 55px;*/
 	height: 55px;
-	background: url(../img/catalog/badges.png) no-repeat
+	border-radius: 50px;
+	width:auto;
+	padding:15px;
+	font-size:1em;
+	font-weight: 300;
+	/*2ba8db синий*/
+	/*b2b2b2 серый*/
+	/*background: url(../img/catalog/badges.png) no-repeat*/
 }
 
 .catalog-grid .tile .badges .sale {
-	background-position: 0 0
+	/*background-position: 0 0*/
+	background:#2ba8db;
 }
 
 .catalog-grid .tile .badges .out {
-	background-position: -57px 0
+	/*background-position: -57px 0*/
+	background:#b2b2b2;
 }
 
 .catalog-grid .tile .badges .best-seller {
-	background-position: -114px 0
+	/*background-position: -114px 0*/
+	background:#000;
 }
 
 .catalog-grid .tile .badges:after {

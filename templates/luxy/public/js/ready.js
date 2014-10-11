@@ -84,6 +84,90 @@ var goToDescr = function(){
 }
 
 $(document).ready(function(){
+
+	if($(".available-form").size()){
+
+
+		$("#available-input").on('keyup',function(){
+			var $this = $(this),
+				value = $this.val(),
+				emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				phoneReg = /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{2})\D?(\d{2})/,
+				phonePattern = "($1) $2-$3-$4",
+				digits = value.replace(/[А-Яа-яA-Za-z$-]/g, ""),
+				skypeReg = /[a-zA-Z][a-zA-Z0-9\.,\-_]{5,31}/,
+				$formGroup = $(this).closest(".form-group")
+				runSkype = true;
+
+			$(".available-form .form-control-feedback").addClass("hide");
+			$formGroup.removeClass("has-success").removeClass("has-error");
+
+			if(value.length >= 5){
+				if(emailReg.test(value)){
+					$(".available-form .form-control-feedback.fa-envelope").removeClass("hide");
+					$formGroup.addClass("has-success");
+					return;
+				}else{
+					if(digits.length >= 8){
+						var phone = '';
+						if(digits[0] == 8){
+							phone = '+7 ' + digits.substring(1).replace(phoneReg,phonePattern);
+						}else if(digits[0] == '+' && digits[1] == 7){
+							phone = '+7 ' + digits.substring(2).replace(phoneReg,phonePattern);
+						}else{
+							phone = '+7 ' + digits.substring(0).replace(phoneReg,phonePattern);
+						}
+
+						if(phone.length >= 18){
+							$(".available-form .form-control-feedback.fa-phone").removeClass("hide");
+							$formGroup.addClass("has-success");
+							return;
+						}
+					}else{
+						if(skypeReg.test(value)){
+							$(".available-form .form-control-feedback.fa-skype").removeClass("hide");
+							$formGroup.addClass("has-success");
+							return;
+						}
+					}
+				}
+			}
+
+			$formGroup.addClass("has-error");
+			$(".available-form .form-control-feedback.fa-times").removeClass("hide");
+
+		}).on('blur',function(){
+//			$(".available-form .form-control-feedback").addClass("hide");
+//			$(this).closest(".form-group").removeClass("has-success").removeClass("has-error");
+		});
+
+		$(".available-form").submit(function(){
+
+			if(!$(".available-form .form-group").hasClass("has-success"))
+				return false;
+
+			var contact = $(".available-form").find("#available-input").val();
+			var productId = $(".available-form").find("#available-input").data("product-id");
+
+
+			$.post('/?option=main&task=feedback',{contact:contact,name:"Manager",message:"Пользователь просит подписаться на появление товара <strong>"+productId+"</strong> в наличии."},function(response){
+
+				$(".available-form").html("<p>Спасибо что оставили свой контакт! Мы обязательно сообщим вам о том когда товар будет доступен для заказа!</p>");
+
+				setTimeout(function(){
+					$("#availableModal").modal("hide");
+				},3000)
+			});
+
+			return false;
+		});
+	}
+
+	$(".popover-me.top.hover").popover({
+		placement: 'top',
+		trigger: 'hover'
+	});
+
 	$(".quick-contact").submit(function(){
 
 		var $form = $(this);
@@ -155,12 +239,6 @@ $(document).ready(function(){
 
 			});
 		return false;
-	});
-
-	$(".promo-labels").hover(function(){
-		setTimeout(function(){
-			console.log($('.promo-labels').html());
-		},300);
 	});
 
 	if($(".category-desc").size()){

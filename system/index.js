@@ -4,7 +4,8 @@ var Loader = require('./core/loader'),
     fs = require('fs'),
     path = require('path'),
 	multipart = require('connect-multiparty'),
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser'),
+	redis = require('redis');
 
 require('./core/global');
 
@@ -38,6 +39,12 @@ var Vakoo = function(fastPort){
 
 	this._isRunning = false;
 
+	this.redis = false;
+
+	this.isProduction = function(){
+		return this.ENVIRONMENT === "production";
+	}
+
 	this.global = function(variable, value){
 		if(typeof value == "undefined"){
 			return this._global[variable] || null;
@@ -51,13 +58,23 @@ var Vakoo = function(fastPort){
 	}
 
     this.start = function(){
+		
+		this.initRedis();
+		
 		this.middlewareInit();
 
 	    this.executeInit();
 
         this.serverStart();
     };
-
+	
+	this.initRedis = function(){
+		var redisClient = redis.createClient();
+		
+		redisClient.on("connect",function(){
+			that.redis = redisClient;
+		})
+	}
 
 	this.initLoader = function(){
 		this.load = new Loader(this);

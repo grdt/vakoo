@@ -36,9 +36,16 @@ var CoreModel = function(){
 	    return this;
     }
 
-	this.order = function(params){
+	this.order = function(params, object){
 
 		this._order = [];
+
+		object = object || false;
+
+		if(object){
+			this._order = params;
+			return this;
+		}
 
 		for(var key in params){
 //			this._order = [key,(params[key] < 0) ? 'descending' : 'ascending'];
@@ -82,7 +89,11 @@ var CoreModel = function(){
 		    }else{
 
 			    if(!_this._order.isEmpty()){
-				    cursor.sort(_this._order[0],_this._order[1]);
+					if(_.isArray(_this._order)){
+						cursor.sort(_this._order[0],_this._order[1]);
+					}else{
+						cursor.sort(_this._order);
+					}
 			    }
 
 			    if(_this._limit){

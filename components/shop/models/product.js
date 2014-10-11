@@ -69,13 +69,6 @@ var ShopProductModel = function () {
 
 	this.isNew = false;
 
-	this.url = function () {
-		if(this.vakoo.ENVIRONMENT == 'development' || !this.ancestors.length){
-			return '/shop/products/index?id=' + this._id;
-		}
-		return '/' + this.ancestors.join('/') + '/' + this.alias;
-	}
-
 	/**
 	 * @param attributes
 	 * @returns ShopProductModel
@@ -232,7 +225,23 @@ var ShopProductModel = function () {
 		}
 		price = parseInt(price / 100) * 100;
 		return price;
-	})
+	});
+
+//	this.defineSetGet("url",function(){
+//
+//	},function(){
+//		if(this.vakoo.ENVIRONMENT == 'development' || !this.ancestors.length){
+//			return '/shop/products/index?id=' + this._id;
+//		}
+//		return '/' + this.ancestors.join('/') + '/' + this.alias;
+//	})
+
+	this.url = function () {
+		if(this.vakoo.ENVIRONMENT == 'development' || !this.ancestors.length){
+			return '/shop/products/index?id=' + this._id;
+		}
+		return '/' + this.ancestors.join('/') + '/' + this.alias;
+	}
 }
 
 module.exports = ShopProductModel;
