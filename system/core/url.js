@@ -39,7 +39,6 @@ var Query = function(request,response){
 					fs.writeFile(fileName,text + '\n');
 				}
 			});
-			console.log(text);
 		}else{
 			console.log(text);
 		}
