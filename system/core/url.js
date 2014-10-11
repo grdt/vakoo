@@ -88,8 +88,6 @@ var Query = function(request,response){
 		});
 	}
 
-//	this.logTime('startQuery')
-
 	if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
 		var params = this.router().fetchUrl(this.request.url);
 		if(!params.params && !params.executor){

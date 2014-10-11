@@ -11,14 +11,14 @@ var ShopUpdateController = function(){
 
 	const filePath = './update.csv';
 	
-	this.priceUpdate = function(){
+	this.priceUpdate = function(globalCallback){
 		var file = fs.createWriteStream(filePath);
 
 		http.get(csvLink, function(response) {
 			response.pipe(file);
 			response.on('end',function(){
 
-				that.parse();
+				that.parse(globalCallback);
 
 			});
 			response.on('error',function(error){
@@ -28,7 +28,7 @@ var ShopUpdateController = function(){
 	}
 
 
-	this.parse = function(){
+	this.parse = function(globalCallback){
 		var lr = new LineByLineReader(filePath, {encoding:'utf8'}),
 			Iconv  = require('iconv').Iconv,
 			iconv = new Iconv('UTF-8', 'CP1251'),
@@ -202,11 +202,11 @@ var ShopUpdateController = function(){
 		lr.on('end', function () {
 			fs.unlink(filePath);
 			console.log('inserted',inserted,'updated',updated,'available',availabled);
-			process.exit(0);
+			globalCallback()
 		});
 	}
 
-	this.updateImages = function(all){
+	this.updateImages = function(all, globalCallback){
 		if(typeof all == "undefined"){
 			all = false;
 		}
@@ -414,10 +414,7 @@ var ShopUpdateController = function(){
 						});
 					},
 					function(err){
-						if(!err){
-							console.log('updated all images');
-							process.exit(0);
-						}
+						globalCallback()
 					}
 				);
 			});
@@ -427,7 +424,7 @@ var ShopUpdateController = function(){
 	}
 
 
-	this.updateSizes = function(){
+	this.updateSizes = function(globalCallback){
 
 
 		var file = function(){
@@ -612,7 +609,7 @@ var ShopUpdateController = function(){
 				
 			}else{
 				console.log('all products updated');
-				process.exit(0);
+				globalCallback()
 			}
 		}
 		cursor.nextObject(update);

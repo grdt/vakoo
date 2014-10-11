@@ -6,7 +6,8 @@ var vakoo = require('./system/index')(),
 	 */
 	updater = vakoo.load.option('shop').controller('update');
 
-var program = require('commander');
+var program = require('commander'),
+	cron = require('cron');
 
 vakoo.load.db._driver.emitter.on('db_conn',function(){
 //	updater.priceUpdate();
@@ -20,15 +21,49 @@ vakoo.load.db._driver.emitter.on('db_conn',function(){
 		.parse(process.argv);
 
 	if(program.image){
-		updater.updateImages( program.all );
+		updater.updateImages(program.all, function(){
+			console.log('all images updated');
+			process.exit(0)
+		});
 	}
 
 	if(program.size){
-		updater.updateSizes();
+		updater.updateSizes(function(){
+			console.log('all sizes updated');
+			process.exit(0)
+		});
 	}
 
 	if(program.update){
-		updater.priceUpdate();
+		updater.priceUpdate(function(){
+			console.log('all prices updated');
+			process.exit(0)
+		});
+	}
+	
+	if(!program.image && !program.size && !program.update){
+		var CronJob = require('cron').CronJob;
+		var job = new CronJob('00 00 03 * * *', function(){
+				updater.priceUpdate(function(){
+					console.log("images update");
+				});
+			}, function () {
+				
+			},
+			true,
+			"Europe/Moscow"
+		);
+
+		var job2 = new CronJob('00 00 03 * * 1,3,5', function(){
+				updater.updateSizes(function(){
+					console.log("sizes update");
+				});
+			}, function () {
+
+			},
+			true,
+			"Europe/Moscow"
+		);
 	}
 
 });

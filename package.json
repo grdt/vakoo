@@ -22,12 +22,15 @@
     "iconv-lite": "~0.4.4",
     "async": "~0.9.0",
     "commander": "~2.3.0",
-    "cron": "~1.0.5"
+    "cron": "~1.0.5",
+    "time": "^0.11.0",
+    "redis": "~0.12.1"
   },
   "scripts": {
     "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",
     "prod": "NODE_ENV=production supervisor -e js,json,hbs,css app.js",
     "start": "NODE_ENV=production forever start -l log.log -o out.log -e error.log -p ./logs/ -a app.js",
-    "stop": "forever stop app.js"
+    "stop": "forever stop app.js",
+    "cron": "forever start -l cron-log.log -o cron-out.log -e cron-error.log -p ./logs/ -a cron.js"
   }
 }
