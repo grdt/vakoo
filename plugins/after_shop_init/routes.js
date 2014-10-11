@@ -60,22 +60,23 @@ var Plugin = function(){
 				console.log('categories routes enabled');
 			});
 
-
-			that.option('shop').model('product').where({category:{$ne:''}}).find(function(products){
-				products.forEach(function(product){
-					var route_string = product.url();
+			var async = require("async");
+			var cursor = that.option('shop').model('product').collection().find({category:{$ne:''}},{ancestors:1,alias:1})
+			cursor.each(function(err,object){
+				if(object === null){
+					console.log('products routes enabled');
+				}else{
+					var route_string = '/' + object.ancestors.join('/') + '/' + object.alias;
 					var route = Susanin.Route(route_string);
 					route.executor = {
 						option:"shop",
 						controller:"products",
 						method:"index",
-						id:product._id
+						id:object._id
 					}
 					$p.addRoute(route);
-				});
-
-				console.log('products routes enabled');
-			});
+				}
+			})
 
 			that.option('content').model('page').find(function(pages){
 				pages.forEach(function(page){
