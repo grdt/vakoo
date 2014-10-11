@@ -7,6 +7,9 @@ var ShopCategoriesController = function(){
 		that = this;
 
 	this.index = function(){
+
+		this.query.logTime("run category action");
+
 		this.model('category').where({_id:this.get('id')}).findOne(function(category){
 			if(category._id){
 
@@ -75,6 +78,8 @@ var ShopCategoriesController = function(){
 
 					data.categories = subsubs;
 
+					that.query.logTime("prepare category display");
+
 					$c.model('product').where({ancestors:category._id, available:true, status:'active'}).count(function(count){
 
 						data.productCount = count;
@@ -93,11 +98,13 @@ var ShopCategoriesController = function(){
 								.find(function(products){
 									data.products = products;
 									data.pagination = {page:$c.get('p')*1 + 1,count:count,perPage:$c.config.product.perPage};
+									that.query.logTime("display category");
 									$c.tmpl().display('category',data);
 							});
 						}else{
 							model.find(function(products){
 									data.products = products;
+									that.query.logTime("display category");
 									$c.tmpl().display('category',data);
 							});
 						}

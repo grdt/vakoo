@@ -22,8 +22,27 @@ var Query = function(request,response){
 	this.initTime = (new Date()).getTime();
 
 	this.logTime = function(name){
-		var time = (new Date()).getTime();
-		console.log(name+':',(time - this.initTime),'ms');
+		var time = (new Date()).getTime(),
+			text = [name+':',(time - this.initTime),'ms'].join(' ');
+		if(this.vakoo.ENVIRONMENT == "production"){
+			var date = new Date(),
+				monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				day = date.getDate(),
+				month = monthes[date.getMonth()],
+				fileName = "./logs/" + "queryTime_" + month + '_' + day + '.log';
+			fs.exists(fileName, function (exists) {
+				if(exists){
+					fs.appendFile(fileName,text + '\n', function (err) {
+
+					});
+				} else {
+					fs.writeFile(fileName,text + '\n');
+				}
+			});
+			console.log(text);
+		}else{
+			console.log(text);
+		}
 		this.initTime = time;
 	}
 
@@ -83,10 +102,11 @@ var Query = function(request,response){
 
 		this.response.cookie(variable,value,{
 			maxAge:new Date(Date.now() + this.vakoo.config().session_live),
-//			httpOnly:true,
 			domain:this.vakoo.config().domain
 		});
 	}
+
+	this.logTime("init url");
 
 	if(this.request.url != '/' && this.executor.isEqual(this.vakoo.config().default_executor)){
 		var params = this.router().fetchUrl(this.request.url);
@@ -97,6 +117,8 @@ var Query = function(request,response){
 			this.request.params = params.params;
 		}
 	}
+
+	this.logTime("run executor");
 }
 
 

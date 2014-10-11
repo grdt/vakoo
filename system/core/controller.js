@@ -34,7 +34,7 @@ var CoreController = function(query){
 		}
 	}else{
 		this.cookie = function(){
-			console.log('not enought query. cookie not supported');
+//			console.log('not enought query. cookie not supported');
 		}
 	}
 	

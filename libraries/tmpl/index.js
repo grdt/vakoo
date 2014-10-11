@@ -32,7 +32,7 @@ var TemplateLibrary = function(params){
 		$l._view = view;
 
 
-//		this.from.query.logTime('startDisplay');
+		this.from.query.logTime('startDisplay');
 //		console.time('display')
 
 		this.initPlugin('before_display',$l,function(){
@@ -42,6 +42,7 @@ var TemplateLibrary = function(params){
 			});
 
 //			console.timeEnd('display')
+			that.from.query.logTime('echo html');
 			that.from.echo(html);
 		});
 	}
