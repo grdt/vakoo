@@ -18,6 +18,7 @@ vakoo.load.db._driver.emitter.on('db_conn',function(){
 		.option('-a, --all', 'update ALL images')
 		.option('-s, --size', 'update sizes')
 		.option('-u, --update', 'update prices')
+		.option('-o, --unowned', 'catch unowned products')
 		.parse(process.argv);
 
 	if(program.image){
@@ -40,8 +41,15 @@ vakoo.load.db._driver.emitter.on('db_conn',function(){
 			process.exit(0)
 		});
 	}
+
+	if(program.unowned){
+		updater.catchUnowned(function(){
+			console.log('unowned complete');
+			process.exit(0)
+		})
+	}
 	
-	if(!program.image && !program.size && !program.update){
+	if(!program.image && !program.size && !program.update && !program.unowded){
 		var CronJob = require('cron').CronJob;
 		var job = new CronJob('00 00 03 * * *', function(){
 				updater.priceUpdate(function(){

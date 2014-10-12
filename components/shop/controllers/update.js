@@ -122,7 +122,8 @@ var ShopUpdateController = function(){
 									for(var key in pathParts){
 										var part = pathParts[key];
 										if(part){
-											if(!loader.isDir(path + part)){
+											var stat = fs.lstatSync(path + part);
+											if(!stat.isSymbolicLink() && !stat.isDirectory()){
 												fs.mkdirSync(path + part);
 											}
 											path = path + part + '/';
@@ -613,6 +614,89 @@ var ShopUpdateController = function(){
 			}
 		}
 		cursor.nextObject(update);
+	}
+
+	this.catchUnowned = function(globalCb){
+		console.log("start catch unowned products");
+		var regs = {
+			trusiki:[
+				new RegExp("трусики","i"),
+				new RegExp("стринги","i"),
+//				new RegExp("джоки","i"),
+//				new RegExp("танга","i"),
+			],
+			"muzhskoe-eroticheskoe-bele":[
+				new RegExp("боксеры","i"),
+				new RegExp("трусы","i"),
+				new RegExp("мужские","i"),
+				new RegExp("тонги","i"),
+			],
+			"komplekty-belya":[
+				new RegExp("комплект","i"),
+				new RegExp("ко��плект","i"),
+				new RegExp("комплек��","i"),
+			]
+		}
+
+		var allcats = {};
+
+
+		that.model("category").find(function(categories){
+			categories.forEach(function(category){
+				allcats[category._id] = category;
+			});
+			categories = allcats;
+
+			var setCategory = function(object,catId,cb){
+				var item = object.clone();
+				item.ancestors = categories[catId].ancestors.clone();
+				item.ancestors.push(categories[catId]._id);
+				item.category = categories[catId]._id;
+				that.model("product").collection().update({_id:item._id},{$set:{ancestors:item.ancestors,category:item.category}},function(err,result){
+					if(typeof cb == "function"){
+						cb();
+					}
+				});
+
+			}
+
+			var cursor = that.model("product").collection().find({category:"",ancestors:[]},{title:1,desc:1,shortDesc:1});
+			cursor.each(function(err,object){
+				if(object === null){
+
+				}else{
+					var string = object.title + ' ' + object.shortDesc;
+					object.cats = [];
+					for(var catId in regs){
+						regs[catId].forEach(function(reg){
+							if(reg.exec(string) !== null){
+								if(object.cats.indexOf(catId) < 0){
+									object.cats.push(catId);
+								}
+							}
+						})
+					}
+					if(object.cats.length){
+						console.log(object._id,string,object.cats);
+						if(object.cats.indexOf("komplekty-belya") >= 0){
+							console.log(object._id,object.title,object.shortDesc,"komplekt");
+							setCategory(object,"komplekty-belya",function(){
+								console.log(object._id,"add");
+							});
+						}
+//
+//						if(object.cats.indexOf("muzhskoe-eroticheskoe-bele") >= 0){
+//							console.log(object._id,object.title,object.shortDesc,"muzhskoe");
+//							setCategory(object,"muzhskoe-eroticheskoe-bele",function(){
+//								console.log(object._id,"add");
+//							});
+//						}
+					}
+				}
+			})
+//		globalCb();
+		})
+
 	}
 	
 }
