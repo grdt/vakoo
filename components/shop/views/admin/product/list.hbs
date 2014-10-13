@@ -1,8 +1,9 @@
 {{factory.flash}}
 
 <div class="well">
-    <a href="/admin/?task=shop.products/index" class="btn {{^noCategory}}btn-primary{{/noCategory}}">Все</a>
+    <a href="/admin/?task=shop.products/index" class="btn {{^noCategory}}{{^withError}}btn-primary{{/withError}}{{/noCategory}}">Все</a>
     <a href="/admin/?task=shop.products/index&category=none" class="btn {{#noCategory}}btn-primary{{/noCategory}}">Без категории</a>
+    <a href="/admin/?task=shop.products/index&error=1" class="btn {{#withError}}btn-primary{{/withError}}">С ошибками в тексте</a>
 
 
     <div class="btn-group">

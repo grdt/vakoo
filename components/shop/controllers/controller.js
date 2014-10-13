@@ -32,7 +32,7 @@ var Controller = function(){
 					categoriesObject[category._id].category = category;
 				})
 
-				that.model('product').where({isNew:true}).find(function(newcomers){
+				that.model('product').where({isNew:true,available:true}).limit(4).find(function(newcomers){
 					that.tmpl().display('main_page',{
 						title:page.meta.title,
 						page:page,

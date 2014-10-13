@@ -83,6 +83,7 @@ var ShopUpdateController = function(){
 						product.price = p.price;
 						product.tradePrice = p.tradePrice;
 						product.available = p.available;
+						product.isNew = true;
 						product.lastUpdate = new Date();
 
 						product.alias = translit(product.title + ' ' + product.shortDesc);

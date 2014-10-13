@@ -73,6 +73,11 @@ var ShopProductsAdminController = function(){
 					data.noCategory = true;
 				}
 
+				if(that.get('error') == "1"){
+					where = {"$or":[{"title":/�/i},{"shortDesc":/�/i},{"desc":/�/i}]};
+					data.withError = true;
+				}
+
 				that.module('pagination').get(productModel(where),PER_PAGE,that.get('p',0),function(products, pagination){
 					data.pagination = pagination;
 					data.products = products;
