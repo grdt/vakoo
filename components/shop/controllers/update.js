@@ -34,7 +34,7 @@ var ShopUpdateController = function(){
 			iconv = new Iconv('UTF-8', 'CP1251'),
 			mnogo = iconv.convert('Много');
 
-		that.model('product').collection().update({},{$set:{available:false}},{multi:true}, function(err,result){
+		that.model('product').collection().update({},{$set:{available:false,isNew:false}},{multi:true}, function(err,result){
 			console.log(err, result);
 		});
 
