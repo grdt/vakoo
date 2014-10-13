@@ -122,8 +122,7 @@ var ShopUpdateController = function(){
 									for(var key in pathParts){
 										var part = pathParts[key];
 										if(part){
-											var stat = fs.lstatSync(path + part);
-											if(!stat.isSymbolicLink() && !stat.isDirectory()){
+											if(!fs.existsSync(path + part)){
 												fs.mkdirSync(path + part);
 											}
 											path = path + part + '/';
@@ -619,12 +618,12 @@ var ShopUpdateController = function(){
 	this.catchUnowned = function(globalCb){
 		console.log("start catch unowned products");
 		var regs = {
-			trusiki:[
-				new RegExp("трусики","i"),
-				new RegExp("стринги","i"),
+//			trusiki:[
+//				new RegExp("трусики","i"),
+//				new RegExp("стринги","i"),
 //				new RegExp("джоки","i"),
 //				new RegExp("танга","i"),
-			],
+//			],
 			"muzhskoe-eroticheskoe-bele":[
 				new RegExp("боксеры","i"),
 				new RegExp("трусы","i"),
@@ -635,11 +634,61 @@ var ShopUpdateController = function(){
 				new RegExp("комплект","i"),
 				new RegExp("ко��плект","i"),
 				new RegExp("комплек��","i"),
+				new RegExp("корсет(.*)стринги","i"),
+				new RegExp("сорочка(.*)стринги","i"),
+				new RegExp("мини-платье(.*)стринги","i"),
+				new RegExp("комбинация(.*)стринги","i"),
+				new RegExp("корсет(.*)трусики","i"),
+				new RegExp("сорочка(.*)трусики","i"),
+				new RegExp("мини-платье(.*)трусики","i"),
+				new RegExp("комбинация(.*)трусики","i"),
+			],
+			"vibrotrusiki":[
+				new RegExp("вибротрусики","i"),
+			],
+			"trusiki-i-krepleniya":[
+				new RegExp("трусики для страпона","i"),
+			],
+			"elektrostimulyaciya":[
+				new RegExp("электростимуляц","i"),
+				new RegExp("электро-стимуляц","i"),
+			],
+			"povodki-i-utyazhki-na-penis":[
+				new RegExp("утяжка","i"),
+			],
+			"pletki-i-shlepalki":[
+				new RegExp("плеть","i"),
+				new RegExp("плетка","i"),
+				new RegExp("стек ","i"),
+				new RegExp("стек, ","i"),
+				new RegExp("хлопалка","i"),
+			],
+			"klyapy":[
+				new RegExp("кляп","i"),
+			],
+			"probki-i-vtulki":[
+				new RegExp("анальная пробка","i"),
+			],
+			"vibropuli":[
+				new RegExp("вибропуля","i"),
+			],
+			"mini-platya-i-sorochki":[
+				new RegExp("мини-платье","i"),
+				new RegExp("сорочка","i"),
+				new RegExp("комбинация","i"),
+			],
+			"eroticheskaya-obuv-dlya-striptiza":[
+				new RegExp("босоножк","i"),
+			],
+			"chulki":[
+				new RegExp("чулки","i"),
+			],
+			"byustgaltery":[
+				new RegExp("лиф ","i"),
 			]
 		}
 
 		var allcats = {};
-
 
 		that.model("category").find(function(categories){
 			categories.forEach(function(category){
@@ -676,22 +725,10 @@ var ShopUpdateController = function(){
 							}
 						})
 					}
-					if(object.cats.length){
-						console.log(object._id,string,object.cats);
-						if(object.cats.indexOf("komplekty-belya") >= 0){
-							console.log(object._id,object.title,object.shortDesc,"komplekt");
-							setCategory(object,"komplekty-belya",function(){
-								console.log(object._id,"add");
-							});
-						}
-//
-//						if(object.cats.indexOf("muzhskoe-eroticheskoe-bele") >= 0){
-//							console.log(object._id,object.title,object.shortDesc,"muzhskoe");
-//							setCategory(object,"muzhskoe-eroticheskoe-bele",function(){
-//								console.log(object._id,"add");
-//							});
-//						}
-					}
+
+//					if(object.cats.length){
+						console.log(object._id, object.title, object.shortDesc, object.cats);
+//					}
 				}
 			})
 //		globalCb();
