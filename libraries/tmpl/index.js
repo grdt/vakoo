@@ -215,15 +215,30 @@ var TemplateLibrary = function(params){
 		});
 
 
+		/* template cache */
+		var soMany = {};
+
+		soMany["shop.product-card"] = Handlebars.compile(that.template("shop.product-card"));
+
+		/* template cache */
+
 		Handlebars.registerHelper('include', function(templateName, data) {
+
+			if(typeof soMany[templateName] == "function"){
+				var string = soMany[templateName](data);
+				var result = new that.hbs.SafeString(string);
+				return result;
+			}
+
 			var html = that.template(templateName);
 
 			if(html){
+
 				var template = Handlebars.compile(html);
 				data.factory = $l.factory();
 				data.root = that.rootUrl();
-
-				var result = new that.hbs.SafeString(template(data));
+				var string = template(data);
+				var result = new that.hbs.SafeString(string);
 				return result;
 			}else{
 				return false;

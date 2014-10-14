@@ -53,7 +53,7 @@ vakoo.load.db._driver.emitter.on('db_conn',function(){
 		var CronJob = require('cron').CronJob;
 		var job = new CronJob('00 00 03 * * *', function(){
 				updater.priceUpdate(function(){
-					console.log("images update");
+					console.log("price update");
 				});
 			}, function () {
 				

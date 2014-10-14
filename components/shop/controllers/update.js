@@ -619,18 +619,6 @@ var ShopUpdateController = function(){
 	this.catchUnowned = function(globalCb){
 		console.log("start catch unowned products");
 		var regs = {
-//			trusiki:[
-//				new RegExp("трусики","i"),
-//				new RegExp("стринги","i"),
-//				new RegExp("джоки","i"),
-//				new RegExp("танга","i"),
-//			],
-			"muzhskoe-eroticheskoe-bele":[
-				new RegExp("боксеры","i"),
-				new RegExp("трусы","i"),
-				new RegExp("мужские","i"),
-				new RegExp("тонги","i"),
-			],
 			"komplekty-belya":[
 				new RegExp("комплект","i"),
 				new RegExp("ко��плект","i"),
@@ -643,6 +631,43 @@ var ShopUpdateController = function(){
 				new RegExp("сорочка(.*)трусики","i"),
 				new RegExp("мини-платье(.*)трусики","i"),
 				new RegExp("комбинация(.*)трусики","i"),
+				new RegExp("бюстгальт(.*)стринги","i"),
+				new RegExp("бюстгальт(.*)шортики","i"),
+				new RegExp("пеньюар(.*)стринги","i"),
+				new RegExp("платье(.*)стринги","i"),
+				new RegExp("топ(.*)стринги","i"),
+				new RegExp("лиф(.*)юбочка(.*)стринги","i"),
+				new RegExp("лиф(.*)стринги(.*)пояс","i"),
+				new RegExp("бюстик(.*)стринги(.*)пояс","i"),
+				new RegExp("топ(.*)юбка(.*)стринги","i"),
+				new RegExp("бюстик(.*)трусики","i"),
+				new RegExp("бэби-долл(.*)стринги","i"),
+				new RegExp("платье(.*)стринги","i"),
+				new RegExp("бюстье(.*)трусики","i"),
+				new RegExp("корсаж(.*)трусики","i"),
+				new RegExp("бюст(.*)юбка","i"),
+			],
+			trusiki:[
+				new RegExp("трусики","i"),
+				new RegExp("стринги","i"),
+				new RegExp("джок","i"),
+				new RegExp("шортики","i"),
+				new RegExp("танга","i"),
+				new RegExp("слипы","i"),
+				new RegExp("шорты","i"),
+				new RegExp("тр��сики","i"),
+				new RegExp("тру��ики","i"),
+				new RegExp("бикини","i"),
+			],
+			"muzhskoe-eroticheskoe-bele":[
+				new RegExp("боксеры","i"),
+				new RegExp("трусы","i"),
+//				new RegExp("мужские","i"),
+				new RegExp("тонги","i"),
+				new RegExp("борцовка","i"),
+			],
+			"medsestry-i-vrachi":[
+				new RegExp("медсестр","i"),
 			],
 			"vibrotrusiki":[
 				new RegExp("вибротрусики","i"),
@@ -653,6 +678,7 @@ var ShopUpdateController = function(){
 			"elektrostimulyaciya":[
 				new RegExp("электростимуляц","i"),
 				new RegExp("электро-стимуляц","i"),
+				new RegExp("электро-импульс","i"),
 			],
 			"povodki-i-utyazhki-na-penis":[
 				new RegExp("утяжка","i"),
@@ -663,12 +689,19 @@ var ShopUpdateController = function(){
 				new RegExp("стек ","i"),
 				new RegExp("стек, ","i"),
 				new RegExp("хлопалка","i"),
+				new RegExp("шлепалка","i"),
+				new RegExp("шлёпалка","i"),
 			],
 			"klyapy":[
 				new RegExp("кляп","i"),
 			],
 			"probki-i-vtulki":[
 				new RegExp("анальная пробка","i"),
+				new RegExp("анальная втулка","i"),
+				new RegExp("стеклянн(.*)втулка","i"),
+				new RegExp("стеклянн(.*)проб","i"),
+				new RegExp("анальная(.*)втулка","i"),
+				new RegExp("анальная(.*)��роб","i"),
 			],
 			"vibropuli":[
 				new RegExp("вибропуля","i"),
@@ -677,15 +710,143 @@ var ShopUpdateController = function(){
 				new RegExp("мини-платье","i"),
 				new RegExp("сорочка","i"),
 				new RegExp("комбинация","i"),
+				new RegExp("фарту","i"),
+				new RegExp("бэби-долл","i"),
+				new RegExp("халат","i"),
 			],
 			"eroticheskaya-obuv-dlya-striptiza":[
 				new RegExp("босоножк","i"),
+				new RegExp("сабо","i"),
+				new RegExp("туфли","i"),
+				new RegExp("��уфли","i"),
+				new RegExp("сапоги","i"),
+				new RegExp("кеды","i"),
+				new RegExp("туфельки","i"),
 			],
 			"chulki":[
 				new RegExp("чулки","i"),
 			],
+			"oshejniki":[
+				new RegExp("ошейник","i"),
+			],
+			"rasshiriteli-zazhimy-i-vytyazhki":[
+				new RegExp("расширител","i"),
+			],
+			"rotiki":[
+				new RegExp("мастурбатор-ротик","i"),
+				new RegExp("мастурбатор(.*)рот","i"),
+				new RegExp("мастурбатор(.*)орал","i"),
+			],
+			"shariki-cepochki-i-elochki":[
+				new RegExp("ёлочка","i"),
+				new RegExp("елочка","i"),
+				new RegExp("анал(.*)цепоч","i"),
+			],
+			"stimulyaciya-prostaty":[
+				new RegExp("простата","i"),
+				new RegExp("простат","i"),
+			],
+			"naruchniki-i-fiksaciya":[
+				new RegExp("наручник","i"),
+				new RegExp("наножник","i"),
+				new RegExp("фиксатор","i"),
+				new RegExp("фиксаци","i"),
+			],
 			"byustgaltery":[
-				new RegExp("лиф ","i"),
+				new RegExp("лиф","i"),
+				new RegExp("бюстгальтер","i"),
+				new RegExp("бюстгалтер","i"),
+				new RegExp("бюстгаль��ер","i"),
+				new RegExp("бюстье","i"),
+			],
+			"vaginalnye-shariki":[
+				new RegExp("шарики вагинальные","i"),
+			],
+			"vibroyajca":[
+				new RegExp("виброяйцо","i"),
+			],
+			"ketsyuty-chulki-na-telo":[
+				new RegExp("кэтсьюит","i"),
+				new RegExp("комбинезон","i"),
+			],
+			"vaginy":[
+				new RegExp("мастурбатор(.*)вагин","i"),
+				new RegExp("вагина(.*)мастурбатор","i"),
+			],
+			"popki":[
+				new RegExp("мастурбатор(.*)поп","i"),
+				new RegExp("поп(.*)мастурбатор","i"),
+			],
+			"vaginy-s-vibraciei":[
+				new RegExp("мастурбатор(.*)вибра","i"),
+				new RegExp("вибра(.*)мастурбатор","i"),
+			],
+			"realistichnye":[
+				new RegExp("вибратор(.*)реалисти","i"),
+				new RegExp("реалисти(.*)вибратор","i"),
+			],
+			"nasadki-strapony-k-trusikam":[
+				new RegExp("фаллоимитатор(.*)насадка(.*)страпон","i"),
+			],
+			"massazhery-dlya-tela":[
+				new RegExp("вибромассажер","i"),
+				new RegExp("вибромассажёр","i"),
+			],
+			"eroticheskie-maski":[
+				new RegExp("маска","i"),
+			],
+			"kolca-s-vibraciej":[
+				new RegExp("виброкольцо","i"),
+				new RegExp("кольцо(.*)вибр","i"),
+			],
+			"realistichnye-realistiki":[
+				new RegExp("фаллоимитатор(.*)реалисти","i"),
+				new RegExp("реалисти(.*)фаллоимитатор","i"),
+			],
+			"vorotnichki-i-manzhety":[
+				new RegExp("манжет","i"),
+			],
+			"korsety":[
+				new RegExp("корсет","i"),
+			],
+			"bodi-teddi-monokini":[
+				new RegExp("боди","i"),
+				new RegExp("тедди","i"),
+			],
+			"analnye-fallosy":[
+				new RegExp("анал(.*)стимуля","i"),
+				new RegExp("стимуля(.*)анал","i"),
+			],
+			"poyasa-i-podtyazhki":[
+				new RegExp("пояс","i"),
+			],
+			"kolgotki":[
+				new RegExp("колготки","i"),
+				new RegExp("леггинсы","i"),
+			],
+			"kolca-bez-vibracii":[
+				new RegExp("эрекционное кольцо","i"),
+			],
+			"gornichnye-sluzhanki-i-oficiantki":[
+				new RegExp("официантк","i"),
+				new RegExp("горничн","i"),
+			],
+			"shkolnicy-i-studentki":[
+				new RegExp("школьниц","i"),
+			],
+			"analnye-vibratory":[
+				new RegExp("анал(.*)вибр","i"),
+				new RegExp("вибр(.*)анал","i"),
+			],
+			"klubnye-i-vechernie-platya":[
+				new RegExp("платье","i"),
+			],
+			"topy-i-majki":[
+				new RegExp("топ","i"),
+			],
+			"yubki":[
+				new RegExp("юбка","i"),
+				new RegExp("юбочка","i"),
 			]
 		}
 
@@ -710,10 +871,14 @@ var ShopUpdateController = function(){
 
 			}
 
-			var cursor = that.model("product").collection().find({category:"",ancestors:[]},{title:1,desc:1,shortDesc:1});
+			var cursor = that.model("product").collection().find({$or:[{"ancestors":[]},{"category":""}]},{title:1,desc:1,shortDesc:1});
+			cursor.count(function(err,count){
+				console.log('count',count);
+			})
+			var iterator = 0;
 			cursor.each(function(err,object){
 				if(object === null){
-
+					console.log("iterator",iterator);
 				}else{
 					var string = object.title + ' ' + object.shortDesc;
 					object.cats = [];
@@ -726,10 +891,33 @@ var ShopUpdateController = function(){
 							}
 						})
 					}
+					var showAll = true,
+						save = false,
+						exclude = false;
 
-//					if(object.cats.length){
+					if(showAll){
 						console.log(object._id, object.title, object.shortDesc, object.cats);
-//					}
+						iterator++;
+					}else{
+						if(!exclude){
+							if(object.cats.length){
+								iterator++;
+								if(save){
+									setCategory(object,object.cats[0],function(){
+										console.log(object._id, object.title, object.shortDesc, object.cats);
+									})
+								}else{
+									console.log(object._id, object.title, object.shortDesc, object.cats);
+								}
+							}
+						}else{
+							if(!object.cats.length){
+								iterator++;
+								console.log(object._id, object.title, object.shortDesc, object.cats);
+							}
+						}
+
+					}
 				}
 			})
 //		globalCb();
