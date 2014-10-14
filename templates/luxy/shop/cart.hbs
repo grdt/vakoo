@@ -61,7 +61,7 @@
                                     <td class="total align-r">{{number-format total}} <span class="fa fa-rouble"></span></td>
                                 </tr>
                                 <tr class="devider"
-                                    data-content="При заказе на сумму более 4000 <span class='fa fa-rouble'></span> доставка осуществляется бесплатно по всей России. " data-html="true" data-container="body">
+                                    data-content="{{^if factory.vakoo._config.delivery.mincart}}Доставка осуществляется бесплатно по всей России{{else}}{{#greater product.price factory.vakoo._config.delivery.mincart}}Доставка <b>{{product.title}}</b> осуществляется бесплатно по всей России.{{else}}Стоимость доставки составит {{factory.vakoo._config.delivery.price}} <span class='fa fa-rouble'></span> при заказе на сумму до {{factory.vakoo._config.delivery.mincart}} <span class='fa fa-rouble'></span> по всей России.{{/greater}}{{/if}}" data-html="true" data-container="body">
                                     <td>Доставка <span class="fa fa-question-circle"></span></td>
                                     <td class="delivery align-r">{{#if delivery}}{{delivery}} <span class="fa fa-rouble"></span>{{else}}Бесплатно{{/if}}</td>
                                 </tr>

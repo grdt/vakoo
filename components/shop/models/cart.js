@@ -68,10 +68,10 @@ var Cart = function($c){
 	}
 
 	this.delivery = function(word){
-		if(this.total > 4000){
+		if(this.total > this.vakoo.config().delivery.mincart){
 			return (word) ? 'Бесплатно' : 0;
 		}else{
-			return 300;
+			return this.vakoo.config().delivery.price;
 		}
 	}
 

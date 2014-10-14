@@ -7,7 +7,6 @@ HandlebarsHelpers.help(Handlebars);
  * @constructor
  */
 var TemplateLibrary = function(params){
-
 	var $l = this;
 	var that = this;
 	this.hbs = Handlebars;
@@ -33,7 +32,6 @@ var TemplateLibrary = function(params){
 
 
 		this.from.query.logTime('startDisplay');
-//		console.time('display')
 
 		this.initPlugin('before_display',$l,function(){
 			var html = $l.layout()({
@@ -41,7 +39,6 @@ var TemplateLibrary = function(params){
 				root:$l.rootUrl()
 			});
 
-//			console.timeEnd('display')
 			that.from.query.logTime('echo html');
 			that.from.echo(html);
 		});
@@ -126,6 +123,7 @@ var TemplateLibrary = function(params){
 	}
 
 	this.helpers = function(){
+
 		Handlebars.registerHelper('factory', function() {
 			var args = Array.prototype.slice.call(arguments);
 
@@ -195,6 +193,8 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
+
+
 		Handlebars.registerHelper('isset', function(context, options) {
 			if(typeof context != "undefined"){
 				return options.fn(this);
@@ -218,7 +218,9 @@ var TemplateLibrary = function(params){
 		/* template cache */
 		var soMany = {};
 
-		soMany["shop.product-card"] = Handlebars.compile(that.template("shop.product-card"));
+		if(!this.from.isAdmin() && typeof soMany["shop.product-card"] == "undefined" && that.template("shop.product-card")){
+			soMany["shop.product-card"] = Handlebars.compile(that.template("shop.product-card"));
+		}
 
 		/* template cache */
 
@@ -265,7 +267,7 @@ var TemplateLibrary = function(params){
 		});
 
 
-		
+
 		Handlebars.registerHelper('row',function(context,inRow,options){
 			if(typeof options == "undefined"){
 				var options = inRow;
@@ -367,6 +369,8 @@ var TemplateLibrary = function(params){
 
 				return km + kw + kd;
 		});
+
+
 	}
 
 
@@ -385,13 +389,8 @@ var TemplateLibrary = function(params){
 		}
 	}
 
-    this.preload = function(){
-
-    }
 
 	this.helpers();
-
-    return this;
 
 }
 

@@ -110,7 +110,7 @@ font-weight: 200;">Y</span></span></h1>
                     }}
                 </div>
                 <div class="promo-labels">
-                    <div data-content="{{#greater product.price 4000}}Доставка <b>{{product.title}}</b> осуществляется бесплатно.{{else}}Стоимость доставки составит 300 <span class='fa fa-rouble'></span> при заказе на сумму до 4000 <span class='fa fa-rouble'></span>.{{/greater}}" data-html="true"><span><i class="fa fa-truck"></i>{{#greater product.price 4000}}Бесплатно{{else}}300 руб.{{/greater}}</span></div>
+                    <div data-content="{{#greater product.price factory.vakoo._config.delivery.mincart}}Доставка <b>{{product.title}}</b> осуществляется бесплатно по всей России.{{else}}Стоимость доставки составит {{factory.vakoo._config.delivery.price}} <span class='fa fa-rouble'></span> при заказе на сумму до {{factory.vakoo._config.delivery.mincart}} <span class='fa fa-rouble'></span> по всей России.{{/greater}}" data-html="true"><span><i class="fa fa-truck"></i>{{#greater product.price factory.vakoo._config.delivery.mincart}}Бесплатно{{else}}{{factory.vakoo._config.delivery.price}} руб.{{/greater}}</span></div>
                     <div data-content="Доставка по всей России в течении одной недели."><i class="fa fa-space-shuttle"></i>По всей России</div>
                     <div data-content="Товар будет проверен нашими специалистами и бережно запакован без опознавательных признаков."><i class="fa fa-shield"></i>Гарантии</div>
                 </div>

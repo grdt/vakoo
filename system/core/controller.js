@@ -135,6 +135,7 @@ var CoreController = function(query){
 
 		var lib = this.vakoo.config().tmpl_lib;
 		var tmpl = this.library(lib,{url:this.query,from:this});
+		this._tmpl = tmpl;
 		return tmpl;
 	}
 

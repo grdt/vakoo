@@ -83,7 +83,8 @@ var CoreComponent = function(name){
     
     this.library = function(name,data){
         if(!!this._libraries[name]){
-            return new this._libraries[name](data);
+			var lib = new this._libraries[name](data);
+            return lib;
         }else{
             throw new Error('library ' + name + ' not found');
             return false;
