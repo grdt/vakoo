@@ -600,6 +600,10 @@ var ShopUpdateController = function(){
 						var hasActive = false;
 
 						products.asyncEach(function(product,nextProduct){
+							if(!product){
+								nextProduct();
+								return;
+							}
 							if(product.available && !hasActive){
 								product.status = 'active';
 								product.alias = translit(product.title + ' ' + product.shortDesc);
