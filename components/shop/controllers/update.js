@@ -573,15 +573,19 @@ var ShopUpdateController = function(){
 					},function(){
 						var ancestors = [];
 						var sizes = {};
-						products.forEach(function(product){
-							if(!product.ancestors){
-								product.ancestors = [];
+						products.forEach(function(product, i){
+							if(!product.size){
+								delete products[i];
+							}else{
+								if(!product.ancestors){
+									product.ancestors = [];
+								}
+								if(product.ancestors && product.ancestors.length){
+									ancestors = product.ancestors;
+								}
+								product.size.current = product.size.current.replace('Размер ','');
+								sizes[product.size.current] = product.sku;
 							}
-							if(product.ancestors && product.ancestors.length){
-								ancestors = product.ancestors;
-							}
-							product.size.current = product.size.current.replace('Размер ','');
-							sizes[product.size.current] = product.sku;
 						});
 						products.forEach(function(product){
 							product.ancestors = ancestors;
