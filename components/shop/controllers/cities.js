@@ -82,7 +82,7 @@ var Controller = function(){
 					}
 					if(citiesLength == 1){
 						data.cities = null;
-					}else{
+					}else if (data.city && data.city.alias){
 						delete data.cities[data.city.alias];
 					}
 					that.json(data);

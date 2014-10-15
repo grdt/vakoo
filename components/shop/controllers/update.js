@@ -664,6 +664,7 @@ var ShopUpdateController = function(){
 				new RegExp("трусы","i"),
 //				new RegExp("мужские","i"),
 				new RegExp("тонги","i"),
+				new RegExp("хипсы","i"),
 				new RegExp("борцовка","i"),
 			],
 			"medsestry-i-vrachi":[
@@ -676,7 +677,7 @@ var ShopUpdateController = function(){
 				new RegExp("трусики для страпона","i"),
 			],
 			"elektrostimulyaciya":[
-				new RegExp("электростимуляц","i"),
+				new RegExp("электростимуля","i"),
 				new RegExp("электро-стимуляц","i"),
 				new RegExp("электро-импульс","i"),
 			],
@@ -709,7 +710,9 @@ var ShopUpdateController = function(){
 			"mini-platya-i-sorochki":[
 				new RegExp("мини-платье","i"),
 				new RegExp("сорочка","i"),
+				new RegExp("блуза","i"),
 				new RegExp("комбинация","i"),
+				new RegExp("комбинац��","i"),
 				new RegExp("фарту","i"),
 				new RegExp("бэби-долл","i"),
 				new RegExp("халат","i"),
@@ -731,6 +734,7 @@ var ShopUpdateController = function(){
 			],
 			"rasshiriteli-zazhimy-i-vytyazhki":[
 				new RegExp("расширител","i"),
+				new RegExp("зажим","i"),
 			],
 			"rotiki":[
 				new RegExp("мастурбатор-ротик","i"),
@@ -748,9 +752,14 @@ var ShopUpdateController = function(){
 			],
 			"naruchniki-i-fiksaciya":[
 				new RegExp("наручник","i"),
+				new RegExp("оковы","i"),
 				new RegExp("наножник","i"),
 				new RegExp("фиксатор","i"),
 				new RegExp("фиксаци","i"),
+				new RegExp("цепь","i"),
+				new RegExp("цепи","i"),
+				new RegExp("карабин","i"),
+				new RegExp("веревк","i"),
 			],
 			"byustgaltery":[
 				new RegExp("лиф","i"),
@@ -758,12 +767,14 @@ var ShopUpdateController = function(){
 				new RegExp("бюстгалтер","i"),
 				new RegExp("бюстгаль��ер","i"),
 				new RegExp("бюстье","i"),
+				new RegExp("бюстик","i"),
 			],
 			"vaginalnye-shariki":[
 				new RegExp("шарики вагинальные","i"),
 			],
 			"vibroyajca":[
 				new RegExp("виброяйцо","i"),
+				new RegExp("вибро-яйц","i"),
 			],
 			"ketsyuty-chulki-na-telo":[
 				new RegExp("кэтсьюит","i"),
@@ -779,7 +790,10 @@ var ShopUpdateController = function(){
 			],
 			"vaginy-s-vibraciei":[
 				new RegExp("мастурбатор(.*)вибра","i"),
+				new RegExp("мастурабатор(.*)вибра","i"),
 				new RegExp("вибра(.*)мастурбатор","i"),
+				new RegExp("вибра(.*)вагин","i"),
+				new RegExp("вагин(.*)вибра","i"),
 			],
 			"realistichnye":[
 				new RegExp("вибратор(.*)реалисти","i"),
@@ -787,10 +801,14 @@ var ShopUpdateController = function(){
 			],
 			"nasadki-strapony-k-trusikam":[
 				new RegExp("фаллоимитатор(.*)насадка(.*)страпон","i"),
+				new RegExp("насадка(.*)страпон","i"),
+				new RegExp("страпон(.*)насадка","i"),
 			],
 			"massazhery-dlya-tela":[
 				new RegExp("вибромассажер","i"),
 				new RegExp("вибромассажёр","i"),
+				new RegExp("массажер","i"),
+				new RegExp("массажёр","i"),
 			],
 			"eroticheskie-maski":[
 				new RegExp("маска","i"),
@@ -812,6 +830,7 @@ var ShopUpdateController = function(){
 			"bodi-teddi-monokini":[
 				new RegExp("боди","i"),
 				new RegExp("тедди","i"),
+				new RegExp("тэдди","i"),
 			],
 			"analnye-fallosy":[
 				new RegExp("анал(.*)стимуля","i"),
@@ -847,6 +866,23 @@ var ShopUpdateController = function(){
 			"yubki":[
 				new RegExp("юбка","i"),
 				new RegExp("юбочка","i"),
+			],
+			"vodonepronicaemye-vibratory":[
+				new RegExp("вибр(.*)водонепроницаем","i"),
+				new RegExp("водонепроницаем(.*)вибр","i"),
+			],
+			"bryuki":[
+				new RegExp("брюки","i"),
+			],
+			"nasadki-na-penis":[
+				new RegExp("насадка(.*)пенис","i"),
+			],
+			"falloprotezy":[
+				new RegExp("фаллопротез","i"),
+				new RegExp("страпон(.*)мужчин","i"),
+			],
+			"eroticheskie-igry":[
+				new RegExp("игра","i"),
 			]
 		}
 
