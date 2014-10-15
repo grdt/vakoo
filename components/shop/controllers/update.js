@@ -577,7 +577,7 @@ var ShopUpdateController = function(){
 							if(!product.ancestors){
 								product.ancestors = [];
 							}
-							if(product.ancestors.length){
+							if(product.ancestors && product.ancestors.length){
 								ancestors = product.ancestors;
 							}
 							product.size.current = product.size.current.replace('Размер ','');
