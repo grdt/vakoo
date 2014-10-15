@@ -449,7 +449,7 @@ var ShopUpdateController = function(){
 			for(var key in pathParts){
 				var part = pathParts[key];
 				if(part){
-					if(!loader.isDir(path + part)){
+					if(!fs.existsSync(path + part)){
 						fs.mkdirSync(path + part);
 					}
 					path = path + part + '/';
