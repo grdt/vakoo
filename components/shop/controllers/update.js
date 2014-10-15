@@ -533,6 +533,10 @@ var ShopUpdateController = function(){
 
 									async.waterfall([
 										function(cb){
+											if(!product.image){
+												cb();
+												return;
+											}
 											downloadFile(product.image, product.alias, function(newFile){
 												product.image = newFile.short(product.title + ' ' + product.shortDesc)
 												cb()
