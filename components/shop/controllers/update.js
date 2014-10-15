@@ -543,7 +543,7 @@ var ShopUpdateController = function(){
 											})
 										},
 										function(cb){
-											if(!product.images.length){
+											if(!product.images || !product.images.length){
 												cb()
 											}else{
 												var images = product.images;
