@@ -574,6 +574,9 @@ var ShopUpdateController = function(){
 						var ancestors = [];
 						var sizes = {};
 						products.forEach(function(product){
+							if(!product.ancestors){
+								product.ancestors = [];
+							}
 							if(product.ancestors.length){
 								ancestors = product.ancestors;
 							}
