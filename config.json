@@ -1,5 +1,5 @@
 {
-    "port":8773,
+    "port":8774,
 	"domain":"vakoo.ru",
 	"default_executor":{
 		"option":"shop",
@@ -9,7 +9,7 @@
     "db":{
         "driver":"mongodb",
         "host":"127.0.0.1",
-        "database":"vakoo"
+        "database":"vakoo_dev"
     },
     "tmpl_lib":"tmpl",
     "template":"luxy",
