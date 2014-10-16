@@ -662,26 +662,26 @@ var ShopUpdateController = function(){
 				new RegExp("корсаж(.*)трусики","i"),
 				new RegExp("бюст(.*)юбка","i"),
 			],
-			trusiki:[
-				new RegExp("трусики","i"),
-				new RegExp("стринги","i"),
-				new RegExp("джок","i"),
-				new RegExp("шортики","i"),
-				new RegExp("танга","i"),
-				new RegExp("слипы","i"),
-				new RegExp("шорты","i"),
-				new RegExp("тр��сики","i"),
-				new RegExp("тру��ики","i"),
-				new RegExp("бикини","i"),
-			],
-			"muzhskoe-eroticheskoe-bele":[
-				new RegExp("боксеры","i"),
-				new RegExp("трусы","i"),
-//				new RegExp("мужские","i"),
-				new RegExp("тонги","i"),
-				new RegExp("хипсы","i"),
-				new RegExp("борцовка","i"),
-			],
+//			trusiki:[
+//				new RegExp("трусики","i"),
+//				new RegExp("стринги","i"),
+//				new RegExp("джок","i"),
+//				new RegExp("шортики","i"),
+//				new RegExp("танга","i"),
+//				new RegExp("слипы","i"),
+//				new RegExp("шорты","i"),
+//				new RegExp("тр��сики","i"),
+//				new RegExp("тру��ики","i"),
+//				new RegExp("бикини","i"),
+//			],
+//			"muzhskoe-eroticheskoe-bele":[
+//				new RegExp("боксеры","i"),
+//				new RegExp("трусы","i"),
+////				new RegExp("мужские","i"),
+//				new RegExp("тонги","i"),
+//				new RegExp("хипсы","i"),
+//				new RegExp("борцовка","i"),
+//			],
 			"medsestry-i-vrachi":[
 				new RegExp("медсестр","i"),
 			],
@@ -712,12 +712,14 @@ var ShopUpdateController = function(){
 				new RegExp("кляп","i"),
 			],
 			"probki-i-vtulki":[
-				new RegExp("анальная пробка","i"),
+				new RegExp("анальная(.*)проб","i"),
 				new RegExp("анальная втулка","i"),
 				new RegExp("стеклянн(.*)втулка","i"),
 				new RegExp("стеклянн(.*)проб","i"),
 				new RegExp("анальная(.*)втулка","i"),
 				new RegExp("анальная(.*)��роб","i"),
+				new RegExp("втулка","i"),
+				new RegExp("пробка","i"),
 			],
 			"vibropuli":[
 				new RegExp("вибропуля","i"),
@@ -740,6 +742,9 @@ var ShopUpdateController = function(){
 				new RegExp("сапоги","i"),
 				new RegExp("кеды","i"),
 				new RegExp("туфельки","i"),
+				new RegExp("ботильон","i"),
+				new RegExp("гладиаторы","i"),
+				new RegExp("каблук","i"),
 			],
 			"chulki":[
 				new RegExp("чулки","i"),
@@ -755,11 +760,14 @@ var ShopUpdateController = function(){
 				new RegExp("мастурбатор-ротик","i"),
 				new RegExp("мастурбатор(.*)рот","i"),
 				new RegExp("мастурбатор(.*)орал","i"),
+				new RegExp("ротик","i"),
 			],
 			"shariki-cepochki-i-elochki":[
 				new RegExp("ёлочка","i"),
 				new RegExp("елочка","i"),
 				new RegExp("анал(.*)цепоч","i"),
+				new RegExp("анал(.*)шар","i"),
+				new RegExp("шар(.*)анал","i"),
 			],
 			"stimulyaciya-prostaty":[
 				new RegExp("простата","i"),
@@ -775,6 +783,8 @@ var ShopUpdateController = function(){
 				new RegExp("цепи","i"),
 				new RegExp("карабин","i"),
 				new RegExp("веревк","i"),
+				new RegExp("бондаж","i"),
+				new RegExp("бандаж","i"),
 			],
 			"byustgaltery":[
 				new RegExp("лиф","i"),
@@ -785,10 +795,11 @@ var ShopUpdateController = function(){
 				new RegExp("бюстик","i"),
 			],
 			"vaginalnye-shariki":[
-				new RegExp("шарики вагинальные","i"),
+				new RegExp("шарики(.*)вагинальные","i"),
+				new RegExp("вагинальные(.*)шарики","i"),
 			],
 			"vibroyajca":[
-				new RegExp("виброяйцо","i"),
+				new RegExp("виброяйц","i"),
 				new RegExp("вибро-яйц","i"),
 			],
 			"ketsyuty-chulki-na-telo":[
@@ -817,6 +828,7 @@ var ShopUpdateController = function(){
 			"nasadki-strapony-k-trusikam":[
 				new RegExp("фаллоимитатор(.*)насадка(.*)страпон","i"),
 				new RegExp("насадка(.*)страпон","i"),
+				new RegExp("насадка(.*)трусик","i"),
 				new RegExp("страпон(.*)насадка","i"),
 			],
 			"massazhery-dlya-tela":[
@@ -828,13 +840,9 @@ var ShopUpdateController = function(){
 			"eroticheskie-maski":[
 				new RegExp("маска","i"),
 			],
-			"kolca-s-vibraciej":[
-				new RegExp("виброкольцо","i"),
-				new RegExp("кольцо(.*)вибр","i"),
-			],
 			"realistichnye-realistiki":[
-				new RegExp("фаллоимитатор(.*)реалисти","i"),
-				new RegExp("реалисти(.*)фаллоимитатор","i"),
+				new RegExp("фалло(.*)реалисти","i"),
+				new RegExp("реалисти(.*)фалло","i"),
 			],
 			"vorotnichki-i-manzhety":[
 				new RegExp("манжет","i"),
@@ -850,6 +858,8 @@ var ShopUpdateController = function(){
 			"analnye-fallosy":[
 				new RegExp("анал(.*)стимуля","i"),
 				new RegExp("стимуля(.*)анал","i"),
+				new RegExp("фаллоим(.*)анал","i"),
+				new RegExp("анал(.*)фаллоим","i"),
 			],
 			"poyasa-i-podtyazhki":[
 				new RegExp("пояс","i"),
@@ -857,9 +867,6 @@ var ShopUpdateController = function(){
 			"kolgotki":[
 				new RegExp("колготки","i"),
 				new RegExp("леггинсы","i"),
-			],
-			"kolca-bez-vibracii":[
-				new RegExp("эрекционное кольцо","i"),
 			],
 			"gornichnye-sluzhanki-i-oficiantki":[
 				new RegExp("официантк","i"),
@@ -895,9 +902,194 @@ var ShopUpdateController = function(){
 			"falloprotezy":[
 				new RegExp("фаллопротез","i"),
 				new RegExp("страпон(.*)мужчин","i"),
+				new RegExp("страпон(.*)полость","i"),
 			],
 			"eroticheskie-igry":[
 				new RegExp("игра","i"),
+				new RegExp("фанты","i"),
+			],
+			"seks-kukly-zhenshiny":[
+				new RegExp("кукла","i"),
+				new RegExp("с вагиной(.*)анусом","i"),
+			],
+			"so-stimulyaciej-klitora":[
+				new RegExp("клитор(.*)стимул","i"),
+				new RegExp("стимул(.*)клитор","i"),
+			],
+			"analnye-grushi":[
+				new RegExp("анал(.*)душ","i"),
+				new RegExp("анал(.*)груша","i"),
+				new RegExp("груша(.*)анал","i"),
+				new RegExp("клизма","i"),
+			],
+			"dvuhstoronnie-dvuhgolovye":[
+				new RegExp("двухсторон(.*)фалло","i"),
+				new RegExp("двусторон(.*)фалло","i"),
+				new RegExp("фалло(.*)двухсторон","i"),
+				new RegExp("фалло(.*)двусторон","i"),
+			],
+			"dvustoronnie-vibratory":[
+				new RegExp("двухсторон(.*)вибр","i"),
+				new RegExp("двухконе(.*)вибр","i"),
+				new RegExp("двуконе(.*)вибр","i"),
+				new RegExp("двхсторон(.*)вибр","i"),
+				new RegExp("вибр(.*)двухсторон","i"),
+				new RegExp("вибр(.*)двхсторон","i"),
+			],
+			"masturbatory":[
+				new RegExp("мастурбатор","i"),
+			],
+			"mnogofunkcionalnye":[
+				new RegExp("многофункцион(.*)вибр","i"),
+				new RegExp("вибр(.*)клиторальным отростком","i"),
+			],
+			"vibratory-dlya-tochki-g":[
+				new RegExp("вибр(.*)точк(.*)G","i"),
+			],
+			"stimulyaciya-grudi":[
+				new RegExp("присоск(.*)соск","i"),
+				new RegExp("стимул(.*)соск","i"),
+				new RegExp("зажим(.*)соск","i"),
+				new RegExp("накладк(.*)соск","i"),
+			],
+			"neobychnie":[
+				new RegExp("вибр(.*)формы","i"),
+				new RegExp("вибр(.*)в форме","i"),
+			],
+			"neobychnoj-formy":[
+				new RegExp("фалло(.*)формы","i"),
+				new RegExp("фалло(.*)в форме","i"),
+			],
+			"vakuumnye-i-gidro-pompy":[
+				new RegExp("помпа(.*)сосков","i"),
+				new RegExp("помпа(.*)клитора","i"),
+				new RegExp("помпа(.*)груди","i"),
+				new RegExp("помпа(.*)вагин","i"),
+				new RegExp("сосков(.*)вакуум","i"),
+				new RegExp("вакуум(.*)клитора","i"),
+				new RegExp("вакуум(.*)груди","i"),
+				new RegExp("помпа(.*)женская","i"),
+				new RegExp("женская(.*)помпа","i"),
+			],
+			"vakuumnye-pompy":[
+				new RegExp("мужская помпа","i"),
+				new RegExp("помпа мужская","i"),
+				new RegExp("помпа(.*)мужчин","i"),
+				new RegExp("вакуумная помпа","i"),
+				new RegExp("помпа вакуумная","i"),
+			],
+			"uvelichenie-chlena":[
+				new RegExp("увеличения члена","i"),
+			],
+			"kolca-s-vibraciej":[
+				new RegExp("кольцо(.*)вибр","i"),
+				new RegExp("вибр(.*)кольцо","i"),
+				new RegExp("кольцо(.*)стимул","i"),
+				new RegExp("стимул(.*)кольцо","i"),
+			],
+			"kolca-bez-vibracii":[
+				new RegExp("кольц","i"),
+				new RegExp("колец","i"),
+			],
+			"perchatki":[
+				new RegExp("перчатки","i"),
+			],
+			"vibro-na-prisoske":[
+				new RegExp("вибр(.*)на(.*)присоске","i"),
+				new RegExp("на(.*)присоске(.*)вибр","i"),
+			],
+			"na-prisoske":[
+				new RegExp("фалло(.*)присоск","i"),
+				new RegExp("пенис(.*)присоск","i"),
+				new RegExp("член(.*)присоск","i"),
+				new RegExp("присоск(.*)фалло","i"),
+				new RegExp("присоск(.*)пенис","i"),
+				new RegExp("присоск(.*)член","i"),
+			],
+			"klassicheskie":[
+				new RegExp("фалло(.*)стекл","i"),
+				new RegExp("стекл(.*)фалло","i"),
+			],
+			"s-moshonkoj":[
+				new RegExp("фалло(.*)с мошонкой","i"),
+			],
+			"s-moshonkoi":[
+				new RegExp("вибр(.*)с мошонкой","i"),
+			],
+			"geli-i-masla-dlya-massazha":[
+				new RegExp("масло(.*)массаж","i"),
+				new RegExp("гель(.*)массаж","i"),
+				new RegExp("лосьон(.*)массаж","i"),
+				new RegExp("массаж(.*)масло","i"),
+				new RegExp("массаж(.*)гель","i"),
+				new RegExp("массаж(.*)лосьон","i"),
+			],
+			"svechi-dlya-massazha":[
+				new RegExp("свеч(.*)массаж","i"),
+				new RegExp("массаж(.*)свеч","i"),
+			],
+			"s-vibraciej":[
+				new RegExp("страп(.*)вибр","i"),
+			],
+			"nakladnye-resnicy":[
+				new RegExp("наклад(.*)ресниц","i"),
+				new RegExp("ресниц(.*)наклад","i"),
+			],
+			"bezremnevye":[
+				new RegExp("безремневой(.*)страпон","i"),
+				new RegExp("безремневый(.*)страпон","i"),
+			],
+			"nakladki-na-soski-pestisy":[
+				new RegExp("пэстис","i"),
+				new RegExp("бра(.*)груд","i"),
+			],
+			"uvlazhnyayushie":[
+				new RegExp("гель(.*)увлаж","i"),
+				new RegExp("лубрикант(.*)увлаж","i"),
+				new RegExp("смазка(.*)увлаж","i"),
+				new RegExp("увлаж(.*)гель","i"),
+				new RegExp("увлаж(.*)лубрикант","i"),
+				new RegExp("увлаж(.*)смазка","i"),
+			],
+			"dlya-analnogo-seksa":[
+				new RegExp("гель(.*)анал","i"),
+				new RegExp("лубрикант(.*)анал","i"),
+				new RegExp("смазка(.*)анал","i"),
+				new RegExp("крем(.*)анал","i"),
+				new RegExp("анал(.*)гель","i"),
+				new RegExp("анал(.*)крем","i"),
+				new RegExp("анал(.*)лубрикант","i"),
+				new RegExp("анал(.*)смазка","i"),
+			],
+			"aromatizirovannye":[
+				new RegExp("гель(.*)арома","i"),
+				new RegExp("лубрикант(.*)арома","i"),
+				new RegExp("смазка(.*)арома","i"),
+				new RegExp("крем(.*)арома","i"),
+				new RegExp("арома(.*)гель","i"),
+				new RegExp("арома(.*)лубрикант","i"),
+				new RegExp("арома(.*)смазка","i"),
+				new RegExp("арома(.*)крем","i"),
+			],
+			"dlya-oralnogo-seksa":[
+				new RegExp("гель(.*)орал","i"),
+				new RegExp("лубрикант(.*)орал","i"),
+				new RegExp("смазка(.*)орал","i"),
+				new RegExp("крем(.*)орал","i"),
+				new RegExp("орал(.*)гель","i"),
+				new RegExp("орал(.*)лубрикант","i"),
+				new RegExp("орал(.*)смазка","i"),
+				new RegExp("орал(.*)крем","i"),
+			],
+			"vozbuzhdayushie":[
+				new RegExp("гель(.*)возбужд","i"),
+				new RegExp("лубрикант(.*)возбужд","i"),
+				new RegExp("смазка(.*)возбужд","i"),
+				new RegExp("крем(.*)возбужд","i"),
+				new RegExp("возбужд(.*)гель","i"),
+				new RegExp("возбужд(.*)лубрикант","i"),
+				new RegExp("возбужд(.*)смазка","i"),
+				new RegExp("возбужд(.*)крем","i"),
 			]
 		}
 
