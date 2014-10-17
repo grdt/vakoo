@@ -9,6 +9,8 @@ var OrderModel = function(){
 	const STATUSES = {
 		"new":'Новый',
 		spam:'Спам',
+		cancelled:'Отменен',
+		approved:'Подтвержден',
 		sent:'Отправлен',
 		obtained:'Получен',
 		completed:'Завершен'
