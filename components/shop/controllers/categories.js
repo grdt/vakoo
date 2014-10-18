@@ -178,7 +178,7 @@ var ShopCategoriesController = function(){
 //				products.push(p);
 			});
 
-			console.log(products);
+//			console.log(products);
 
 			data.categories.forEach(function(category){
 				cIds.push(category._id.toString());

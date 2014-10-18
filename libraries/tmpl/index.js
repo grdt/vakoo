@@ -24,6 +24,7 @@ var TemplateLibrary = function(params){
 	this._layout = null;
 	this._config = null;
 	this._factory = null;
+	this._isAdmin = false;
 
 	this.display = function(view,data){
 
@@ -34,13 +35,19 @@ var TemplateLibrary = function(params){
 		this.from.query.logTime('startDisplay');
 
 		this.initPlugin('before_display',$l,function(){
-			var html = $l.layout()({
-				factory:$l.factory(),
-				root:$l.rootUrl()
-			});
+			that.from.user(function(user){
+				if(user && user.status == 'admin'){
+					that._isAdmin = true;
+				}
 
-			that.from.query.logTime('echo html');
-			that.from.echo(html);
+				var html = $l.layout()({
+					factory:$l.factory(),
+					root:$l.rootUrl()
+				});
+
+				that.from.query.logTime('echo html');
+				that.from.echo(html);
+			})
 		});
 	}
 
@@ -214,15 +221,8 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
-		var _isAdmin = false;
-		that.from.user(function(user){
-			if(user && user.status == 'admin'){
-				_isAdmin = true;
-			}
-		})
-
 		Handlebars.registerHelper('admin', function(options) {
-			if(_isAdmin){
+			if(that._isAdmin){
 				return options.fn(this)
 			}else{
 				return options.inverse(this);

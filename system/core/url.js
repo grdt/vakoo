@@ -23,24 +23,37 @@ var Query = function(request,response){
 
 	this.logTime = function(name){
 		var time = (new Date()).getTime(),
-			text = [name+':',(time - this.initTime),'ms'].join(' ');
-		if(this.vakoo.ENVIRONMENT == "production"){
-			var date = new Date(),
-				monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-				day = date.getDate(),
-				month = monthes[date.getMonth()],
-				fileName = "./logs/" + "queryTime_" + month + '_' + day + '.log';
-			fs.exists(fileName, function (exists) {
-				if(exists){
-					fs.appendFile(fileName,text + '\n', function (err) {
+			text = [name+':',(time - this.initTime),'ms'].join(' ') + " " + (new Date()).toString() + " " + this.requestUrl() + " " + process.memoryUsage().heapUsed / 1024 / 1024,
+			log = {
+				name:name,
+				time:(time - this.initTime),
+				url:this.requestUrl(),
+				memory: process.memoryUsage().heapUsed / 1024 / 1024,
+				date:new Date(),
+				type:"queryLogTime"
+			};
 
-					});
-				} else {
-					fs.writeFile(fileName,text + '\n');
-				}
+		if(this.vakoo.ENVIRONMENT == "production"){
+
+			this.option("main").model("log").collection().insert(log,function(err,item){
 			});
+
+//			var date = new Date(),
+//				monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//				day = date.getDate(),
+//				month = monthes[date.getMonth()],
+//				fileName = "./logs/" + "queryTime_" + month + '_' + day + '.log';
+//			fs.exists(fileName, function (exists) {
+//				if(exists){
+//					fs.appendFile(fileName,text + '\n', function (err) {
+//
+//					});
+//				} else {
+//					fs.writeFile(fileName,text + '\n');
+//				}
+//			});
 		}else{
-			console.log(text);
+			console.log(log);
 		}
 		this.initTime = time;
 	}
