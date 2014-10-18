@@ -221,6 +221,14 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
+		Handlebars.registerHelper('production', function(options) {
+			if(that.vakoo.isProduction()){
+				return options.fn(this)
+			}else{
+				return options.inverse(this);
+			}
+		});
+
 		Handlebars.registerHelper('admin', function(options) {
 			if(that._isAdmin){
 				return options.fn(this)

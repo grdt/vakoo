@@ -33,6 +33,9 @@
     "prod": "NODE_ENV=production supervisor -e js,json,hbs,css app.js",
     "start": "NODE_ENV=production forever start -l log.log -o out.log -e error.log -p ./logs/ -a app.js",
     "stop": "forever stop app.js",
-    "cron": "forever start -l cron-log.log -o cron-out.log -e cron-error.log -p ./logs/ -a cron.js"
+    "cron": "forever start -l cron-log.log -o cron-out.log -e cron-error.log -p ./logs/ -a cron.js",
+	"pm2-start": "pm2 start luxy.json",
+	"pm2-kill": "pm2 kill",
+	"pm2-restart": "pm2 kill && pm2 start luxy.json"
   }
 }

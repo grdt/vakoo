@@ -237,10 +237,11 @@ var ShopProductModel = function () {
 //	})
 
 	this.url = function () {
-		if(this.vakoo.ENVIRONMENT == 'development' || !this.ancestors.length){
+		if(this.vakoo.isProduction() && this.ancestors.length){
+			return '/' + this.ancestors.join('/') + '/' + this.alias;
+		}else{
 			return '/shop/products/index?id=' + this._id;
 		}
-		return '/' + this.ancestors.join('/') + '/' + this.alias;
 	}
 }
 

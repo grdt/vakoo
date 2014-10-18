@@ -54,7 +54,14 @@ var ShopCategoryModel = function(query){
 	}
 
 	this.url = function(sublink){
-		if(this.vakoo.ENVIRONMENT == 'development'){
+		if(this.vakoo.isProduction()){
+			var sep = '/';
+			var url = sep + ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
+			if(sublink && _.isString(sublink)){
+				url += '?' + sublink;
+			}
+			return url;
+		}else{
 			var link = '/shop/categories/index?id=' + this._id;
 			if(sublink && _.isString(sublink)){
 				link += '&' + sublink;
@@ -62,12 +69,7 @@ var ShopCategoryModel = function(query){
 
 			return link;
 		}
-		var sep = '/';
-		var url = sep + ((this.ancestors.length) ? this.ancestors.join('/') + '/' : '') + this._id;
-		if(sublink && _.isString(sublink)){
-			url += '?' + sublink;
-		}
-		return url;
+
 	}
 
 //	this.beforeSave = function(done){

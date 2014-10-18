@@ -23,10 +23,10 @@ var FileIndexController = function(){
 		};
 
 		this.query.response.writeHead(200,{'Content-Type':mimeTypes.txt});
-		var name = (this.vakoo.ENVIRONMENT == 'production') ? 'prod-robots.txt' : 'dev-robots.txt';
+		var name = (this.vakoo.isProduction()) ? 'prod-robots.txt' : 'dev-robots.txt';
 		var fileStream = fs.createReadStream(this.APP_PATH + this.SEPARATOR + 'public' + this.SEPARATOR + name);
 
-		if(this.vakoo.ENVIRONMENT == 'production'){
+		if(this.vakoo.isProduction()){
 			
 			var res = 'User-agent: *\n'+
 				'Allow: /\n'+

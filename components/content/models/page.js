@@ -47,7 +47,7 @@ var PageModel = function(){
 	}
 
 	this.url = function(){
-		if(this.vakoo.ENVIRONMENT == 'production'){
+		if(this.vakoo.isProduction()){
 			return '/' + this.alias;
 		}else{
 			return '/page?id=' + this._id;

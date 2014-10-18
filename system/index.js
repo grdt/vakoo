@@ -26,7 +26,7 @@ var Vakoo = function(fastPort){
     this.CONFIG_PATH = this.SYSTEM_PATH + this.SEPARATOR + 'config';
 	this.PUBLIC_PATH = this.APP_PATH + this.SEPARATOR + 'public';
 
-	this.ENVIRONMENT = process.env.NODE_ENV;
+	this.ENVIRONMENT = process.env.NODE_ENV || "development";
 
     this.EXT_JS = '.js';
     this.EXT_JSON = '.json';
@@ -43,6 +43,10 @@ var Vakoo = function(fastPort){
 
 	this.isProduction = function(){
 		return this.ENVIRONMENT === "production";
+	}
+
+	this.isDevelopment = function(){
+		return this.ENVIRONMENT === "development";
 	}
 
 	this.global = function(variable, value){
@@ -90,7 +94,7 @@ var Vakoo = function(fastPort){
 		this._server.listen(port);
 		this.enableSmtp();
 		this._isRunning = true;
-		console.log('Vakoo start at port ',port);
+		console.log('Vakoo start at port ',port, "env:",this.ENVIRONMENT);
 	}
 
 	this.serverRestart = function(){

@@ -33,7 +33,7 @@ var Query = function(request,response){
 				type:"queryLogTime"
 			};
 
-		if(this.vakoo.ENVIRONMENT == "production"){
+		if(this.vakoo.isProduction()){
 
 			this.option("main").model("log").collection().insert(log,function(err,item){
 			});
