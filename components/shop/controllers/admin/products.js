@@ -78,7 +78,7 @@ var ShopProductsAdminController = function(){
 					data.withError = true;
 				}
 
-				that.module('pagination').get(productModel(where),PER_PAGE,that.get('p',0),function(products, pagination){
+				that.module('pagination').get(productModel(where).order({"available":-1}),PER_PAGE,that.get('p',0),function(products, pagination){
 					data.pagination = pagination;
 					data.products = products;
 

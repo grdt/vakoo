@@ -169,10 +169,16 @@ var ShopCategoriesController = function(){
 			var pIds = [],
 				hash = {},
 				cIds = [],
+				products = [],
 				index = this.getRedisIndex();
 			data.products.forEach(function(product){
 				pIds.push(product._id.toString());
+//				var p = product.clean();
+//				p.url = product.url()
+//				products.push(p);
 			});
+
+			console.log(products);
 
 			data.categories.forEach(function(category){
 				cIds.push(category._id.toString());

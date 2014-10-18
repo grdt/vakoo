@@ -214,6 +214,21 @@ var TemplateLibrary = function(params){
 			return ret;
 		});
 
+		var _isAdmin = false;
+		that.from.user(function(user){
+			if(user && user.status == 'admin'){
+				_isAdmin = true;
+			}
+		})
+
+		Handlebars.registerHelper('admin', function(options) {
+			if(_isAdmin){
+				return options.fn(this)
+			}else{
+				return options.inverse(this);
+			}
+		});
+
 
 		/* template cache */
 		var soMany = {};
