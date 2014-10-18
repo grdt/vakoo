@@ -1,7 +1,7 @@
 [{
 	"name": "luxy",
 	"script": "./app.js",
-	"args": "[--production]",
+	"args": "['--production']",
 	"instances": "3",
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
