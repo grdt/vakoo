@@ -33,25 +33,15 @@ var Query = function(request,response){
 				type:"queryLogTime"
 			};
 
+		if(log.memory > 600){
+			process.exit(0);
+		}
+
 		if(this.vakoo.isProduction()){
 
 			this.option("main").model("log").collection().insert(log,function(err,item){
 			});
 
-//			var date = new Date(),
-//				monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-//				day = date.getDate(),
-//				month = monthes[date.getMonth()],
-//				fileName = "./logs/" + "queryTime_" + month + '_' + day + '.log';
-//			fs.exists(fileName, function (exists) {
-//				if(exists){
-//					fs.appendFile(fileName,text + '\n', function (err) {
-//
-//					});
-//				} else {
-//					fs.writeFile(fileName,text + '\n');
-//				}
-//			});
 		}else{
 			console.log(log);
 		}
