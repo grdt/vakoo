@@ -383,6 +383,7 @@ var chooseCity = function(data){
 			navigator.geolocation.getCurrentPosition(function(pos){
 				var lat = pos.coords.latitude;
 				var lng = pos.coords.longitude;
+                console.log("current pos", lat, lng);
 
 				link += '&lat='+lat+'&lng='+lng;
 

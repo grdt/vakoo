@@ -47,14 +47,14 @@ var City = function(){
 			ip = this.ip2long(ip);
 		}
 
-		this.where({block:{$elemMatch:{begin_ip:{$lte:ip},end_ip:{$gte:ip}}},status:'active'});
+		this.where({block:{$elemMatch:{begin_ip:{$lte:ip},begin_end:{$gte:ip}}},status:'active'});
 		return this;
 	}
 
 	this.byCoords = function(loc){
 		loc.lng = parseFloat(loc.lng);
 		loc.lat = parseFloat(loc.lat);
-		this.where({loc:{$near:[loc.lng,loc.lat]},status:'active'});
+		this.where({loc:{$near:[loc.lng,loc.lat],$maxDistance: 5},status:'active'});
 		return this;
 	}
 

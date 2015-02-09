@@ -19,7 +19,7 @@ var Plugin = function(){
 			}
 		}else{
 			loader.option('shop').model('category',$l.from.query).find(function(categories){
-				vakoo.memory('all-categories',categories);
+//				vakoo.memory('all-categories',categories);
 				$l._data["catalog:menu"] = {categories:categories};
 				$l._data["catalog:breadcrumbs"] = {categories:categories};
 

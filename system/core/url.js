@@ -43,7 +43,7 @@ var Query = function(request,response){
 			});
 
 		}else{
-			console.log(log);
+//			console.log(log);
 		}
 		this.initTime = time;
 	}

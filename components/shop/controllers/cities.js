@@ -1,3 +1,4 @@
+var async = require("async")
 var Controller = function(){
 	var $c = this,
 		that = this;
@@ -29,6 +30,17 @@ var Controller = function(){
 		});
 
 	}
+
+    var sortLocations = function(locations, lat, lng) {
+        function dist(l) {
+            return (l.latitude - lat) * (l.latitude - lat) +
+                (l.longitude - lng) * (l.longitude - lng);
+        }
+
+        locations.sort(function(l1, l2) {
+            return dist(l1) - dist(l2);
+        });
+    }
 	
 	this.choose = function(){
 		this.model('city').where({alias:{$in:this.get('aliases')},status:'active'}).find(function(finded){
@@ -46,6 +58,7 @@ var Controller = function(){
 					that.model('city').byCoords({lat:that.get('lat'),lng:that.get('lng')}).limit(3).find(function(findedByCoords){
 
 						if(findedByCoords.length){
+                            sortLocations(findedByCoords, parseFloat(that.get('lat')), parseFloat(that.get('lng')));
 							findedByCoords.forEach(function(city){
 								data.cities[city.alias] = city.short();
 							})

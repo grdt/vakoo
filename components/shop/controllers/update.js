@@ -75,126 +75,132 @@ var ShopUpdateController = function(){
 						lr.resume();
 					});
 				}else{
-					that.controller('import').getProduct(p.sku,function(product){
-						inserted++;
-						
-						var mainUpload = false,
-							allUpload = false;
-						product.price = p.price;
-						product.tradePrice = p.tradePrice;
-						product.available = p.available;
-						product.isNew = true;
-						product.lastUpdate = new Date();
 
-						product.alias = translit(product.title + ' ' + product.shortDesc);
+                    if(!p.available) {
+                        console.log("skip not available");
+                        lr.resume();
+                    }else{
 
-						that.model('product').where({alias:product.alias}).count(function(count){
-							if(count && count >= 1){
-								product.alias = translit(product.sku + ' ' + product.title + ' ' + product.shortDesc);
-							}
+                        that.controller('import').getProduct(p.sku, function (product) {
+                            inserted++;
 
+                            var mainUpload = false,
+                                allUpload = false;
+                            product.price = p.price;
+                            product.tradePrice = p.tradePrice;
+                            product.available = p.available;
+                            product.isNew = true;
+                            product.lastUpdate = new Date();
 
-							if(!product.image){
-								product.save(function(){
-									lr.resume();
-								});
-							}else{
+                            product.alias = translit(product.title + ' ' + product.shortDesc);
 
-								var async = require('async');
-
-								var file = function(){
-									return that.option('file').model('file');
-								}
-
-								var generatePath = function(){
-									var	date = new Date(),
-										monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-										loader = that.vakoo.load,
-										UPLOAD_PATH = '/public/files/',
-										day = date.getDate(),
-										month = monthes[date.getMonth()],
-										path = that.APP_PATH + UPLOAD_PATH + date.getFullYear();
-
-									path = path + month + '/' + day;
-
-									var pathParts = path.split('/'),
-										path = '/';
-
-									for(var key in pathParts){
-										var part = pathParts[key];
-										if(part){
-											if(!fs.existsSync(path + part)){
-												fs.mkdirSync(path + part);
-											}
-											path = path + part + '/';
-										}
-									}
-
-									return path;
-								}
-
-								var downloadFile = function(link, alias, callback){
-									var newFile = file(),
-										path = generatePath(),
-										ext = link.split('.')[link.split('.').length - 1],
-										stream = fs.createWriteStream(path + alias + '.' + ext),
-										http = require('http'),
-										request = http.get(link, function(response) {
-											response.pipe(stream);
-											response.on('end',function(){
-												newFile.name = alias + '.' + ext;
-												newFile.originalName = link.split('/')[link.split('/').length - 1];
-												newFile.path = (path + alias + '.' + ext).replace(that.APP_PATH,'').replace('/public','');
-												newFile.size = fs.statSync(path + alias + '.' + ext).size;
-												newFile.type = "image/jpeg";
-												newFile.save(function(){
-													callback(newFile)
-												});
-											});
-										}).end();
-								}
+                            that.model('product').where({alias: product.alias}).count(function (count) {
+                                if (count && count >= 1) {
+                                    product.alias = translit(product.sku + ' ' + product.title + ' ' + product.shortDesc);
+                                }
 
 
-								async.waterfall([
-									function(cb){
-										downloadFile(product.image, product.alias, function(newFile){
-											product.image = newFile.short(product.title + ' ' + product.shortDesc)
-											cb()
-										})
-									},
-									function(cb){
-										if(!product.images.length){
-											cb()
-										}else{
-											var images = product.images;
-											product.images = [];
+                                if (!product.image) {
+                                    product.save(function () {
+                                        lr.resume();
+                                    });
+                                } else {
 
-											var i = 1;
+                                    var async = require('async');
 
-											images.asyncEach(function(img,nextImg){
-												downloadFile(img, i + '-' + product.alias, function(newFile){
-													product.images.push(newFile.short(product.title + ' ' + product.shortDesc + ' ' + i));
-													i++;
-													nextImg();
-												});
+                                    var file = function () {
+                                        return that.option('file').model('file');
+                                    }
 
-											},function(){
-												cb()
-											});
-										}
-									}
-								],function(){
-									product.save(function(){
-										lr.resume();
-									})
-								})
+                                    var generatePath = function () {
+                                        var date = new Date(),
+                                            monthes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                                            loader = that.vakoo.load,
+                                            UPLOAD_PATH = '/public/files/',
+                                            day = date.getDate(),
+                                            month = monthes[date.getMonth()],
+                                            path = that.APP_PATH + UPLOAD_PATH + date.getFullYear();
 
-							}
-						});
+                                        path = path + month + '/' + day;
 
-						
+                                        var pathParts = path.split('/'),
+                                            path = '/';
 
-					});
+                                        for (var key in pathParts) {
+                                            var part = pathParts[key];
+                                            if (part) {
+                                                if (!fs.existsSync(path + part)) {
+                                                    fs.mkdirSync(path + part);
+                                                }
+                                                path = path + part + '/';
+                                            }
+                                        }
+
+                                        return path;
+                                    }
+
+                                    var downloadFile = function (link, alias, callback) {
+                                        var newFile = file(),
+                                            path = generatePath(),
+                                            ext = link.split('.')[link.split('.').length - 1],
+                                            stream = fs.createWriteStream(path + alias + '.' + ext),
+                                            http = require('http'),
+                                            request = http.get(link, function (response) {
+                                                response.pipe(stream);
+                                                response.on('end', function () {
+                                                    newFile.name = alias + '.' + ext;
+                                                    newFile.originalName = link.split('/')[link.split('/').length - 1];
+                                                    newFile.path = (path + alias + '.' + ext).replace(that.APP_PATH, '').replace('/public', '');
+                                                    newFile.size = fs.statSync(path + alias + '.' + ext).size;
+                                                    newFile.type = "image/jpeg";
+                                                    newFile.save(function () {
+                                                        callback(newFile)
+                                                    });
+                                                });
+                                            }).end();
+                                    }
+
+
+                                    async.waterfall([
+                                        function (cb) {
+                                            downloadFile(product.image, product.alias, function (newFile) {
+                                                product.image = newFile.short(product.title + ' ' + product.shortDesc)
+                                                cb()
+                                            })
+                                        },
+                                        function (cb) {
+                                            if (!product.images.length) {
+                                                cb()
+                                            } else {
+                                                var images = product.images;
+                                                product.images = [];
+
+                                                var i = 1;
+
+                                                images.asyncEach(function (img, nextImg) {
+                                                    downloadFile(img, i + '-' + product.alias, function (newFile) {
+                                                        product.images.push(newFile.short(product.title + ' ' + product.shortDesc + ' ' + i));
+                                                        i++;
+                                                        nextImg();
+                                                    });
+
+                                                }, function () {
+                                                    cb()
+                                                });
+                                            }
+                                        }
+                                    ], function () {
+                                        product.save(function () {
+                                            lr.resume();
+                                        })
+                                    })
+
+                                }
+                            });
+
+
+                        });
+                    }
 				}
 			});
 

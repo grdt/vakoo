@@ -132,6 +132,7 @@ var ShopCategoriesAdminController = function(){
 		}
 
 		if(this.post()){
+            console.log("hello", this.post())
 			this.model('category').where({_id:this.get('id')}).findOne(function(category){
 				that.model('category').where({_id:that.post('parent')}).findOne(function(parent){
 					var catAncestors = parent.ancestors.clone();
@@ -140,6 +141,8 @@ var ShopCategoriesAdminController = function(){
 					prodAncestors.push(category._id);
 					category.ancestors = catAncestors;
 					category.parent = parent._id;
+
+                    console.log(category);
 
 					category.save();
 
@@ -177,32 +180,36 @@ var ShopCategoriesAdminController = function(){
 							category._id = null;
 							that.back();
 						}else{
-							category.insert(function(){
-								that.setFlash('success','Категория сохранена');
-								if(that.post('exit') == '1'){
-									that.back();
-								}else{
-									that.redirect(that.query.mergeUrl('/admin/?task=shop.categories/edit&id=' + category._id,{"return":that.get('return','false')}));
-								}
-							});
+                            category.setParent(function() {
+                                category.insert(function () {
+                                    that.setFlash('success', 'Категория сохранена');
+                                    if (that.post('exit') == '1') {
+                                        that.back();
+                                    } else {
+                                        that.redirect(that.query.mergeUrl('/admin/?task=shop.categories/edit&id=' + category._id, {"return": that.get('return', 'false')}));
+                                    }
+                                });
+                            });
 						}
 					});
 				}else{
 					category.save(function(){
 						that.setFlash('success','Категория сохранена');
-						if(that.post('exit') == '1'){
-							that.back();
-						}else{
-							categoryModel().find(function(categories){
-								categories.forEach(function(cat){
-									if(that.get('parent') == cat._id){
-										cat.selected = true;
-									}
-								});
-								categories = that.tree(categories);
-								that.display('form',{category:category, categories:categories});
-							});
-						}
+                        category.setParent(function() {
+                            if (that.post('exit') == '1') {
+                                that.back();
+                            } else {
+                                categoryModel().find(function (categories) {
+                                    categories.forEach(function (cat) {
+                                        if (that.get('parent') == cat._id) {
+                                            cat.selected = true;
+                                        }
+                                    });
+                                    categories = that.tree(categories);
+                                    that.display('form', {category: category, categories: categories});
+                                });
+                            }
+                        });
 					});
 				}
 			}else{
