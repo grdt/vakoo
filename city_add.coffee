@@ -117,69 +117,227 @@ citiesList = []
 
 async.waterfall(
   [
-    async.apply async.parallel, {
-          cities: async.apply fs.readFile, "./cities.txt", encoding: "utf8"
-          blocks: async.apply fs.readFile, "./cidr_optim.txt", encoding: "utf8"
-        }
-    (results, taskCallback)->
-      strings = results.cities.split("\n")
-      cities = []
-      for string in strings
-        cityParams = string.split("\t")
-        if cityParams.length > 1
-          cities.push(
-            {
-              cid: +cityParams[0]
-              name: cityParams[1]
-              region: cityParams[2]
-              lat: +cityParams[4]
-              lng: +cityParams[5]
-            }
-          )
-      strings2 = results.blocks.split("\n")
-
-
-      blockByCities = {}
-      for string in strings2
-        blockParams = string.split("\t")
-        if blockParams.length > 1 and +blockParams[4] > 0
-          unless blockByCities[+blockParams[4]]?
-            blockByCities[+blockParams[4]] = []
-          blockByCities[+blockParams[4]].push(
-            {
-              begin_ip: +blockParams[0]
-              begin_end: +blockParams[1]
-              mask: blockParams[2]
-            }
-          )
-
-      resultCities = []
-
-      for city in cities
-        if blockByCities["#{city.cid}"]?
-          city.block = blockByCities["#{city.cid}"]
-          clone = _.clone(cityObject)
-          clone.cid = city.cid
-          clone.alias = translit city.name
-          clone.block = city.block
-          clone.name_ru = city.name
-          clone.title_in = ''
-          clone.title_from = ''
-          clone.name_en = ''
-          clone.region = city.region
-          clone.latitude = city.lat
-          clone.longitude = city.lng
-          clone.loc.lng = city.lng
-          clone.loc.lat = city.lat
-          clone.status = "active"
-          resultCities.push clone
-
-      taskCallback null, resultCities
-
-    (cities, taskCallback)->
-
-      citiesList = _.compact(cities)
-
+#    async.apply async.parallel, {
+#          cities: async.apply fs.readFile, "./cities.txt", encoding: "utf8"
+#          blocks: async.apply fs.readFile, "./cidr_optim.txt", encoding: "utf8"
+#        }
+#    (results, taskCallback)->
+#      strings = results.cities.split("\n")
+#      cities = []
+#      for string in strings
+#        cityParams = string.split("\t")
+#        if cityParams.length > 1
+#          cities.push(
+#            {
+#              cid: +cityParams[0]
+#              name: cityParams[1]
+#              region: cityParams[2]
+#              lat: +cityParams[4]
+#              lng: +cityParams[5]
+#            }
+#          )
+#      strings2 = results.blocks.split("\n")
+#
+#
+#      blockByCities = {}
+#      for string in strings2
+#        blockParams = string.split("\t")
+#        if blockParams.length > 1 and +blockParams[4] > 0
+#          unless blockByCities[+blockParams[4]]?
+#            blockByCities[+blockParams[4]] = []
+#          blockByCities[+blockParams[4]].push(
+#            {
+#              begin_ip: +blockParams[0]
+#              begin_end: +blockParams[1]
+#              mask: blockParams[2]
+#            }
+#          )
+#
+#      resultCities = []
+#
+#      for city in cities
+#        if blockByCities["#{city.cid}"]?
+#          city.block = blockByCities["#{city.cid}"]
+#          clone = _.clone(cityObject)
+#          clone.cid = city.cid
+#          clone.alias = translit city.name
+#          clone.block = city.block
+#          clone.name_ru = city.name
+#          clone.title_in = ''
+#          clone.title_from = ''
+#          clone.name_en = ''
+#          clone.region = city.region
+#          clone.latitude = city.lat
+#          clone.longitude = city.lng
+#          clone.loc.lng = city.lng
+#          clone.loc.lat = city.lat
+#          clone.status = "active"
+#          resultCities.push clone
+#
+#      taskCallback null, resultCities
+#
+#    (cities, taskCallback)->
+#
+#      citiesList = _.compact(cities)
+#
+#      yaToken = "b57c144f86264bcbabcd54910b6401e3"
+#
+#      request.get(
+#        "http://webmaster.yandex.ru/api/v2/hosts"
+#        {
+#          headers: {
+#            Authorization: "OAuth #{yaToken}"
+#          }
+#        }
+#        (err, response, body)->
+#          taskCallback err, response, body
+#      )
+#    (response, body, taskCallback)->
+#      parseString body, taskCallback
+#    (yaResult, taskCallback)->
+#
+#      yaToken = "b57c144f86264bcbabcd54910b6401e3"
+#
+#      mustDelete = []
+#
+#      toYandex = []
+#
+#      toDb = []
+#
+#      duplicates = {}
+#
+#
+#      for city in citiesList
+#        where = _.where(citiesList, {alias:city.alias})
+#        if where.length > 1
+#          citiesList = _.filter(
+#            citiesList
+#            (c)->
+#              return c.alias isnt city.alias
+#          )
+#          for c in where
+#            regionWords = c.region.split(" ")
+#            if c.alias is "pervomajsk"
+#              c.alias = "#{c.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[0][2].toLowerCase() + regionWords[1][0].toLowerCase())}"
+#            else
+#              c.alias = "#{c.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[1][0].toLowerCase())}"
+#            citiesList.push c
+#
+#      for host in yaResult.hostlist.host
+#        alias = host.name[0].split(".")[0]
+#
+#        citiesByAlias = _.filter(
+#          citiesList
+#          (city)->
+#            return city.alias is alias
+#        )
+#
+#        if citiesByAlias.length
+#          if citiesByAlias.length > 1
+#            duplicates[alias] = citiesByAlias
+#          else
+#            toDb.push(
+#              citiesByAlias[0]
+#            )
+#        else
+#          unless alias is "www"
+#            mustDelete.push host.$.href
+#
+#      for city in citiesList
+#        unless city in toDb
+#          if "#{city.alias}.luxy.sexy" in toYandex
+#
+#          else
+#            toYandex.push(
+#              "#{city.alias}.luxy.sexy"
+#            )
+#
+#      if _.size(duplicates)
+#        for alias,cities of duplicates
+#          for city in cities
+#            regionWords = city.region.split(" ")
+#            city.alias = "#{city.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[1][0].toLowerCase())}"
+#            toDb.push(
+#              city
+#            )
+#            toYandex.push(
+#              "#{city.alias}.luxy.sexy"
+#            )
+#
+#      for city in citiesList
+#        unless city.cid in _.map(
+#          toDb
+#          (c)->
+#            return c.cid
+#        )
+#          toDb.push(
+#            city
+#          )
+#
+#      console.log "yandex.len: `#{yaResult.hostlist.host.length}`"
+#      console.log "list: `#{citiesList.length}`, toDb `#{toDb.length}`, toYandex: `#{toYandex.length}, #{_.unique(toYandex).length}`, fromYandex `#{mustDelete.length}`"
+#
+#      console.log "run tasks"
+#
+#      tasks = []
+#
+#      if mustDelete.length
+#        for del in mustDelete
+#          do (del)->
+#            tasks.push(
+#              (done)->
+#                request.del(
+#                  del.replace("https","http")
+#                  {
+#                    headers: {
+#                      Authorization: "OAuth #{yaToken}"
+#                    }
+#                  }
+#                  done
+#                )
+#            )
+#
+#      if toYandex.length
+#
+#        for add in toYandex
+#          do (add)->
+#            tasks.push(
+#              (done)->
+#                request.post(
+#                  {
+#                    url: "http://webmaster.yandex.ru/api/v2/hosts"
+#                    headers: {
+#                      Authorization: "OAuth #{yaToken}"
+#                    }
+#                    body: "<host><name>#{add}</name></host>"
+#                  }
+#                  (err, res, body)->
+#                    if res.statusCode isnt 201
+#                      console.log body
+#                    done()
+#                )
+#            )
+#
+#      if tasks.length
+#        async.parallel tasks, (err)->
+#          taskCallback err, toDb
+#      else
+#        taskCallback null, toDb
+#
+#    (toDb, taskCallback)->
+#      if toDb.length
+#        async.waterfall(
+#          [
+#            (subTaskCallback)->
+#              MongoClient.connect "mongodb://localhost:27017/vakoo", subTaskCallback
+#            (db, subTaskCallback)->
+#              db.collection("cities").insert toDb, subTaskCallback
+#          ]
+#          taskCallback
+#        )
+#      else
+#        taskCallback null, null
+    (taskCallback)->
       yaToken = "b57c144f86264bcbabcd54910b6401e3"
 
       request.get(
@@ -189,8 +347,7 @@ async.waterfall(
             Authorization: "OAuth #{yaToken}"
           }
         }
-        (err, response, body)->
-          taskCallback err, response, body
+        taskCallback
       )
     (response, body, taskCallback)->
       parseString body, taskCallback
@@ -198,144 +355,37 @@ async.waterfall(
 
       yaToken = "b57c144f86264bcbabcd54910b6401e3"
 
-      mustDelete = []
-
-      toYandex = []
-
-      toDb = []
-
-      duplicates = {}
-
-
-      for city in citiesList
-        where = _.where(citiesList, {alias:city.alias})
-        if where.length > 1
-          citiesList = _.filter(
-            citiesList
-            (c)->
-              return c.alias isnt city.alias
-          )
-          for c in where
-            regionWords = c.region.split(" ")
-            if c.alias is "pervomajsk"
-              c.alias = "#{c.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[0][2].toLowerCase() + regionWords[1][0].toLowerCase())}"
-            else
-              c.alias = "#{c.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[1][0].toLowerCase())}"
-            citiesList.push c
-
-      for host in yaResult.hostlist.host
-        alias = host.name[0].split(".")[0]
-
-        citiesByAlias = _.filter(
-          citiesList
-          (city)->
-            return city.alias is alias
-        )
-
-        if citiesByAlias.length
-          if citiesByAlias.length > 1
-            duplicates[alias] = citiesByAlias
-          else
-            toDb.push(
-              citiesByAlias[0]
-            )
-        else
-          unless alias is "www"
-            mustDelete.push host.$.href
-
-      for city in citiesList
-        unless city in toDb
-          if "#{city.alias}.luxy.sexy" in toYandex
-
-          else
-            toYandex.push(
-              "#{city.alias}.luxy.sexy"
-            )
-
-      if _.size(duplicates)
-        for alias,cities of duplicates
-          for city in cities
-            regionWords = city.region.split(" ")
-            city.alias = "#{city.alias}-#{translit(regionWords[0][0].toLowerCase() + regionWords[1][0].toLowerCase())}"
-            toDb.push(
-              city
-            )
-            toYandex.push(
-              "#{city.alias}.luxy.sexy"
-            )
-
-      for city in citiesList
-        unless city.cid in _.map(
-          toDb
-          (c)->
-            return c.cid
-        )
-          toDb.push(
-            city
-          )
-
-      console.log "yandex.len: `#{yaResult.hostlist.host.length}`"
-      console.log "list: `#{citiesList.length}`, toDb `#{toDb.length}`, toYandex: `#{toYandex.length}, #{_.unique(toYandex).length}`, fromYandex `#{mustDelete.length}`"
-
-      console.log "run tasks"
 
       tasks = []
-
-      if mustDelete.length
-        for del in mustDelete
-          do (del)->
+      for host in yaResult.hostlist.host
+        console.log host.verification[0].$.state
+        if host.verification[0].$.state isnt "VERIFIED"
+          do (host)->
             tasks.push(
               (done)->
-                request.del(
-                  del.replace("https","http")
-                  {
-                    headers: {
-                      Authorization: "OAuth #{yaToken}"
-                    }
-                  }
+                async.parallel(
+                  [
+                    (subTaskCallback)->
+
+                      console.log host.$.href.replace("https","http") + "/verify"
+
+                      request.put(
+                        {
+                          url: host.$.href.replace("https","http") + "/verify"
+                          headers: {
+                            Authorization: "OAuth #{yaToken}"
+                          }
+                          body: "<host><type>TXT_FILE</type></host>"
+                        }
+                        (err, res, body)->
+                          console.log err, res.statusCode, body
+                          subTaskCallback()
+                      )
+                  ]
                   done
                 )
             )
-
-      if toYandex.length
-
-        for add in toYandex
-          do (add)->
-            tasks.push(
-              (done)->
-                request.post(
-                  {
-                    url: "http://webmaster.yandex.ru/api/v2/hosts"
-                    headers: {
-                      Authorization: "OAuth #{yaToken}"
-                    }
-                    body: "<host><name>#{add}</name></host>"
-                  }
-                  (err, res, body)->
-                    if res.statusCode isnt 201
-                      console.log body
-                    done()
-                )
-            )
-
-      if tasks.length
-        async.parallel tasks, (err)->
-          taskCallback err, toDb
-      else
-        taskCallback null, toDb
-
-    (toDb, taskCallback)->
-      async.waterfall(
-        [
-          (subTaskCallback)->
-            MongoClient.connect "mongodb://localhost:27017/vakoo", subTaskCallback
-          (db, subTaskCallback)->
-            db.collection("cities").insert toDb, subTaskCallback
-        ]
-        taskCallback
-      )
-    (res, taskCallback)->
-      console.log res
+      async.parallel tasks, taskCallback
   ]
 
   (err)->

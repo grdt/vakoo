@@ -20,7 +20,7 @@ var Controller = function(){
 						color:'gray'
 					},
 					"eroticheskaya-odezhda-i-bele":{
-						bg:'dark',
+						bg:'000',
 						color:'light'
 					},
 					"fetish-i-bdsm":{
