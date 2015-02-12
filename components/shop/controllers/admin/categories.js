@@ -244,6 +244,8 @@ var ShopCategoriesAdminController = function(){
 	 * @returns {Array}
 	 */
 	this.tree = function(categories, withCount){
+
+        console.log("start tree")
 		var tree = [];
 
 		if(typeof withCount == "undefined"){
@@ -262,6 +264,7 @@ var ShopCategoriesAdminController = function(){
 			var count = 0;
 
 				if(category.ancestors.length == 0){
+                    console.log(category._id)
 					tree[category._id] = category.clean();
 					tree[category._id].selected = category.selected;
 					tree[category._id].path = category.url();

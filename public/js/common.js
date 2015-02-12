@@ -141,24 +141,26 @@ var Page = new (function(){
 		}
 	}
 
-	$.cookie.defaults = {
-		domain: '.' + this.getHost(true),
-		expires:365,
-		path:'/'
-	};
 
-	this.cookie = function(variable, value){
-		if(typeof value == "undefined"){
-			return $.cookie(variable);
-		}
+    if ($.cookie){
+        $.cookie.defaults = {
+            domain: '.' + this.getHost(true),
+            expires:365,
+            path:'/'
+        };
 
-		if(value === null){
-			$.removeCookie(variable);
-			return this;
-		}
+        this.cookie = function(variable, value){
+            if(typeof value == "undefined"){
+                return $.cookie(variable);
+            }
 
-		$.cookie(variable, value);
-		return this;
-	}
+            if(value === null){
+                $.removeCookie(variable);
+                return this;
+            }
 
+            $.cookie(variable, value);
+            return this;
+        }
+    }
 })();

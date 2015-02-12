@@ -358,7 +358,6 @@ async.waterfall(
 
       tasks = []
       for host in yaResult.hostlist.host
-        console.log host.verification[0].$.state
         if host.verification[0].$.state isnt "VERIFIED"
           do (host)->
             tasks.push(
@@ -367,7 +366,9 @@ async.waterfall(
                   [
                     (subTaskCallback)->
 
-                      console.log host.$.href.replace("https","http") + "/verify"
+#                      console.log host.$.href.replace("https","http") + "/verify"
+
+                      console.log "start verify #{host.name[0]}"
 
                       request.put(
                         {

@@ -218,7 +218,9 @@ var CoreController = function(query){
 
     this.run = function(method){
 		this.startTimeout();
-        if(typeof this[method] == "function"){
+        if(typeof this.__proto__[method] == "function" && this.__proto__[method] != that[method]){
+            this.__proto__[method]()
+        }else if (typeof this[method] == "function"){
             this[method]();
         }else{
             this.show404(404,'method not found',this.query.response);

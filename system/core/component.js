@@ -54,6 +54,18 @@ var CoreComponent = function(name){
 			}
             return c;
         }else{
+            var path = this.CONTROLLER_PATH + this.SEPARATOR + name + ".coffee";
+            if(fs.existsSync(path)){
+                var Controller = require(path);
+                Controller.prototype = this.coreController();
+                var c = new Controller(query);
+//                c = _.extend((new this.coreController()), c);
+                c.query = query;
+                if(typeof query != "undefined"){
+                    this._executiveController = c;
+                }
+                return c;
+            }
             return false;
         }
     }

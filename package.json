@@ -30,7 +30,7 @@
     "xml2js": "^0.4.4"
   },
   "scripts": {
-    "dev": "NODE_ENV=development supervisor -e js,json,hbs,css app.js",
+    "dev": "NODE_ENV=development supervisor -e js,json,hbs,css,coffee app.coffee",
     "prod": "NODE_ENV=production supervisor -e js,json,hbs,css app.js",
     "start": "NODE_ENV=production forever start -l log.log -o out.log -e error.log -p ./logs/ -a app.js",
     "stop": "forever stop app.js",

@@ -110,7 +110,7 @@ var ShopCategoryModel = function(query){
 			catAncestors.push(parent._id)
 			var prodAncestors = catAncestors.clone();
 			prodAncestors.push(that._id);
-			that.ancestors = catAncestors;
+			that.ancestors = _.compact(catAncestors);
 			that.parent = parent._id;
 
 			that.save();
