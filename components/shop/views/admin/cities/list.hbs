@@ -1,1 +1,43 @@
-cities list here
+{{factory.flash}}
+
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            Город
+        </th>
+        <th>
+            Yandex
+        </th>
+        <th>
+            Google
+        </th>
+        <th></th>
+    </tr>
+    {{#each cities}}
+        <tr>
+            <td>
+                {{name_ru}} <small>({{title_in}}, {{title_from}})</small>
+            </td>
+            <td>
+                <a href="https://webmaster.yandex.ru/site/?host={{yandex.$.id}}" target="_blank">{{yandex.name.[0]}}</a><br/>
+                <small>
+                    Верификация: {{yandex.verification.[0].$.state}}<br/>
+                    Индексация: {{yandex.crawling.[0].$.state}}<br/>
+                    Загружено/в индексе: {{yandex.url-count.[0]}}/{{yandex.index-count.[0]}}
+                </small>
+            </td>
+            <td>
+                Coming soon...
+            </td>
+            <td>
+                <a href="/admin/?task=shop.cities/edit&id={{_id}}" class="btn btn-default"><i class="glyphicon glyphicon-edit"></i></a>
+            </td>
+        </tr>
+    {{/each}}
+</table>
+
+
+{{#if pagination}}
+    {{factory 'module' 'pagination' pagination}}
+{{/if}}

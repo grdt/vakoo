@@ -1,0 +1,44 @@
+{{factory.flash}}
+
+<form class="form-horizontal" role="form" action="" method="post">
+
+<div class="form-group">
+    <label for="name_ru" class="col-sm-2 control-label">Заголовок</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" name="name_ru" placeholder="Заголовок" value="{{city.name_ru}}" readonly>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="region" class="col-sm-2 control-label">Регион</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" name="region" placeholder="Заголовок" value="{{city.region}}">
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label for="title_in" class="col-sm-2 control-label">Поеду в ... </label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" name="title_in" placeholder="Заголовок" value="{{city.title_in}}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="title_from" class="col-sm-2 control-label">Я из ...</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" name="title_from" placeholder="Заголовок" value="{{city.title_from}}">
+    </div>
+</div>
+
+
+
+<input type="hidden" name="exit" value="0"/>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <button type="submit" class="btn btn-primary" onclick="$(this).closest('form').find('[name=exit]').val(1)">Сохранить и выйти</button>
+    </div>
+</div>
+
+</form>
