@@ -165,7 +165,8 @@ var CoreController = function(query){
     this.isBot = function(){
         var ua = this.query.request.headers["user-agent"],
             isBot = false,
-            bot = "unknown";
+            bot = "unknown",
+            sessId = this.query.request.sessionID;
 
         if (/yandex/i.test(ua)){
             bot = "yandex"
@@ -181,12 +182,13 @@ var CoreController = function(query){
             isBot = true;
         }
 
+
         if(isBot){
-            this.vakoo.load.db.interface.collection("sessions").remove({_id:this.query.request.sessionID}, function(err, count){
+            this.vakoo.load.db.interface.collection("sessions").remove({_id:sessId}, function(err, count){
                 if(err){
                     console.error("Mongo err", err)
                 }else{
-                    console.log("Bot detected `", bot, "`remove session is ok", that.query.request.sessionID, count)
+                    console.log("Bot detected `", bot, "`remove session is ok", sessId, count)
                 }
             })
         }
