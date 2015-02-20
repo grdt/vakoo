@@ -1,10 +1,10 @@
 [{
 	"name": "luxy",
-	"script": "./app.js",
+	"script": "./app.coffee",
 	"args": "['--production']",
-	"instances": "3",
+	"instances": "max",
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
 	"exec_mode": "cluster_mode",
-	"port": 23568
+	"port": 8774
 }]
