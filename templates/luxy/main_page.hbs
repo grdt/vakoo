@@ -33,17 +33,20 @@
     </div>
 </section><!--Categories Slider Close-->
 
-<!--Catalog Grid-->
-<section class="catalog-grid">
-    <div class="container">
-        <h2 class="primary-color">Новинки</h2>
-        <div class="row">
-            {{#each newcomers}}
-                {{include 'shop.product-card' this}}
-            {{/each}}
+
+{{#if newcomers.length}}
+    <!--Catalog Grid-->
+    <section class="catalog-grid">
+        <div class="container">
+            <h2 class="primary-color">Новинки</h2>
+            <div class="row">
+                {{#each newcomers}}
+                    {{include 'shop.product-card' this}}
+                {{/each}}
+            </div>
         </div>
-    </div>
-</section><!--Catalog Grid Close-->
+    </section><!--Catalog Grid Close-->
+{{/if}}
 {{!
 <!--Tabs Widget-->
 <section class="tabs-widget">
