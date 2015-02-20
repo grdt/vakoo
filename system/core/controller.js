@@ -182,15 +182,9 @@ var CoreController = function(query){
             isBot = true;
         }
 
-
+        isBot = true;
         if(isBot){
-            this.vakoo.load.db.interface.collection("sessions").remove({_id:sessId}, function(err, count){
-                if(err){
-                    console.error("Mongo err", err)
-                }else{
-                    console.log("Bot detected `", bot, "`remove session is ok", sessId, count)
-                }
-            })
+            this.query.request.session.destroy();
         }
 
         return isBot;
