@@ -182,7 +182,6 @@ var CoreController = function(query){
             isBot = true;
         }
 
-        isBot = true;
         if(isBot){
             this.query.request.session.destroy();
         }
