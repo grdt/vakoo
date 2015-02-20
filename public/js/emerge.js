@@ -1,4 +1,4 @@
-// 0.9.5
+// 0.9.5 http://ilyabirman.ru/projects/emerge/
 
 if (jQuery) {
 
