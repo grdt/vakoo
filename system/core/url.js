@@ -41,8 +41,8 @@ var Query = function(request,response){
 
 		if(this.vakoo.isProduction()){
 
-			this.option("main").model("log").collection().insert(log,function(err,item){
-			});
+//			this.option("main").model("log").collection().insert(log,function(err,item){
+//			});
 
 		}else{
 //			console.log(log);
