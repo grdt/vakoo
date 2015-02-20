@@ -6,5 +6,5 @@
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
 	"exec_mode": "cluster_mode",
-	"port": 8774
+	"port": 8773
 }]
