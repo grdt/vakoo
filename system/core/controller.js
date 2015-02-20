@@ -186,7 +186,7 @@ var CoreController = function(query){
                 if(err){
                     console.error("Mongo err", err)
                 }else{
-                    console.log("Bot detected `", bot, "`remove session is ok")
+//                    console.log("Bot detected `", bot, "`remove session is ok")
                 }
             })
         }
