@@ -146,19 +146,52 @@ var CoreController = function(query){
 
     this.echo = function(data){
 		this.cleanTimeout();
-        if(!this.isAjax()){
+        if(!this.isAjax() && !this.isBot()){
             console.log(
-                "url: ",
+                "\nurl:           `",
                 this.query.requestUrl(),
-                "\nua: ",
+                "`\nua:            `",
                 this.query.request.headers["user-agent"],
-                "\nresponse-time: ",
+                "`\nresponse-time: `",
                 ((new Date()).getTime() - this.query.initializeTime),
-                "session_id: ",
-                this.query.request.sessionID,
-                "\n");
+                "`\ncity:          `",
+                this.query.city.alias,
+                "`"
+             );
         }
         this.query.response.send(data);
+    }
+
+    this.isBot = function(){
+        var ua = this.query.request.headers["user-agent"],
+            isBot = false,
+            bot = "unknown";
+
+        if (/yandex/i.test(ua)){
+            bot = "yandex"
+            isBot = true;
+        }
+
+        if (/google/i.test(ua)){
+            bot = "google"
+            isBot = true;
+        }
+
+        if (/bot/i.test(ua)){
+            isBot = true;
+        }
+
+        if(isBot){
+            this.vakoo.load.db.interface.collection("sessions").remove({_id:this.query.request.sessionID}, function(err){
+                if(err){
+                    console.error("Mongo err", err)
+                }else{
+                    console.log("Bot detected `", bot, "`remove session is ok")
+                }
+            })
+        }
+
+        return isBot;
     }
 
 	this.isAjax = function(){
