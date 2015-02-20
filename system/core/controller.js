@@ -182,6 +182,11 @@ var CoreController = function(query){
             isBot = true;
         }
 
+        if (/megaindex/i.test(ua)){
+            bot = "megaindex";
+            isBot = true;
+        }
+
         if(isBot){
             this.query.request.session.destroy();
         }
