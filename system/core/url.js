@@ -21,6 +21,8 @@ var Query = function(request,response){
 
 	this.initTime = (new Date()).getTime();
 
+	this.initializeTime = (new Date()).getTime();
+
 	this.logTime = function(name){
 		var time = (new Date()).getTime(),
 			text = [name+':',(time - this.initTime),'ms'].join(' ') + " " + (new Date()).toString() + " " + this.requestUrl() + " " + process.memoryUsage().heapUsed / 1024 / 1024,
@@ -51,6 +53,10 @@ var Query = function(request,response){
 	this.requestUrl = function(){
 		return this.request.url;
 	}
+
+    this.isAjax = function(){
+        return this.request.xhr;
+    }
 
 	this.referrer = function(){
 		var ref = this.request.headers.referer;

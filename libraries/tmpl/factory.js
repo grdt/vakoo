@@ -29,6 +29,8 @@ var TemplateFactory = function(){
 		info:'Информация:'
 	}
 
+    this.city = this.from.query.city;
+
 	this.get = function(param){
 		return that.from.get(param);
 	}

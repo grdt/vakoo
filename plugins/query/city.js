@@ -15,6 +15,7 @@ var Plugin = function(){
 			callback = arguments[1],
 			loader = this.load;
 
+
 //		console.log(process.memoryUsage().heapUsed / 1024 / 1024);
 		
 		

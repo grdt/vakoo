@@ -146,6 +146,18 @@ var CoreController = function(query){
 
     this.echo = function(data){
 		this.cleanTimeout();
+        if(!this.isAjax()){
+            console.log(
+                "url: ",
+                this.query.requestUrl(),
+                "\nua: ",
+                this.query.request.headers["user-agent"],
+                "\nresponse-time: ",
+                ((new Date()).getTime() - this.query.initializeTime),
+                "session_id: ",
+                this.query.request.sessionID,
+                "\n");
+        }
         this.query.response.send(data);
     }
 

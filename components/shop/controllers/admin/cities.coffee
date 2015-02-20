@@ -28,6 +28,11 @@ ShopCitiesAdminController = (@context)->
           @mongo.collection("cities").findOne {_id:new ObjectID(@get("id"))}, taskCallback
         (city, taskCallback)=>
           if @post()
+
+            city.title_in = @post("title_in", city.title_in)
+            city.title_from = @post("title_from", city.title_from)
+            city.region = @post("region", city.region)
+
             @mongo.collection("cities").update(
               {_id:new ObjectID(@get("id"))}
               {$set:{
@@ -46,14 +51,64 @@ ShopCitiesAdminController = (@context)->
           console.error err
           @setFlash('error',"Ошибка: `#{err}`");
         else if @post()
-          @setFlash('success','Город сохранен');
+          @setFlash('success',"Город `#{data.city.name_ru}` сохранен");
+
+          #todo remove this
+#          async.waterfall(
+#            [
+#              (taskCallback)=>
+#                @mongo.collection("cities").count {"title_in":""}, taskCallback
+#              (count, taskCallback)=>
+#                @setFlash('info',"Осталось #{count}");
+#                taskCallback()
+#              (taskCallback)=>
+#                @mongo.collection("cities").findOne {"title_in":""}, taskCallback
+#            ]
+#            (err, city)=>
+#              if err
+#                console.error err
+#                @setFlash('error',"Ошибка: `#{err}`");
+#              @redirect "/admin/?task=shop.cities/edit&id=#{city._id}"
+#          )
+#          return
+
         if @post("exit") is "1"
           @back()
         else
           @display("form", data)
     )
 
+  @cityList = ->
+
+    pager = false
+
+    async.waterfall(
+      [
+        async.apply @getPagination, @mongo.collection("cities"), {"title_in":""}, PER_PAGE, @get("p", 0)
+        (results, taskCallback)=>
+          pager = results
+          @mongo.collection("cities").find {"title_in":""}, taskCallback
+        (cursor, taskCallback)->
+          cursor.skip pager.limit[0]
+          cursor.limit pager.limit[1]
+          cursor.toArray taskCallback
+        (cities, taskCallback)->
+          taskCallback null, {
+            cities:cities
+            pagination: pager.pagination
+          }
+      ]
+      (err, data)=>
+        if err
+          console.error err
+        @display("list", data)
+    )
+
   @index = ->
+
+    if @get("padezh") is 1
+      @cityList()
+      return
 
     @cleanTimeout()
 
