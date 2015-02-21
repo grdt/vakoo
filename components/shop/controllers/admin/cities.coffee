@@ -257,7 +257,7 @@ ShopCitiesAdminController = (@context)->
   @getFromRedis = (key, getter, callback)->
 
     client = @vakoo.redis
-    ttl = 600
+    ttl = 60 * 60 * 24 * 2
 
     client.get key, (error, result)=>
       if error
