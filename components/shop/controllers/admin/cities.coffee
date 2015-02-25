@@ -6,6 +6,28 @@ parseString = require('xml2js').parseString
 
 ObjectID = require('mongodb').ObjectID
 
+#google path
+google = require "googleapis"
+
+OAuth2 = google.auth.OAuth2
+oauth2Client = new OAuth2("369918028503-34mnodtfft061n53ko96ms267jnme9h8.apps.googleusercontent.com", "9LDxcunVacvKTYWaMGoCDuXp", "http://vakoo.ru/admin/?task=shop.seo/googleAuth")
+
+gooToken = "ya29.IQFVrGVoF9J242-x8iodeJ7PVNlBfAvb2vec9hGjpeX3ua6WH0j2z0v-DjPI1efgLH8526WmsV918w"
+
+token =
+  access_token: gooToken
+  token_type: "Bearer"
+  expiry_date: 1424528439229
+
+oauth2Client.setCredentials token
+
+google.options auth: oauth2Client
+
+webmaster = google.webmasters "v3"
+#end google
+
+
+
 ShopCitiesAdminController = (@context)->
 
   @VIEW_NAMESPACE = "cities"
@@ -124,40 +146,33 @@ ShopCitiesAdminController = (@context)->
           cursor.skip pager.limit[0]
           cursor.limit pager.limit[1]
           cursor.toArray taskCallback
-        (cities, taskCallback)=>
-          async.each(
-            cities
-            (city, done)=>
-              if city.yandexId?
 
-                @getFromRedis(
-                  "yandex-host-#{city.yandexId}"
-                  (redisCallback)->
-                    async.waterfall(
-                      [
-                        (subTaskCallback)->
-                          request.get(
-                            "http://webmaster.yandex.ru/api/v2/hosts/#{city.yandexId}/stats"
-                            {
-                              headers:{
-                                Authorization: "OAuth #{yaToken}"
-                              }
-                            }
-                            subTaskCallback
-                          )
-                        (response, body, subTaskCallback)->
-                          parseString body, subTaskCallback
-                        (yaResult, subTaskCallback)->
-                          city.yandex = yaResult.host
-                          subTaskCallback null, city.yandex
-                      ]
-                      redisCallback
-                    )
-                  (err, yandex)->
-                    city.yandex = yandex
-                    done err
-                )
+        @getYandexStats
 
+        @getGoogleStats
+
+        (cities, taskCallback)->
+          taskCallback null, {
+            cities:cities
+            pagination: pager.pagination
+          }
+      ]
+      (err, data)=>
+        if err
+          console.error err
+        @display("list", data)
+    )
+
+  @getYandexStats = (cities, callback)=>
+    async.each(
+      cities
+      (city, done)=>
+
+        async.waterfall(
+          [
+            (taskCallback)=>
+              if city.yandexId
+                taskCallback null, city.yandexId
               else
                 async.waterfall(
                   [
@@ -174,40 +189,48 @@ ShopCitiesAdminController = (@context)->
                         {$set: {yandexId: city.yandexId}}
                         subTaskCallback
                       )
-                    (c, subTaskCallback)->
-                      request.get(
-                        "http://webmaster.yandex.ru/api/v2/hosts/#{city.yandexId}/stats"
-                        {
-                          headers:{
-                            Authorization: "OAuth #{yaToken}"
-                          }
-                        }
-                        subTaskCallback
-                      )
-                    (response, body, subTaskCallback)->
-                      parseString body, subTaskCallback
-                    (yaResult, subTaskCallback)->
-                      city.yandex = yaResult.host
-                      subTaskCallback null, city.yandex
                   ]
-                  (err, yandex)->
-                    city.yandex = yandex
-                    done err
+                  (err)->
+                    taskCallback err, city.yandexId
                 )
-            (err)->
-              taskCallback err, cities
-          )
-        (cities, taskCallback)->
-          taskCallback null, {
-            cities:cities
-            pagination: pager.pagination
-          }
-      ]
-      (err, data)=>
-        if err
-          console.error err
-        @display("list", data)
+            (yandexId, taskCallback)=>
+              @getFromRedis(
+                "yandex-host-#{city.yandexId}"
+                (redisCallback)->
+                  async.waterfall(
+                    [
+                      (subTaskCallback)->
+                        console.log "receive yandex stats for `#{city.alias}.luxy.sexy`"
+                        request.get(
+                          "http://webmaster.yandex.ru/api/v2/hosts/#{city.yandexId}/stats"
+                          {
+                            headers:{
+                              Authorization: "OAuth #{yaToken}"
+                            }
+                          }
+                          subTaskCallback
+                        )
+                      (response, body, subTaskCallback)->
+                        parseString body, subTaskCallback
+                      (yaResult, subTaskCallback)->
+                        subTaskCallback null, yaResult.host
+                    ]
+                    redisCallback
+                  )
+                (err, yandex)->
+                  taskCallback err, yandex
+              )
+          ]
+          (err, stats)->
+            city.yandex = stats
+            done err
+        )
+      (err)->
+        callback err, cities
     )
+
+  @getGoogleStats = (cities, callback)=>
+    callback null, cities
 
   @getYandexSites = (callback)=>
     @getFromRedis(
@@ -274,9 +297,9 @@ ShopCitiesAdminController = (@context)->
               callback err
             else
               if _.isArray(result) or _.isObject(result)
-                result = redisResult:result
-                result = JSON.stringify result
-              client.setex key, ttl, result, (err)->
+                storeResult = redisResult:result
+                storeResult = JSON.stringify storeResult
+              client.setex key, ttl, storeResult, (err)->
                 callback err, result
 
   return
