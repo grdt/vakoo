@@ -1,8 +1,17 @@
-console.log "\n\n"
+async = require "async"
 
-if process.argv.indexOf("--production") >= 0
-	process.env.NODE_ENV = "production";
+Vakoo = require "./vakoo"
 
-vakoo = require('./system/index')()
-
-vakoo.start()
+async.waterfall(
+  [
+    async.apply Vakoo.addStorage, "mongo"
+    async.apply Vakoo.addStorage, "redis"
+    async.apply Vakoo.createServer
+    async.apply Vakoo.initialize
+    Vakoo.init
+  ]
+  (err)->
+    if err
+      Vakoo.logger.error "Vakoo init err: #{err}"
+    Vakoo.logger.info "Vakoo init successful."
+)
