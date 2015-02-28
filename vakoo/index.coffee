@@ -22,6 +22,7 @@ class Vakoo
       "Context"
       "Initialize"
       "Web"
+      "Mailer"
     ]
 
     len = (_.max loggers, (logger)->
@@ -140,6 +141,11 @@ class Vakoo
   getAppClass: (name, path)->
     return require Path.resolve APP_PATH, "#{path}/#{name}"
 
+  enableSMTP: (callback)=>
+    Mailer = @getClass "mailer"
+    config = @getConfig "smtp"
+    @mailer = new Mailer config
+    callback()
 
 
 vakoo = new Vakoo()

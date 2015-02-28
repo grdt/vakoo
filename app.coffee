@@ -6,6 +6,7 @@ async.waterfall(
   [
     async.apply Vakoo.addStorage, "mongo"
     async.apply Vakoo.addStorage, "redis"
+    async.apply Vakoo.enableSMTP
     async.apply Vakoo.createServer
     async.apply Vakoo.initRouter
     async.apply Vakoo.initialize
