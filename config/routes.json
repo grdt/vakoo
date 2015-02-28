@@ -1,0 +1,13 @@
+{
+    "default": {
+        "controller": "main",
+        "action": "index"
+    },
+    "test": {
+        "action": "build"
+    },
+    "billing": {
+        "controller": "billing",
+        "action": "index"
+    }
+}

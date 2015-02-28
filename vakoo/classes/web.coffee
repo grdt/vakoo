@@ -27,7 +27,7 @@ class Web
 
   start: (callback)=>
 
-    @app.all "*", @executor
+    @app.all "*", @execute
 
     @server = @app.listen(
       @port
@@ -36,7 +36,21 @@ class Web
         callback()
     )
 
-  executor: (req, res)=>
-    res.send "It's working!"
+  execute: (req, res)=>
+    route = Vakoo.router.fetch req.url
+    if route? and route[1]
+      try
+        context = new (Vakoo.getClass "context") req, res, route
+        Controller = Vakoo.getAppClass route[1].controller, "controllers"
+        if Controller?
+          (new Controller context)[route[1].action]()
+        else
+          throw new Error "Controller `#{route[1].controller}` not found."
+      catch e
+        #TODO 404
+        res.send "404 with #{e}"
+    else
+      #TODO 404
+      res.send "404 route not found"
 
 module.exports = Web

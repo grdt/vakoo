@@ -106,15 +106,24 @@ class Vakoo
     @web = new Web config
     callback()
 
+  initRouter: (callback)=>
+    Router = @getClass "router"
+    config = @getConfig "routes"
+    @router = new Router config, callback
+
   getClass: (name)->
     return require Path.resolve VAKOO_PATH, "classes/#{name}"
 
   getConfig: (name)->
     return require Path.resolve APP_PATH, "config/#{name}.json"
 
+  getAppClass: (name, path)->
+    return require Path.resolve APP_PATH, "#{path}/#{name}"
+
+
 
 vakoo = new Vakoo()
-
+#TODO global beauty
 global.Vakoo = vakoo
 global.APP_PATH = Path.resolve __dirname, ".."
 global.VAKOO_PATH = __dirname
