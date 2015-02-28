@@ -1,3 +1,7 @@
+async = require "async"
+_ = require "underscore"
+
+
 class Billing extends Vakoo.getClass "controller"
 
   index: ->

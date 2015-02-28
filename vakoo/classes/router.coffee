@@ -25,6 +25,8 @@ class Router
           defaults: _.defaults data, @defaults
         )
 
+    @logger.info "Enable successfully."
+
     callback()
 
   fetch: (url)=>

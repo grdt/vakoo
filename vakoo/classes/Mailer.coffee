@@ -3,13 +3,16 @@ MailComposer = require("mailcomposer").MailComposer
 
 class Mailer
 
-  constructor: (@config)->
+  constructor: (@config, callback)->
     @logger = Vakoo.loggers.Mailer
     @client = smtp.createClientPool(
       @config.outgoing.port
       @config.outgoing.host
       @config.outgoing.options
     )
+
+    @logger.info "Enable successfully."
+    callback()
 
   sendMail: (recepient, subject, body, callback)=>
     @client.sendMail(

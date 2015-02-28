@@ -10,7 +10,7 @@ MongoStore = (require "connect-mongo") session
 
 class Web
 
-  constructor: (@config)->
+  constructor: (@config, callback)->
 
     @logger = Vakoo.loggers.Web
 
@@ -18,12 +18,16 @@ class Web
 
     @app = express()
 
+    @app.set "json spaces", 3
+
     @app.use bodyParser.json()
     @app.use bodyParser.urlencoded extended: true
     @app.use cookieParser()
     @app.use multipart uploadDir: APP_PATH + "/tmp"
     @app.use express.static APP_PATH + "/public"
     @app.use errorhandler()
+
+    callback()
 
   start: (callback)=>
 

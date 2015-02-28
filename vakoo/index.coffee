@@ -70,7 +70,7 @@ class Vakoo
 
     tasks = [
       (taskCallback)=>
-        @logger.info "Vakoo. Start initialization."
+        @logger.info "Start initialization."
         taskCallback()
     ]
 
@@ -96,13 +96,13 @@ class Vakoo
     @Storage ?= @getClass "storage"
 
     if @Storage[name]?
-      callback "Vakoo. Storage `#{name}` already added."
+      callback "Storage `#{name}` already added."
     else
       config = @getConfig configName
       Storage = @getClass config.class
       storage = new Storage config
       @Storage.add name, storage
-      @logger.info "Vakoo. Add storage `#{name}` with config `#{configName}`"
+      @logger.info "Add storage `#{name}` with config `#{configName}`"
       callback()
 
   initialize: (callback)=>
@@ -124,8 +124,12 @@ class Vakoo
   createServer: (callback)=>
     config = @getConfig "web"
     Web = @getClass "web"
-    @web = new Web config
-    callback()
+    @web = new Web config, callback
+
+  enableSMTP: (callback)=>
+    Mailer = @getClass "mailer"
+    config = @getConfig "smtp"
+    @mailer = new Mailer config, callback
 
   initRouter: (callback)=>
     Router = @getClass "router"
@@ -141,11 +145,7 @@ class Vakoo
   getAppClass: (name, path)->
     return require Path.resolve APP_PATH, "#{path}/#{name}"
 
-  enableSMTP: (callback)=>
-    Mailer = @getClass "mailer"
-    config = @getConfig "smtp"
-    @mailer = new Mailer config
-    callback()
+
 
 
 vakoo = new Vakoo()
