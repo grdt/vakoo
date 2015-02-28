@@ -4,7 +4,7 @@ MongoStore = (require "connect-mongo") session
 class MongoSessionInitializer
 
   constructor: (callback)->
-    Vakoo.logger.info "Initializer. Start `mongo-session` initializer."
+    Vakoo.loggers.Initialize.info "Start `mongo-session`."
     Vakoo.web.app.use(
       session(
         store: new MongoStore url:Vakoo.Storage.mongo.url
@@ -17,7 +17,7 @@ class MongoSessionInitializer
 #          domain: 'vakoo.ru'
       )
     )
-    Vakoo.logger.info "Initializer. Initializer `mongo-session` complete successful."
+    Vakoo.loggers.Initialize.info "Complete `mongo-session` successfully."
     callback()
 
 

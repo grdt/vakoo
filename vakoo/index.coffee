@@ -2,12 +2,48 @@ winston = require "winston"
 async = require "async"
 Path = require "path"
 fs = require "fs"
+_ = require "underscore"
 
 class Vakoo
 
   constructor: ->
-    @logger = winston
+    @initLoggers()
+
+    @logger = winston.loggers.get "Vakoo"
     @initializers = []
+
+  initLoggers: =>
+
+    loggers = [
+      "Vakoo"
+      "Redis"
+      "Mongo"
+      "Router"
+      "Context"
+      "Initialize"
+      "Web"
+    ]
+
+    len = (_.max loggers, (logger)->
+      return logger.length).length
+
+    labels = _.object _.map loggers, (logger)->
+      return [logger, logger]
+#      return [logger, "#{(new Array (len - logger.length + 1)).join " "}#{logger}"]
+
+    @loggers = {}
+
+    for logger in loggers
+      winston.loggers.add logger, {
+        console: {
+          colorize: true
+          label: labels[logger]
+        }
+      }
+
+      @loggers[logger] = winston.loggers.get logger
+
+    @logger = @loggers.Vakoo
 
   init: (callback)=>
 

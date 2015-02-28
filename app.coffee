@@ -13,5 +13,6 @@ async.waterfall(
   (err)->
     if err
       Vakoo.logger.error "Vakoo init err: #{err}"
-    Vakoo.logger.info "Vakoo init successful."
+    else
+      Vakoo.logger.info "Vakoo init successfully."
 )

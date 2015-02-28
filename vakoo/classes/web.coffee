@@ -11,6 +11,9 @@ MongoStore = (require "connect-mongo") session
 class Web
 
   constructor: (@config)->
+
+    @logger = Vakoo.loggers.Web
+
     @port = @config.port ? 8773
 
     @app = express()
@@ -29,7 +32,7 @@ class Web
     @server = @app.listen(
       @port
       =>
-        Vakoo.logger.info "Web. Start listening port `#{@port}`"
+        @logger.info "Start listening port `#{@port}`"
         callback()
     )
 
