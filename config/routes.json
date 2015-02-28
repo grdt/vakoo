@@ -9,5 +9,9 @@
     "billing": {
         "controller": "billing",
         "action": "index"
+    },
+    "billing/<act>": {
+        "controller": "billing",
+        "action": "answer"
     }
 }

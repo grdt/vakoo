@@ -1,9 +1,12 @@
 MongoClient = require("mongodb").MongoClient
+ObjectID = require("mongodb").ObjectID
 
 class Mongo extends Vakoo.Storage.Extender
 
   constructor: (@config)->
     @logger = Vakoo.loggers.Mongo
+
+    @ObjectID = ObjectID
 
   connect: (callback)=>
     @url  = "mongodb://localhost:27017/#{@config.database}"
@@ -15,6 +18,9 @@ class Mongo extends Vakoo.Storage.Extender
         @client = db
         @logger.info "Connected to `#{@config.database}` successfully."
       callback err
+
+  collection: (name)=>
+    return @client.collection name
 
 
 
