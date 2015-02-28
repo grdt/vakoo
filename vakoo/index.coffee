@@ -45,6 +45,26 @@ class Vakoo
 
     @logger = @loggers.Vakoo
 
+  createLogger: (name, postfix)=>
+
+    firstUpper = (string)->
+      arr = string.split ""
+      return "#{arr[0].toUpperCase()}#{_.rest(arr).join("").toLowerCase()}"
+
+    label = "#{firstUpper name}#{firstUpper postfix}"
+
+    return new winston.Logger(
+      {
+        transports: [
+          new winston.transports.Console(
+            colorize: true
+            label: label
+          )
+        ]
+        exitOnError: false
+      }
+    )
+
   init: (callback)=>
 
     tasks = [

@@ -41,16 +41,19 @@ class Web
     if route? and route[1]
       try
         context = new (Vakoo.getClass "context") req, res, route
-        Controller = Vakoo.getAppClass route[1].controller, "controllers"
+        Controller = Vakoo.getAppClass context.route.controller, "controllers"
         if Controller?
-          (new Controller context)[route[1].action]()
+          (new Controller context, Vakoo.createLogger(context.route.controller, "Controller"))[route[1].action]()
         else
+          @logger.error "Controller `#{route[1].controller}` not found."
           throw new Error "Controller `#{route[1].controller}` not found."
       catch e
         #TODO 404
+        @logger.error e.toString()
         res.send "404 with #{e}"
     else
       #TODO 404
-      res.send "404 route not found"
+      @logger.warn "Route with url `#{req.url}` not found."
+      res.send "Route with url `#{req.url}` not found. 404 Error."
 
 module.exports = Web
