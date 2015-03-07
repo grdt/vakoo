@@ -34,6 +34,7 @@
     "dev": "NODE_ENV=development supervisor -e js,json,hbs,css,coffee app.coffee",
     "prod": "NODE_ENV=production supervisor -e js,json,hbs,css,coffee app.coffee",
     "start": "NODE_ENV=production forever -c coffee start -l log.log -o out.log -e error.log -p ./logs/ -a app.coffee",
+    "backup": "NODE_ENV=production forever -c coffee start -l log.log -o out.log -e error.log -p ./logs/ -a backup.coffee",
     "stop": "forever stop app.coffee",
     "cron": "forever start -l cron-log.log -o cron-out.log -e cron-error.log -p ./logs/ -a cron.js",
     "pm2-start": "pm2 start luxy.json",
