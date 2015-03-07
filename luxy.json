@@ -4,9 +4,22 @@
 	"instances": "2",
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
-	"exec_mode": "cluster_mode",
+	"exec_mode": "cluster",
 	"port": 8773,
     "env": {
         "NODE_ENV": "production"
     }
-}]
+},
+{
+    "name": "pm2-web",
+    "script": "/usr/lib/node_modules/pm2-web/pm2-web.js",
+    "instances": "1",
+    "port": 9000
+},
+{
+    "name": "cron",
+    "script": "./cron.js",
+    "instances": "1",
+    "exec_mode": "fork"
+}
+]
