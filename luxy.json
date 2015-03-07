@@ -2,7 +2,7 @@
 	"name": "luxy",
 	"script": "./app.coffee",
 	"args": ["--production"],
-	"instances": "4",
+	"instances": "2",
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
 	"exec_mode": "cluster_mode",
