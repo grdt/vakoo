@@ -215,6 +215,11 @@ var CoreController = function(query){
 	}
 
     this.session = function(key,value){
+
+        if(typeof this.query.request.session == "undefined"){
+            return false;
+        }
+
         if(typeof value == "undefined"){
             if(typeof key == "undefined"){
                 return this.query.request.session;

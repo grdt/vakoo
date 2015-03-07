@@ -13,7 +13,8 @@ var Plugin = function(){
 
 		var query = arguments[0][0],
 			callback = arguments[1],
-			loader = this.load;
+			loader = this.load,
+            cityModel = loader.option('shop').model('city');
 
 
 //		console.log(process.memoryUsage().heapUsed / 1024 / 1024);
@@ -51,8 +52,13 @@ var Plugin = function(){
 			var subdomain = query.getSubdomain(),
 				cookieCity = query.cookie('city');
 
+            if(typeof cityModel.where != "function"){
+                cb();
+                return;
+            }
+
 			if(cookieCity && cookieCity != CHOOSE_CITY){
-				loader.option('shop').model('city').where({status:'active',alias:cookieCity}).findOne(function(city){
+                cityModel.where({status:'active',alias:cookieCity}).findOne(function(city){
 					if(city._id){
 						if(subdomain == cookieCity){
 							query.city = city.short();
@@ -70,7 +76,7 @@ var Plugin = function(){
 					}
 				});
 			}else{
-				loader.option('shop').model('city').where({status:'active',alias:subdomain}).findOne(function(city){
+				cityModel.where({status:'active',alias:subdomain}).findOne(function(city){
 					if(city._id){
 
 						query.city = city.short();
