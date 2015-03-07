@@ -1,7 +1,7 @@
 [{
 	"name": "luxy",
 	"script": "./app.coffee",
-	"args": "['--production']",
+	"args": ["--production"],
 	"instances": "4",
 	"error_file": "./logs/err.log",
 	"out_file": "./logs/out.log",
