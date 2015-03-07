@@ -25,6 +25,8 @@ var PageModel = function(){
 
 	this.alias = '';
 
+    this.label = '';
+
 	this.anonce = '';
 
 	this.content = '';

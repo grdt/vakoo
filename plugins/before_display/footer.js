@@ -11,32 +11,18 @@ var Plugin = function(){
 		var next = arguments[1];
 		var pages;
 
-		if(pages = vakoo.memory('all-articles')){
-			pages.forEach(function(page){
-				aliases[page.alias] = page;
-			});
+        loader.option('content').model('page').where({type:'article'}).find(function(pages){
 
-			$l._data['footer'] = aliases;
+            pages.forEach(function(page){
+                aliases[page.alias] = page;
+            });
 
-			if(typeof next == "function"){
-				next();
-			}
-		}else{
-			loader.option('content').model('page').where({type:'article'}).find(function(pages){
+            $l._data['footer'] = aliases;
 
-				vakoo.memory('all-articles',pages);
-
-				pages.forEach(function(page){
-					aliases[page.alias] = page;
-				});
-
-				$l._data['footer'] = aliases;
-
-				if(typeof next == "function"){
-					next();
-				}
-			});
-		}
+            if(typeof next == "function"){
+                next();
+            }
+        });
 	}
 }
 
