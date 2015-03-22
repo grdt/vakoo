@@ -1,0 +1,224 @@
+<!--Mobile Menu Toggle-->
+<div class="menu-toggle"><i class="fa fa-list"></i></div>
+<div class="mobile-border"><span></span></div>
+
+<!--Main Menu-->
+<nav class="menu">
+<ul class="main">
+    <li class="has-submenu"><a href="/">Главная</a><!--Class "has-submenu" for proper highlighting and dropdown-->
+    <li class="hide-sm has-submenu"><a href="{{pages.about.url}}">Магазин{{pages.about.label}}<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            <li><a href="{{pages.delivery.url}}">{{pages.delivery.label}}</a></li>
+            <li><a href="{{pages.anonymity.url}}">{{pages.anonymity.label}}</a></li>
+            <li><a href="{{pages.guarantee.url}}">{{pages.guarantee.label}}</a></li>
+            <li><a href="{{pages.payment.url}}">{{pages.payment.label}}</a></li>
+        </ul>
+    </li>
+    <li class="{{!hide-sm}} has-submenu"><a href="{{pages.support.url}}">{{pages.support.title}}</a>
+        <ul class="submenu">
+            <li><a href="{{pages.order.url}}">{{pages.order.label}}</a></li>
+            <li><a href="{{pages.sizes.url}}">Таблицы размеров</a></li>
+            <li><a href="{{pages.feedback.url}}">{{pages.feedback.label}}</a></li>
+            <li><a href="{{pages.contacts.url}}">{{pages.contacts.label}}</a></li>
+        </ul>
+    </li>
+    <li class="{{!hide-sm}}">
+        <a href="javascript:chooseCity()"><i class="fa fa-map-marker"></i>&nbsp;{{#if city}}{{city.title}}{{else}}Указать город{{/if}}</a>
+    </li>
+</ul>
+<ul class="catalog">
+    <li class="has-submenu"><a href="{{categoriesTree.dlya-nee.path}}">{{categoriesTree.dlya-nee.title}}<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            {{#keyin categoriesTree.dlya-nee.childs}}
+                {{#isset childs}}
+                    <li class="has-submenu">
+                        <a href="{{path}}">{{title}}</a>
+                        <ul class="sub-submenu">
+                            {{#keyin childs}}
+                                <li><a href="{{path}}">{{title}}</a></li>
+                            {{/keyin}}
+                        </ul>
+                    </li>
+                {{/isset}}
+            {{/keyin}}
+
+            <li class="has-submenu">
+                <a href="{{categoriesTree.analnaya-stimulyaciya.path}}">{{categoriesTree.analnaya-stimulyaciya.title}}</a>
+                <ul class="sub-submenu">
+                    {{#keyinRange categoriesTree.analnaya-stimulyaciya.childs 1 7}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/keyinRange}}
+                </ul>
+            </li>
+
+            {{#keyin categoriesTree.dlya-nee.childs}}
+                {{^isset childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/isset}}
+            {{/keyin}}
+        </ul>
+    </li>
+
+    <li class="has-submenu"><a href="{{categoriesTree.dlya-nego.path}}">{{categoriesTree.dlya-nego.title}}<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            {{#keyin categoriesTree.dlya-nego.childs}}
+                {{#isset childs}}
+                    <li class="has-submenu">
+                        <a href="{{path}}">{{title}}</a>
+                        <ul class="sub-submenu">
+                            {{#keyin childs}}
+                                <li><a href="{{path}}">{{title}}</a></li>
+                            {{/keyin}}
+                        </ul>
+                    </li>
+                {{/isset}}
+            {{/keyin}}
+
+            <li class="has-submenu">
+                <a href="{{categoriesTree.analnaya-stimulyaciya.path}}">{{categoriesTree.analnaya-stimulyaciya.title}}</a>
+                <ul class="sub-submenu">
+                    {{#keyin categoriesTree.analnaya-stimulyaciya.childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/keyin}}
+                </ul>
+            </li>
+
+            {{#keyin categoriesTree.dlya-nego.childs}}
+                {{^isset childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/isset}}
+            {{/keyin}}
+        </ul>
+    </li>
+
+    <li class="has-submenu"><a href="{{categoriesTree.dlya-dvoih.path}}">{{categoriesTree.dlya-dvoih.title}}<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            {{#keyin categoriesTree.dlya-dvoih.childs}}
+                {{#isset childs}}
+                    <li class="has-submenu">
+                        <a href="{{path}}">{{title}}</a>
+                        <ul class="sub-submenu">
+                            {{#keyin childs}}
+                                <li><a href="{{path}}">{{title}}</a></li>
+                            {{/keyin}}
+                        </ul>
+                    </li>
+                {{/isset}}
+            {{/keyin}}
+
+            <li class="has-submenu">
+                <a href="{{categoriesTree.analnaya-stimulyaciya.path}}">{{categoriesTree.analnaya-stimulyaciya.title}}</a>
+                <ul class="sub-submenu">
+                    {{#keyin categoriesTree.analnaya-stimulyaciya.childs}}
+                        <li><a href="{{path}}">{{title}}</a></li>
+                    {{/keyin}}
+                </ul>
+            </li>
+
+            {{#keyin categoriesTree.dlya-dvoih.childs}}
+                {{^isset childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/isset}}
+            {{/keyin}}
+        </ul>
+    </li>
+
+    <li class="has-submenu"><a href="{{categoriesTree.eroticheskaya-odezhda-i-bele.path}}">Бельё и одежда<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            {{#keyin categoriesTree.eroticheskaya-odezhda-i-bele.childs}}
+                {{#isset childs}}
+                    <li class="has-submenu">
+                        <a href="{{path}}">{{title}}</a>
+                        <ul class="sub-submenu">
+                            {{#keyin childs}}
+                                <li><a href="{{path}}">{{title}}</a></li>
+                            {{/keyin}}
+                        </ul>
+                    </li>
+                {{/isset}}
+            {{/keyin}}
+
+            {{#keyin categoriesTree.eroticheskaya-odezhda-i-bele.childs}}
+                {{^isset childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/isset}}
+            {{/keyin}}
+        </ul>
+    </li>
+
+
+    <li class="has-submenu"><a href="{{categoriesTree.fetish-i-bdsm.path}}">BDSM<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+            {{#keyin categoriesTree.fetish-i-bdsm.childs}}
+                {{#isset childs}}
+                    <li class="has-submenu">
+                        <a href="{{path}}">{{title}}</a>
+                        <ul class="sub-submenu">
+                            {{#keyin childs}}
+                                <li><a href="{{path}}">{{title}}</a></li>
+                            {{/keyin}}
+                        </ul>
+                    </li>
+                {{/isset}}
+            {{/keyin}}
+
+            {{#keyin categoriesTree.fetish-i-bdsm.childs}}
+                {{^isset childs}}
+                    <li><a href="{{path}}">{{title}}</a></li>
+                {{/isset}}
+            {{/keyin}}
+        </ul>
+    </li>
+
+    <li class="hide-sm has-submenu"><a href="{{categoriesTree.prezervativy-i-smazki.path}}">{{categoriesTree.prezervativy-i-smazki.title}}<i class="fa fa-chevron-down"></i></a>
+        <ul class="submenu">
+
+            {{#keyin categoriesTree.prezervativy-i-smazki.childs}}
+                <li><a href="{{path}}">{{title}}</a></li>
+            {{/keyin}}
+        </ul>
+    </li>
+
+
+    {{!
+    <li class="has-submenu"><a href="shop-filters-left-3cols.html">Для него</a>
+        <ul class="submenu">
+            <li><a href="#">Nokia</a></li>
+            <li class="has-submenu"><a href="#">iPhone</a><!--Class "has-submenu" for adding carret and dropdown-->
+                <ul class="sub-submenu">
+                    <li><a href="#">iPhone 4</a></li>
+                    <li><a href="#">iPhone 4s</a></li>
+                    <li><a href="#">iPhone 5c</a></li>
+                    <li><a href="#">iPhone 5s</a></li>
+                </ul>
+            </li>
+            <li><a href="#">HTC</a></li>
+            <li class="has-submenu"><a href="#">Samsung</a>
+                <ul class="sub-submenu">
+                    <li><a href="#">Galaxy Note 3</a></li>
+                    <li><a href="#">Galaxy S5</a></li>
+                    <li><a href="#">Galaxy S3 Neo</a></li>
+                    <li><a href="#">Galaxy Gear</a></li>
+                    <li><a href="#">Galaxy S Duos 2</a></li>
+                </ul>
+            </li>
+            <li><a href="#">BlackBerry</a></li>
+            <li class="offer">
+                <div class="col-1">
+                    <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+                <div class="col-2">
+                    <img src="/img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
+                    <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li><a href="shop-filters-left-3cols.html">Для двоих</a></li>
+    <li><a href="shop-filters-left-3cols.html">Бельё</a></li>
+    <li><a href="shop-filters-left-3cols.html">BDSM</a></li>
+    <li><a href="shop-filters-left-3cols.html">Презервативы и смазки</a></li>
+    <li><a href="shop-filters-left-3cols.html">Анальная стимуляция</a></li>
+    }}
+</ul>
+</nav>

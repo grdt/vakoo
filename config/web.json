@@ -1,3 +1,6 @@
 {
-    "port": 8800
+    "port": 8800,
+    "public": [
+        "public"
+    ]
 }

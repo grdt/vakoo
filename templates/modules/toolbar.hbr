@@ -1,0 +1,29 @@
+<!--Toolbar-->
+<div class="toolbar group">
+    <button class="search-btn btn-outlined-invert"><i class="icon-magnifier"></i></button>
+
+    <div class="cart-btn empty">
+        <a class="btn btn-outlined-invert" href="/cart"><i class="icon-shopping-cart-content"></i><span class="rect"></span></a>
+
+        <!--Cart Dropdown-->
+        <div class="cart-dropdown">
+            <span class="rect"></span><!--Small rectangle to overlap Cart button-->
+            <div class="body">
+                <table>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Кол-во</th>
+                        <th>Стоимость</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="footer group">
+                <div class="buttons">
+                    <a class="btn btn-outlined-invert" href="/checkout"><i class="icon-download"></i>Оформить</a>
+                    <a class="btn btn-outlined-invert" href="/cart"><i class="icon-shopping-cart-content"></i>В корзину</a>
+                </div>
+                <div class="total"><span class="t"></span>&nbsp;<span class="fa fa-rouble"></span></div>
+            </div>
+        </div><!--Cart Dropdown Close-->
+    </div>
+</div><!--Toolbar Close-->

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DEPLOY_PATH="/root/services/vakoo2"
+
+DEPLOYER_PATH="/Users/Pasa/Dropbox/my/deploy.js"
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  TARGET="$(readlink "$SOURCE")"
+  if [[ $SOURCE == /* ]]; then
+    echo "SOURCE '$SOURCE' is an absolute symlink to '$TARGET'"
+    SOURCE="$TARGET"
+  else
+    DIR="$( dirname "$SOURCE" )"
+    echo "SOURCE '$SOURCE' is a relative symlink to '$TARGET' (relative to '$DIR')"
+    SOURCE="$DIR/$TARGET"
+  fi
+done
+
+RDIR="$( dirname "$SOURCE" )"
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+if [ "$DIR" != "$RDIR" ]; then
+  echo "local_path is '$DIR'"
+fi
+
+node $DEPLOYER_PATH local_path=$DIR deploy_path=$DEPLOY_PATH host=luxy.sexy pass=085bdb2261 port=22 user=root

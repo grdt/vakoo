@@ -26,15 +26,15 @@ class Context
     if _.isObject(data)
       @responser.setHeader 'Content-Type', 'application/json; charset=utf-8'
     else
-      @responser.setHeader 'Content-Type', 'text/plain; charset=utf-8'
+      @responser.setHeader 'Content-Type', 'text/html; charset=utf-8'
       data = "" + data
-    if @response.headers?
+    if headers?
       @responser.setHeader h, v for h, v of headers
     @responser.status(@response.code).send(data)
 
   sendError: (data)=>
     if @response.code is 200
-      @response.code = 500
+      @response.code = 404
     @send data
 
   sendHandler: (err, data, turn = true)=>

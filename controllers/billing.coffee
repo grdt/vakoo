@@ -3,6 +3,8 @@ _ = require "underscore"
 crypto = require "crypto"
 Controller = Vakoo.getClass "controller"
 moment = require "moment"
+TemplateDecorator = require "../decorators/template"
+ContextDecorator = require "../decorators/context"
 
 class Billing extends Controller
 
@@ -15,6 +17,12 @@ class Billing extends Controller
 
   constructor: ->
 
+    super
+
+    @contextDecorator = new ContextDecorator @context
+    @templateDecorator = new TemplateDecorator @context
+
+
     @mongo = Vakoo.Storage.mongo
     @orderCollection = @mongo.collection "orders"
 
@@ -26,8 +34,6 @@ class Billing extends Controller
       pass1: "085bdb2261"
       pass2: "webadmin45"
       url: "http://test.robokassa.ru/Index.aspx"
-
-    super
 
 
   index: ->
@@ -54,8 +60,10 @@ class Billing extends Controller
       (err, url)=>
         if err
           @logger.error err
-        @logger.info url
-        @context.send url
+          @contextDecorator.showError err
+        else
+          @logger.info url
+          @contextDecorator.showTemplate "billing.index", {url}
     )
 
   answer: ->

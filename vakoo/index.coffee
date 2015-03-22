@@ -147,7 +147,6 @@ class Vakoo
 
 
 
-
 vakoo = new Vakoo()
 #TODO global beauty
 global.Vakoo = vakoo

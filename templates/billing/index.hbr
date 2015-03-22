@@ -1,0 +1,21 @@
+{{{common.breadCrumbs}}}
+
+<!--Blog Single-->
+<section class="blog">
+    <div class="container">
+        <div class="row">
+
+            <!--Left Column-->
+            <div class="col-lg-9 col-md-9">
+                <h1 class="title">Сосиска</h1>
+                <!--Post-->
+                <div class="post">
+
+                    <p class="p-style3">{{url}}</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!--Blog Single Close-->
+

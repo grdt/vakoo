@@ -24,7 +24,9 @@ class Web
     @app.use bodyParser.urlencoded extended: true
     @app.use cookieParser()
     @app.use multipart uploadDir: APP_PATH + "/tmp"
-    @app.use express.static APP_PATH + "/public"
+    for publicPath in @config.public
+      console.log "static", APP_PATH + "/#{publicPath}"
+      @app.use express.static APP_PATH + "/#{publicPath}"
     @app.use errorhandler()
 
     callback()
